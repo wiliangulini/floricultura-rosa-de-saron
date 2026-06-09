@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+}
+
+enum PriceType {
+  FIXED
+  STARTING_FROM
+  ON_REQUEST
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(ADMIN)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  active      Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@index([active, sortOrder])
+}
+
+model Product {
+  id               String         @id @default(cuid())
+  categoryId       String
+  name             String
+  slug             String         @unique
+  shortDescription String?
+  description      String?
+  price            Decimal?       @db.Decimal(10, 2)
+  priceType        PriceType      @default(FIXED)
+  active           Boolean        @default(true)
+  available        Boolean        @default(true)
+  featured         Boolean        @default(false)
+  seasonal         Boolean        @default(false)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  category         Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  images           ProductImage[]
+
+  @@index([categoryId])
+  @@index([active, available])
+  @@index([featured])
+  @@index([seasonal])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  url       String
+  altText   String?
+  isMain    Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, sortOrder])
+}
+
+model Settings {
+  id                    String   @id @default(cuid())
+  businessName          String
+  whatsappNumber        String
+  phone                 String?
+  email                 String?
+  address               String?
+  city                  String?
+  state                 String?
+  neighborhood          String?
+  googleMapsUrl         String?
+  instagramUrl          String?
+  facebookUrl           String?
+  openingHours          String?
+  deliveryAvailable     Boolean  @default(false)
+  deliveryDescription   String?
+  seoDefaultTitle       String?
+  seoDefaultDescription String?
+  ogImageUrl            String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
