@@ -35,7 +35,7 @@ export function CategoryFilter({ activeSlug, categories }: CategoryFilterProps) 
           <Link
             aria-current={isActive ? "page" : undefined}
             className={isActive ? activeClass : inactiveClass}
-            href={`/categoria/${category.slug}`}
+            href={`/categorias/${category.slug}`}
             key={category.slug}
           >
             {category.name}
