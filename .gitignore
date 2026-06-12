@@ -8,3 +8,7 @@ dist
 !.env.example
 .DS_Store
 *.local
+
+# Prompts locais
+claudeCode_prompt.md
+codex_prompt.md
