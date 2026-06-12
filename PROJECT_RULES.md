@@ -119,7 +119,7 @@ O painel deve ser simples o suficiente para ser usado por uma pessoa sem conheci
 
 ## 6. Regras de segurança
 
-- Nunca expor segredos, credenciais ou strings de conexão no frontend.
+- Nunca expor segredos, credenciais ou strings de conexão no frontend. 
 - Usar variáveis de ambiente para dados sensíveis.
 - Validar dados recebidos do cliente antes de salvar ou processar.
 - Sanitizar e codificar dados usados em URLs, especialmente na mensagem do WhatsApp.
