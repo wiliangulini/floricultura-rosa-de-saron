@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { useCart } from "@/context/CartContext";
-import { buildCheckoutMessage, createWhatsappUrl } from "@/lib/whatsapp";
+import { buildOrderWhatsAppMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 type CheckoutFormProps = {
   whatsappNumber: string;
@@ -25,6 +25,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
   const [cardMessage, setCardMessage] = useState("");
   const [notes, setNotes] = useState("");
   const [customerNameError, setCustomerNameError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   if (items.length === 0) {
     return (
@@ -43,6 +44,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
   function handleCustomerNameChange(event: ChangeEvent<HTMLInputElement>) {
     setCustomerName(event.target.value);
     if (customerNameError) setCustomerNameError("");
+    if (successMessage) setSuccessMessage("");
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -50,18 +52,21 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
 
     if (!customerName.trim()) {
       setCustomerNameError("Informe seu nome para enviar o pedido.");
+      setSuccessMessage("");
       return;
     }
 
-    const message = buildCheckoutMessage(
-      items,
-      { customerName: customerName.trim(), desiredDate, paymentMethod, cardMessage, notes },
-      estimatedTotal,
-      hasOnRequestItems,
-    );
+    const message = buildOrderWhatsAppMessage(items, {
+      customerName: customerName.trim(),
+      desiredDate,
+      paymentMethod,
+      cardMessage,
+      notes,
+    });
 
-    const url = createWhatsappUrl({ phoneNumber: whatsappNumber, message });
+    const url = buildWhatsAppUrl(whatsappNumber, message);
     window.open(url, "_blank", "noopener,noreferrer");
+    setSuccessMessage("Pedido aberto no WhatsApp. Seu carrinho continua salvo.");
   }
 
   return (
@@ -132,6 +137,12 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
         <Button className="mt-8 w-full sm:w-auto" size="lg" type="submit" variant="primary">
           Enviar pedido pelo WhatsApp
         </Button>
+
+        {successMessage ? (
+          <p className="mt-3 text-sm font-medium leading-5 text-emerald-700" role="status">
+            {successMessage}
+          </p>
+        ) : null}
 
         <p className="mt-3 text-sm leading-5 text-zinc-500">
           Valores, disponibilidade, entrega e pagamento serão confirmados pela floricultura

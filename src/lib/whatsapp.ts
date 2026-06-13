@@ -8,11 +8,15 @@ export type WhatsappMessageOptions = {
   message: string;
 };
 
-export function createWhatsappUrl({ phoneNumber, message }: WhatsappMessageOptions): string {
-  const digitsOnlyPhoneNumber = phoneNumber.replace(/\D/g, "");
+export function buildWhatsAppUrl(phone: string, message: string): string {
+  const digitsOnlyPhoneNumber = phone.replace(/\D/g, "");
   const encodedMessage = encodeURIComponent(message);
 
   return `${WHATSAPP_BASE_URL}/${digitsOnlyPhoneNumber}?text=${encodedMessage}`;
+}
+
+export function createWhatsappUrl({ phoneNumber, message }: WhatsappMessageOptions): string {
+  return buildWhatsAppUrl(phoneNumber, message);
 }
 
 export type CheckoutFormData = {
@@ -23,60 +27,106 @@ export type CheckoutFormData = {
   notes: string;
 };
 
-export function buildCheckoutMessage(
+const ORDER_CONFIRMATION_NOTICE =
+  "Pedido sujeito à confirmação de disponibilidade, prazo e pagamento pela floricultura.";
+
+function getTrimmedText(value: string | null): string | null {
+  const trimmedValue = value?.trim();
+
+  return trimmedValue ? trimmedValue : null;
+}
+
+function getEstimatedOrderTotal(items: CartItem[]): number {
+  return items.reduce((total, item) => {
+    if (item.priceType === "ON_REQUEST" || item.unitPrice === null) {
+      return total;
+    }
+
+    return total + item.unitPrice * item.quantity;
+  }, 0);
+}
+
+function formatItemUnitPrice(item: CartItem): string {
+  if (item.priceType === "ON_REQUEST" || item.unitPrice === null) {
+    return "Valor sob consulta";
+  }
+
+  const formattedPrice = formatCurrencyBRL(item.unitPrice);
+
+  return item.priceType === "STARTING_FROM" ? `A partir de ${formattedPrice}` : formattedPrice;
+}
+
+function formatItemSubtotal(item: CartItem): string {
+  if (item.priceType === "ON_REQUEST" || item.unitPrice === null) {
+    return "Valor sob consulta";
+  }
+
+  const formattedSubtotal = formatCurrencyBRL(item.unitPrice * item.quantity);
+
+  return item.priceType === "STARTING_FROM"
+    ? `A partir de ${formattedSubtotal}`
+    : formattedSubtotal;
+}
+
+function getOptionalCheckoutLines(checkoutData: CheckoutFormData): string[] {
+  const fields = [
+    ["Data/prazo desejado", checkoutData.desiredDate],
+    ["Forma de pagamento", checkoutData.paymentMethod],
+    ["Mensagem para cartão", checkoutData.cardMessage],
+    ["Observações gerais", checkoutData.notes],
+  ] as const;
+
+  return fields.flatMap(([label, value]) => {
+    const trimmedValue = getTrimmedText(value);
+
+    return trimmedValue ? [`${label}: ${trimmedValue}`] : [];
+  });
+}
+
+export function buildOrderWhatsAppMessage(
   items: CartItem[],
-  formData: CheckoutFormData,
-  estimatedTotal: number,
-  hasOnRequestItems: boolean,
+  checkoutData: CheckoutFormData,
 ): string {
-  const lines: string[] = [
-    "Olá! Gostaria de fazer um pedido pelo site.",
-    "",
-    `Nome: ${formData.customerName}`,
-    "",
-    "Produtos:",
-  ];
+  const customerName = getTrimmedText(checkoutData.customerName);
+  const estimatedTotal = getEstimatedOrderTotal(items);
+  const hasOnRequestItems = items.some((item) => item.priceType === "ON_REQUEST");
+
+  const lines: string[] = ["Olá! Gostaria de fazer um pedido pelo site.", "", "Pedido pelo site"];
+
+  if (customerName) {
+    lines.push(`Nome: ${customerName}`);
+  }
+
+  lines.push("", "Produtos:");
 
   for (const item of items) {
-    const subtotal =
-      item.priceType === "ON_REQUEST" || item.unitPrice === null
-        ? "Sob consulta"
-        : formatCurrencyBRL(item.unitPrice * item.quantity);
+    const shortDescription = getTrimmedText(item.shortDescription);
 
-    lines.push(`• ${item.name} — ${item.quantity}× — ${subtotal}`);
+    lines.push(`• ${item.name}`);
+
+    if (shortDescription) {
+      lines.push(`  Descrição: ${shortDescription}`);
+    }
+
+    lines.push(`  Quantidade: ${item.quantity}`);
+    lines.push(`  Preço unitário: ${formatItemUnitPrice(item)}`);
+    lines.push(`  Subtotal: ${formatItemSubtotal(item)}`);
   }
 
-  lines.push("");
+  lines.push("", `Total estimado: ${formatCurrencyBRL(estimatedTotal)}`);
 
-  if (hasOnRequestItems && estimatedTotal > 0) {
-    lines.push(`Total estimado: ${formatCurrencyBRL(estimatedTotal)}`);
-    lines.push("(Itens sob consulta não estão incluídos no total estimado.)");
-  } else if (hasOnRequestItems) {
-    lines.push("Total: a confirmar (todos os itens são sob consulta).");
-  } else {
-    lines.push(`Total estimado: ${formatCurrencyBRL(estimatedTotal)}`);
+  if (hasOnRequestItems) {
+    lines.push("Itens com Valor sob consulta não estão incluídos no total estimado.");
   }
 
-  if (formData.paymentMethod.trim()) {
-    lines.push("", `Forma de pagamento: ${formData.paymentMethod.trim()}`);
+  const optionalCheckoutLines = getOptionalCheckoutLines(checkoutData);
+
+  if (optionalCheckoutLines.length > 0) {
+    lines.push("", ...optionalCheckoutLines);
   }
 
-  if (formData.desiredDate.trim()) {
-    lines.push(`Data/prazo desejado: ${formData.desiredDate.trim()}`);
-  }
-
-  if (formData.cardMessage.trim()) {
-    lines.push("", `Mensagem para cartão: ${formData.cardMessage.trim()}`);
-  }
-
-  if (formData.notes.trim()) {
-    lines.push("", `Observações: ${formData.notes.trim()}`);
-  }
-
-  lines.push(
-    "",
-    "Valores, disponibilidade, entrega e forma de pagamento serão confirmados pela floricultura.",
-  );
+  lines.push("", ORDER_CONFIRMATION_NOTICE);
 
   return lines.join("\n");
 }
+
