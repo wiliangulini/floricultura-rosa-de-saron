@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { AddToCartButton } from "@/components/public/AddToCartButton";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { getCartProduct } from "@/lib/cart";
 import { formatCurrencyBRL } from "@/lib/money";
 import { getProductBySlug, type PublicProduct } from "@/server/products";
 
@@ -210,9 +212,12 @@ export default async function ProdutoPage({ params }: Props) {
               disponibilidade, entrega e pagamento serão confirmados pela loja.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Button className="w-full sm:flex-1" disabled size="lg" variant="primary">
-                Adicionar ao pedido
-              </Button>
+              <AddToCartButton
+                className="w-full sm:flex-1"
+                product={getCartProduct(product)}
+                size="lg"
+                variant="primary"
+              />
               <Button className="w-full sm:flex-1" disabled size="lg" variant="outline">
                 Pedir pelo WhatsApp
               </Button>

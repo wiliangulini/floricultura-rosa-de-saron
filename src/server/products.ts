@@ -10,6 +10,7 @@ const publicProductImageSelect = {
 } satisfies Prisma.ProductImageSelect;
 
 const publicProductSelect = {
+  id: true,
   name: true,
   slug: true,
   shortDescription: true,

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/components/public/AddToCartButton";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
+import { getCartProduct } from "@/lib/cart";
 import { formatCurrencyBRL } from "@/lib/money";
 import type { PublicProduct } from "@/server/products";
 
@@ -65,9 +66,11 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardContent>
 
         <CardFooter className="mt-auto flex-col items-stretch sm:flex-row">
-          <Button className="w-full sm:flex-1" disabled variant="primary">
-            Adicionar ao pedido
-          </Button>
+          <AddToCartButton
+            className="w-full sm:flex-1"
+            product={getCartProduct(product)}
+            variant="primary"
+          />
           <Link
             aria-label={`Ver detalhes de ${product.name}`}
             className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-rose-300 bg-white/80 px-5 py-2.5 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:flex-1"
