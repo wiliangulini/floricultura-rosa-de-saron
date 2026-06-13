@@ -13,7 +13,7 @@ export default async function AdminNovoProdutoPage() {
       <div>
         <h1 className="text-3xl font-bold text-zinc-950">Cadastrar produto</h1>
         <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-700">
-          Informe os dados do produto e use uma URL provisória para a imagem principal.
+          Informe os dados do produto e adicione a imagem principal quando houver.
         </p>
       </div>
 
@@ -26,6 +26,7 @@ export default async function AdminNovoProdutoPage() {
           categoryId: "",
           description: "",
           featured: false,
+          imageAltText: "",
           imageUrl: "",
           name: "",
           price: "",

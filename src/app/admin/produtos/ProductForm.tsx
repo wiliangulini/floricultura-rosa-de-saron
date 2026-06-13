@@ -1,8 +1,15 @@
 "use client";
 
 import type { PriceType } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
-import { type ReactNode, useActionState, useState } from "react";
+import {
+  type ChangeEvent,
+  type ReactNode,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 
 import { Button, Card, CardContent, CardFooter, Input, Textarea } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -21,6 +28,7 @@ export type ProductFormValues = {
   categoryId: string;
   description: string | null;
   featured: boolean;
+  imageAltText: string;
   imageUrl: string;
   name: string;
   price: string | null;
@@ -80,6 +88,10 @@ const priceTypeOptions: Array<{ label: string; value: PriceType }> = [
   },
 ];
 
+const acceptedImageTypes = ["image/jpeg", "image/png", "image/webp"];
+const acceptedImageExtensions = ["jpg", "jpeg", "png", "webp"];
+const maxImageFileSizeBytes = 5 * 1024 * 1024;
+
 export function ProductForm({
   action,
   categories,
@@ -88,21 +100,81 @@ export function ProductForm({
 }: ProductFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const [currentPriceType, setCurrentPriceType] = useState<PriceType>(initialValues.priceType);
+  const [currentName, setCurrentName] = useState(initialValues.name);
+  const [manualImageUrl, setManualImageUrl] = useState(initialValues.imageUrl);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [selectedImagePreviewUrl, setSelectedImagePreviewUrl] = useState<string | null>(null);
+  const [clientImageFileError, setClientImageFileError] = useState("");
+  const [imageAltText, setImageAltText] = useState(
+    initialValues.imageAltText || initialValues.name,
+  );
+  const [hasEditedImageAltText, setHasEditedImageAltText] = useState(
+    Boolean(initialValues.imageAltText),
+  );
+  const previewImageUrl = selectedImagePreviewUrl ?? getPreviewableImageUrl(manualImageUrl);
+  const previewImageAlt = imageAltText.trim() || currentName || "Prévia da imagem do produto";
+  const imageFileError = clientImageFileError || state.fieldErrors.imageFile;
+
+  useEffect(() => {
+    if (!selectedImagePreviewUrl?.startsWith("blob:")) {
+      return;
+    }
+
+    return () => URL.revokeObjectURL(selectedImagePreviewUrl);
+  }, [selectedImagePreviewUrl]);
+
+  function handleNameChange(event: ChangeEvent<HTMLInputElement>) {
+    const nextName = event.target.value;
+    setCurrentName(nextName);
+
+    if (!hasEditedImageAltText) {
+      setImageAltText(nextName);
+    }
+  }
+
+  function handleImageAltTextChange(event: ChangeEvent<HTMLInputElement>) {
+    setHasEditedImageAltText(true);
+    setImageAltText(event.target.value);
+  }
+
+  function handleImageFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] ?? null;
+    setClientImageFileError("");
+    setSelectedImageFile(null);
+    setSelectedImagePreviewUrl(null);
+
+    if (!file) {
+      return;
+    }
+
+    const validationError = validateImageFileClient(file);
+
+    if (validationError) {
+      setClientImageFileError(validationError);
+      event.currentTarget.value = "";
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    setSelectedImageFile(file);
+    setSelectedImagePreviewUrl(objectUrl);
+  }
 
   return (
     <Card>
-      <form action={formAction} noValidate>
+      <form action={formAction} encType="multipart/form-data" noValidate>
         <CardContent className="space-y-6 pt-5">
           <div className="grid gap-5 lg:grid-cols-2">
             <Input
               autoComplete="off"
-              defaultValue={initialValues.name}
               disabled={isPending}
               error={state.fieldErrors.name}
               label="Nome"
               name="name"
+              onChange={handleNameChange}
               placeholder="Ex.: Buquê de rosas vermelhas"
               type="text"
+              value={currentName}
             />
 
             <SelectField
@@ -175,17 +247,69 @@ export function ProductForm({
             />
           </div>
 
-          <Input
-            autoComplete="off"
-            defaultValue={initialValues.imageUrl}
-            disabled={isPending}
-            error={state.fieldErrors.imageUrl}
-            helperText="Use uma URL provisória começando com https://. Deixe em branco para remover a imagem principal."
-            label="URL da imagem principal"
-            name="imageUrl"
-            placeholder="https://..."
-            type="url"
-          />
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-zinc-900">Prévia da imagem principal</p>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-rose-200 bg-rose-50">
+                {previewImageUrl ? (
+                  <Image
+                    alt={previewImageAlt}
+                    className="object-cover"
+                    fill
+                    sizes="(min-width: 1024px) 320px, 100vw"
+                    src={previewImageUrl}
+                    unoptimized={previewImageUrl.startsWith("blob:")}
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center px-5 text-center text-sm font-semibold text-rose-900">
+                    Sem imagem
+                  </div>
+                )}
+              </div>
+              {selectedImageFile ? (
+                <p className="text-sm leading-5 text-zinc-600">{selectedImageFile.name}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-5">
+              <Input
+                accept="image/jpeg,image/png,image/webp"
+                disabled={isPending}
+                error={imageFileError}
+                helperText="Envie uma imagem JPG, PNG ou WebP de até 5 MB."
+                label="Arquivo da imagem principal"
+                name="imageFile"
+                onChange={handleImageFileChange}
+                type="file"
+              />
+
+              <Input
+                autoComplete="off"
+                disabled={isPending}
+                error={state.fieldErrors.imageUrl}
+                helperText="Usada quando nenhum arquivo é enviado. Deixe em branco para remover a imagem principal."
+                label="URL manual da imagem principal"
+                name="imageUrl"
+                onChange={(event) => setManualImageUrl(event.target.value)}
+                placeholder="https://..."
+                type="url"
+                value={manualImageUrl}
+              />
+
+              <Input
+                autoComplete="off"
+                disabled={isPending}
+                error={state.fieldErrors.imageAltText}
+                helperText="Texto usado por leitores de tela e mecanismos de busca."
+                label="Texto alternativo da imagem"
+                name="imageAltText"
+                onChange={handleImageAltTextChange}
+                placeholder="Ex.: Buquê de rosas vermelhas"
+                type="text"
+                value={imageAltText}
+              />
+            </div>
+          </div>
 
           <div className="grid gap-5 lg:grid-cols-2">
             <Input
@@ -264,6 +388,46 @@ export function ProductForm({
       </form>
     </Card>
   );
+}
+
+function validateImageFileClient(file: File): string {
+  if (file.size > maxImageFileSizeBytes) {
+    return "A imagem deve ter no máximo 5 MB.";
+  }
+
+  const extension = file.name.split(".").pop()?.toLowerCase();
+
+  if (extension === "svg" || file.type.toLowerCase() === "image/svg+xml") {
+    return "SVG não é permitido. Envie uma imagem JPG, PNG ou WebP.";
+  }
+
+  if (!extension || !acceptedImageExtensions.includes(extension)) {
+    return "Envie uma imagem nos formatos JPG, PNG ou WebP.";
+  }
+
+  if (file.type && !acceptedImageTypes.includes(file.type)) {
+    return "Envie uma imagem nos formatos JPG, PNG ou WebP.";
+  }
+
+  return "";
+}
+
+function getPreviewableImageUrl(value: string): string | null {
+  if (!value.trim()) {
+    return null;
+  }
+
+  try {
+    const url = new URL(value);
+
+    if (url.protocol !== "https:" || !url.hostname) {
+      return null;
+    }
+
+    return url.toString();
+  } catch {
+    return null;
+  }
 }
 
 function SelectField({

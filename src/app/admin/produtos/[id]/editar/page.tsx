@@ -45,6 +45,7 @@ export default async function AdminEditarProdutoPage({ params }: AdminEditarProd
           categoryId: product.categoryId,
           description: product.description,
           featured: product.featured,
+          imageAltText: product.mainImage?.altText ?? "",
           imageUrl: product.mainImage?.url ?? "",
           name: product.name,
           price: product.price,

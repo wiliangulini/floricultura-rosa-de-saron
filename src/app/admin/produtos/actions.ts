@@ -8,9 +8,12 @@ import { redirect } from "next/navigation";
 import { ADMIN_SESSION_COOKIE, readAdminSessionCookie } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/slug";
+import { getProductImageFile, ProductImageUploadError, uploadProductImage } from "@/server/images";
 
 type ProductFieldErrors = {
   categoryId?: string;
+  imageAltText?: string;
+  imageFile?: string;
   imageUrl?: string;
   name?: string;
   price?: string;
@@ -31,6 +34,7 @@ type ValidatedProductData = {
   categoryId: string;
   description: string | null;
   featured: boolean;
+  imageAltText: string | null;
   imageUrl: string | null;
   name: string;
   price: string | null;
@@ -55,6 +59,11 @@ type ProductReference = {
   featured: boolean;
   id: string;
   slug: string;
+};
+
+type ProductMainImageData = {
+  altText: string | null;
+  url: string | null;
 };
 
 const validPriceTypes = [PriceType.FIXED, PriceType.STARTING_FROM, PriceType.ON_REQUEST] as const;
@@ -100,6 +109,12 @@ export async function createProduct(
     return createDuplicateSlugState();
   }
 
+  const mainImage = await resolveProductMainImage(formData, validation.data);
+
+  if (!mainImage.data) {
+    return mainImage.state;
+  }
+
   try {
     await prisma.$transaction(async (transaction) => {
       const product = await transaction.product.create({
@@ -109,17 +124,7 @@ export async function createProduct(
         },
       });
 
-      if (validation.data.imageUrl) {
-        await transaction.productImage.create({
-          data: {
-            altText: validation.data.name,
-            isMain: true,
-            productId: product.id,
-            sortOrder: 0,
-            url: validation.data.imageUrl,
-          },
-        });
-      }
+      await createMainProductImage(transaction, product.id, mainImage.data);
     });
   } catch (error) {
     if (isUniqueConstraintError(error)) {
@@ -179,6 +184,12 @@ export async function updateProduct(
     return createDuplicateSlugState();
   }
 
+  const mainImage = await resolveProductMainImage(formData, validation.data);
+
+  if (!mainImage.data) {
+    return mainImage.state;
+  }
+
   try {
     await prisma.$transaction(async (transaction) => {
       await transaction.product.update({
@@ -188,48 +199,7 @@ export async function updateProduct(
         },
       });
 
-      if (validation.data.imageUrl) {
-        const mainImage = await transaction.productImage.findFirst({
-          select: {
-            id: true,
-          },
-          where: {
-            isMain: true,
-            productId: currentProduct.id,
-          },
-        });
-
-        if (mainImage) {
-          await transaction.productImage.update({
-            data: {
-              altText: validation.data.name,
-              isMain: true,
-              sortOrder: 0,
-              url: validation.data.imageUrl,
-            },
-            where: {
-              id: mainImage.id,
-            },
-          });
-        } else {
-          await transaction.productImage.create({
-            data: {
-              altText: validation.data.name,
-              isMain: true,
-              productId: currentProduct.id,
-              sortOrder: 0,
-              url: validation.data.imageUrl,
-            },
-          });
-        }
-      } else {
-        await transaction.productImage.deleteMany({
-          where: {
-            isMain: true,
-            productId: currentProduct.id,
-          },
-        });
-      }
+      await upsertMainProductImage(transaction, currentProduct.id, mainImage.data);
     });
   } catch (error) {
     if (isUniqueConstraintError(error)) {
@@ -330,6 +300,7 @@ function validateProductForm(formData: FormData):
   const priceTypeValue = getFormValue(formData, "priceType").trim();
   const priceValue = getFormValue(formData, "price").trim();
   const imageUrlValue = getFormValue(formData, "imageUrl").trim();
+  const imageAltTextValue = getFormValue(formData, "imageAltText").trim();
   const seoTitle = getFormValue(formData, "seoTitle").trim();
   const seoDescription = getFormValue(formData, "seoDescription").trim();
   const fieldErrors: ProductFieldErrors = {};
@@ -380,6 +351,7 @@ function validateProductForm(formData: FormData):
       categoryId,
       description: description || null,
       featured: formData.get("featured") === "on",
+      imageAltText: imageAltTextValue || name,
       imageUrl,
       name,
       price,
@@ -427,6 +399,124 @@ function parseImageUrl(value: string): string | null {
   } catch {
     return null;
   }
+}
+
+async function resolveProductMainImage(
+  formData: FormData,
+  data: ValidatedProductData,
+): Promise<
+  | {
+      data: ProductMainImageData;
+      state?: never;
+    }
+  | {
+      data?: never;
+      state: ProductActionState;
+    }
+> {
+  const imageFile = getProductImageFile(formData);
+  const fallbackImage: ProductMainImageData = {
+    altText: data.imageUrl ? data.imageAltText || data.name : null,
+    url: data.imageUrl,
+  };
+
+  if (!imageFile) {
+    return {
+      data: fallbackImage,
+    };
+  }
+
+  try {
+    const uploadedImage = await uploadProductImage({
+      file: imageFile,
+      productName: data.name,
+      productSlug: data.slug,
+    });
+
+    return {
+      data: {
+        altText: data.imageAltText || data.name,
+        url: uploadedImage.url,
+      },
+    };
+  } catch (error) {
+    if (error instanceof ProductImageUploadError) {
+      return {
+        state: {
+          fieldErrors: {
+            imageFile: error.message,
+          },
+          message: "Não foi possível enviar a imagem do produto.",
+          status: "error",
+        },
+      };
+    }
+
+    throw error;
+  }
+}
+
+async function createMainProductImage(
+  transaction: Prisma.TransactionClient,
+  productId: string,
+  image: ProductMainImageData,
+): Promise<void> {
+  if (!image.url) {
+    return;
+  }
+
+  await transaction.productImage.create({
+    data: {
+      altText: image.altText,
+      isMain: true,
+      productId,
+      sortOrder: 0,
+      url: image.url,
+    },
+  });
+}
+
+async function upsertMainProductImage(
+  transaction: Prisma.TransactionClient,
+  productId: string,
+  image: ProductMainImageData,
+): Promise<void> {
+  if (!image.url) {
+    await transaction.productImage.deleteMany({
+      where: {
+        isMain: true,
+        productId,
+      },
+    });
+    return;
+  }
+
+  const currentMainImage = await transaction.productImage.findFirst({
+    select: {
+      id: true,
+    },
+    where: {
+      isMain: true,
+      productId,
+    },
+  });
+
+  if (currentMainImage) {
+    await transaction.productImage.update({
+      data: {
+        altText: image.altText,
+        isMain: true,
+        sortOrder: 0,
+        url: image.url,
+      },
+      where: {
+        id: currentMainImage.id,
+      },
+    });
+    return;
+  }
+
+  await createMainProductImage(transaction, productId, image);
 }
 
 function createProductWriteData(data: ValidatedProductData): Prisma.ProductUncheckedCreateInput {
