@@ -20,6 +20,7 @@ const prisma = new PrismaClient({ adapter });
 const ADMIN_EMAIL = "admin@floricultura.com";
 const TEMPORARY_ADMIN_PASSWORD = "admin123";
 const SETTINGS_ID = "default-settings";
+const STORE_WHATSAPP_NUMBER = "5546991168949";
 
 const categories = [
   {
@@ -118,7 +119,7 @@ async function main() {
     where: { id: SETTINGS_ID },
     update: {
       businessName: "Floricultura",
-      whatsappNumber: "5546999999999",
+      whatsappNumber: STORE_WHATSAPP_NUMBER,
       city: "Pato Branco",
       state: "PR",
       seoDefaultTitle: "Floricultura em Pato Branco | Buquês, arranjos e presentes",
@@ -128,7 +129,7 @@ async function main() {
     create: {
       id: SETTINGS_ID,
       businessName: "Floricultura",
-      whatsappNumber: "5546999999999",
+      whatsappNumber: STORE_WHATSAPP_NUMBER,
       city: "Pato Branco",
       state: "PR",
       seoDefaultTitle: "Floricultura em Pato Branco | Buquês, arranjos e presentes",
