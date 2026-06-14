@@ -35,7 +35,14 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
     <li className="flex gap-4 py-5 first:pt-0 last:pb-0">
       <div className="relative size-20 shrink-0 overflow-hidden rounded-md border border-rose-100 bg-rose-50">
         {item.imageUrl ? (
-          <Image alt={item.name} className="object-cover" fill sizes="80px" src={item.imageUrl} />
+          <Image
+            alt={item.name}
+            className="h-full w-full object-cover"
+            height={80}
+            sizes="80px"
+            src={item.imageUrl}
+            width={80}
+          />
         ) : (
           <div className="flex h-full items-center justify-center px-2 text-center text-xs text-rose-400">
             Sem foto

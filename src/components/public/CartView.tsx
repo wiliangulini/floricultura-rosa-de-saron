@@ -98,10 +98,11 @@ export function CartView({ whatsappNumber }: CartViewProps) {
                 {item.imageUrl ? (
                   <Image
                     alt={item.name}
-                    className="object-cover"
-                    fill
+                    className="h-full w-full object-cover"
+                    height={96}
                     sizes="96px"
                     src={item.imageUrl}
+                    width={96}
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-xs text-rose-400">

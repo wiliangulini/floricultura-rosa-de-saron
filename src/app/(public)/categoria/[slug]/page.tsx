@@ -4,14 +4,13 @@ import { notFound } from "next/navigation";
 import { CategoryFilter } from "@/components/public/CategoryFilter";
 import { ProductCard } from "@/components/public/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { CartProvider } from "@/context/CartContext";
 import { createSiteUrl } from "@/lib/site-url";
 import { getActiveCategories, getCategoryBySlug, type PublicCategory } from "@/server/categories";
 import { getProductsByCategorySlug } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
 
 type Props = { params: Promise<{ slug: string }> };
-
-export const dynamic = "force-dynamic";
 
 function getCityName(settings: PublicSettings): string {
   return settings.city?.trim() || "sua cidade";
@@ -149,13 +148,15 @@ export default async function CategoriaPage({ params }: Props) {
         </div>
 
         {products.length > 0 ? (
-          <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-              <li key={product.slug} className="flex">
-                <ProductCard product={product} />
-              </li>
-            ))}
-          </ul>
+          <CartProvider>
+            <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {products.map((product) => (
+                <li key={product.slug} className="flex">
+                  <ProductCard product={product} />
+                </li>
+              ))}
+            </ul>
+          </CartProvider>
         ) : (
           <EmptyState
             className="mt-10"

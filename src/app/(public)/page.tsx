@@ -5,13 +5,12 @@ import type { ReactNode } from "react";
 
 import { ProductCard } from "@/components/public/ProductCard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { CartProvider } from "@/context/CartContext";
 import { cn } from "@/lib/cn";
 import { createWhatsappUrl } from "@/lib/whatsapp";
 import { getActiveCategories, type PublicCategory } from "@/server/categories";
 import { getFeaturedProducts, type PublicProduct } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
-
-export const dynamic = "force-dynamic";
 
 const fallbackBusinessName = "Floricultura";
 const fallbackCityName = "sua cidade";
@@ -331,12 +330,12 @@ function HeroSection({
             {heroImage ? (
               <Image
                 alt={heroImage.altText || heroProduct.name}
-                className="object-cover"
-                fill
-                loading="eager"
+                className="h-full w-full object-cover"
+                height={900}
                 priority
                 sizes="(min-width: 1024px) 42vw, 100vw"
                 src={heroImage.url}
+                width={1200}
               />
             ) : (
               <div className="flex h-full items-center justify-center px-8 text-center">
@@ -389,13 +388,15 @@ function FeaturedProductsSection({ products }: { products: PublicProduct[] }) {
         </div>
 
         {visibleProducts.length > 0 ? (
-          <ul className="mt-8 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {visibleProducts.map((product) => (
-              <li className="flex" key={product.slug}>
-                <ProductCard product={product} />
-              </li>
-            ))}
-          </ul>
+          <CartProvider>
+            <ul className="mt-8 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {visibleProducts.map((product) => (
+                <li className="flex" key={product.slug}>
+                  <ProductCard product={product} />
+                </li>
+              ))}
+            </ul>
+          </CartProvider>
         ) : (
           <div className="mt-8 rounded-lg border border-rose-100 bg-rose-50 p-6">
             <h3 className="text-xl font-bold text-zinc-950">Destaques em preparação</h3>

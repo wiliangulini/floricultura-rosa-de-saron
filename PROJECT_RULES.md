@@ -89,7 +89,7 @@ SEO local é prioridade máxima do projeto. Toda decisão de estrutura, nomencla
   - `Product` na página de cada produto, com nome, descrição, imagem e disponibilidade.
 - Gerar `sitemap.xml` e `robots.txt` usando os recursos nativos do Next.js App Router.
 - Usar meta `canonical` para evitar conteúdo duplicado em URLs com query params.
-- Usar textos claros com termos locais relevantes, como nome da floricultura, cidade, bairro e região atendida.
+- Usar textos claros com termos locais relevantes, como nome da floricultura, cidade, bairro e região atendida. 
 - Produtos e categorias devem ter URLs amigáveis baseadas em slugs.
 - Usar HTML semântico para títulos (`<h1>`, `<h2>`), listas, botões, navegação e conteúdo principal.
 - Incluir informações visíveis e fáceis de encontrar sobre endereço, telefone, WhatsApp e área de atendimento.

@@ -18,8 +18,10 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family:
-    Arial,
-    Helvetica,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
 }
 

@@ -38,10 +38,11 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.mainImage ? (
             <Image
               alt={imageAlt}
-              className="object-cover"
-              fill
+              className="h-full w-full object-cover"
+              height={540}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               src={product.mainImage.url}
+              width={720}
             />
           ) : (
             <div className="flex h-full items-center justify-center px-6 text-center text-sm font-semibold text-rose-900">

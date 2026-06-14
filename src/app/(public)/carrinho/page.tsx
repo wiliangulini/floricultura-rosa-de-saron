@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { CartView } from "@/components/public/CartView";
+import { CartProvider } from "@/context/CartContext";
 import { getSettings } from "@/server/settings";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +32,9 @@ export default async function CarrinhoPage() {
 
         <h1 className="mb-8 text-3xl font-bold text-zinc-950 sm:text-4xl">Meu pedido</h1>
 
-        <CartView whatsappNumber={settings.whatsappNumber} />
+        <CartProvider>
+          <CartView whatsappNumber={settings.whatsappNumber} />
+        </CartProvider>
       </div>
     </main>
   );

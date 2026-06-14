@@ -5,14 +5,13 @@ import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/public/AddToCartButton";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { CartProvider } from "@/context/CartContext";
 import { getCartProduct } from "@/lib/cart";
 import { formatCurrencyBRL } from "@/lib/money";
 import { getProductBySlug, type PublicProduct } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
 
 type Props = { params: Promise<{ slug: string }> };
-
-export const dynamic = "force-dynamic";
 
 const fallbackBusinessName = "Floricultura";
 
@@ -169,7 +168,7 @@ export default async function ProdutoPage({ params }: Props) {
                 alt={imageAlt}
                 className="aspect-[4/3] h-auto w-full object-cover"
                 height={900}
-                priority
+                preload
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 src={product.mainImage.url}
                 width={1200}
@@ -251,12 +250,14 @@ export default async function ProdutoPage({ params }: Props) {
               disponibilidade, entrega e pagamento serão confirmados pela loja.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <AddToCartButton
-                className="w-full sm:flex-1"
-                product={getCartProduct(product)}
-                size="lg"
-                variant="primary"
-              />
+              <CartProvider>
+                <AddToCartButton
+                  className="w-full sm:flex-1"
+                  product={getCartProduct(product)}
+                  size="lg"
+                  variant="primary"
+                />
+              </CartProvider>
               <Button className="w-full sm:flex-1" disabled size="lg" variant="outline">
                 Pedir pelo WhatsApp
               </Button>

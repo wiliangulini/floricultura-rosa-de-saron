@@ -6,8 +6,6 @@ import { cn } from "@/lib/cn";
 import { createWhatsappUrl } from "@/lib/whatsapp";
 import { getSettings, type PublicSettings } from "@/server/settings";
 
-export const dynamic = "force-dynamic";
-
 const fallbackBusinessName = "Floricultura";
 const fallbackCityName = "sua cidade";
 

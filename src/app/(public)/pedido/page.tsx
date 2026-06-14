@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { CheckoutForm } from "@/components/public/CheckoutForm";
+import { CartProvider } from "@/context/CartContext";
 import { getSettings } from "@/server/settings";
 
 export const dynamic = "force-dynamic";
@@ -48,7 +49,9 @@ export default async function PedidoPage() {
           </p>
         </div>
 
-        <CheckoutForm whatsappNumber={settings.whatsappNumber} />
+        <CartProvider>
+          <CheckoutForm whatsappNumber={settings.whatsappNumber} />
+        </CartProvider>
       </div>
     </main>
   );

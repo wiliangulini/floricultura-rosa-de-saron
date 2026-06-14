@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { CategoryFilter } from "@/components/public/CategoryFilter";
 import { ProductCard } from "@/components/public/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { CartProvider } from "@/context/CartContext";
 import { getActiveCategories } from "@/server/categories";
 import { getActiveProducts } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
@@ -10,8 +11,6 @@ import { getSettings, type PublicSettings } from "@/server/settings";
 const pageDescription =
   "Veja flores, buquês, arranjos e presentes disponíveis na floricultura para pedir pelo WhatsApp.";
 const fallbackBusinessName = "Floricultura";
-
-export const dynamic = "force-dynamic";
 
 function getTrimmedValue(value: string | null | undefined): string | null {
   const trimmedValue = value?.trim();
@@ -82,13 +81,15 @@ export default async function ProdutosPage() {
         </div>
 
         {products.length > 0 ? (
-          <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-              <li key={product.slug} className="flex">
-                <ProductCard product={product} />
-              </li>
-            ))}
-          </ul>
+          <CartProvider>
+            <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {products.map((product) => (
+                <li key={product.slug} className="flex">
+                  <ProductCard product={product} />
+                </li>
+              ))}
+            </ul>
+          </CartProvider>
         ) : (
           <EmptyState
             className="mt-10"
