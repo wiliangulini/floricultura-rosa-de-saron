@@ -8,6 +8,11 @@ dist
 !.env.example
 .DS_Store
 *.local
+*.log
+
+# Artefatos de teste e ferramentas locais
+.playwright-mcp/
+coverage/
 
 # Prompts locais
 claudeCode_prompt.md
