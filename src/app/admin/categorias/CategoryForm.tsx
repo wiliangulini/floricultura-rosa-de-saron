@@ -68,9 +68,10 @@ export function CategoryForm({ action, initialValues, submitLabel }: CategoryFor
 
           <label className="flex items-start gap-3 rounded-md border border-rose-100 bg-rose-50/60 px-3.5 py-3 text-sm text-zinc-700">
             <input
-              className="mt-1 size-4 rounded border-rose-300 text-rose-700 focus:ring-rose-500"
+              className="mt-0.5 size-5 rounded border-rose-300 text-rose-700 focus:ring-rose-500"
               defaultChecked={initialValues.active}
               disabled={isPending}
+              id="active"
               name="active"
               type="checkbox"
             />

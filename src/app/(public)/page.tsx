@@ -647,7 +647,7 @@ export default async function Home() {
   const localBusinessJsonLd = createLocalBusinessJsonLd(settings);
 
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
+    <>
       <script
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(localBusinessJsonLd) }}
         type="application/ld+json"
@@ -664,6 +664,6 @@ export default async function Home() {
       <AboutPreviewSection settings={settings} />
       <LocationSection settings={settings} whatsappHref={whatsappHref} />
       <WhatsAppCTASection settings={settings} whatsappHref={whatsappHref} />
-    </main>
+    </>
   );
 }

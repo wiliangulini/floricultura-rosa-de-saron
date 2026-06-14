@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -218,9 +219,23 @@ function getSanitizedCartProduct(product: CartProductInput): CartItem | null {
 }
 
 export function CartProvider({ children }: CartProviderProps) {
-  const [items, setItems] = useState<CartItem[]>(loadStoredCart);
+  const [items, setItems] = useState<CartItem[]>([]);
+  const hasLoadedStoredCartRef = useRef(false);
 
   useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      hasLoadedStoredCartRef.current = true;
+      setItems(loadStoredCart());
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedStoredCartRef.current) {
+      return;
+    }
+
     saveStoredCart(items);
   }, [items]);
 

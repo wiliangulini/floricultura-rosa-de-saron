@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Badge } from "@/components/ui";
+import { Badge, EmptyState } from "@/components/ui";
 import { formatCurrencyBRL } from "@/lib/money";
 import { getAdminProducts, type AdminProduct } from "@/server/products";
 
@@ -67,7 +67,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
           <h1 className="text-3xl font-bold text-zinc-950">Gerenciar produtos</h1>
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-700">
             Cadastre produtos, controle a visibilidade no catálogo e mantenha imagens provisórias
-            por URL.
+            por link de imagem.
           </p>
         </div>
 
@@ -86,14 +86,105 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
               ? "bg-emerald-50 text-emerald-800"
               : "bg-red-50 text-red-700"
           }`}
-          role="status"
+          role={resultMessage.type === "success" ? "status" : "alert"}
         >
           {resultMessage.text}
         </p>
       ) : null}
 
       {products.length > 0 ? (
-        <div className="overflow-hidden rounded-lg border border-rose-100 bg-white shadow-sm shadow-rose-950/5">
+        <>
+          <ul className="grid gap-4 md:hidden" role="list">
+            {products.map((product) => (
+              <li
+                className="rounded-lg border border-rose-100 bg-white p-4 shadow-sm shadow-rose-950/5"
+                key={product.id}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="relative size-20 shrink-0 overflow-hidden rounded-md border border-rose-100 bg-rose-50">
+                    {product.mainImage ? (
+                      <Image
+                        alt={product.mainImage.altText || product.name}
+                        className="object-cover"
+                        fill
+                        sizes="80px"
+                        src={product.mainImage.url}
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center px-2 text-center text-xs font-semibold text-rose-900">
+                        Sem imagem
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-zinc-950">{product.name}</p>
+                    {product.shortDescription ? (
+                      <p className="mt-1 line-clamp-2 text-sm leading-6 text-zinc-600">
+                        {product.shortDescription}
+                      </p>
+                    ) : null}
+                    <p className="mt-2 text-sm font-semibold text-rose-900">
+                      {formatAdminProductPrice(product)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Badge variant={product.active ? "sage" : "neutral"}>
+                    {product.active ? "Ativo" : "Inativo"}
+                  </Badge>
+                  <Badge variant={product.available ? "rose" : "neutral"}>
+                    {product.available ? "Disponível" : "Indisponível"}
+                  </Badge>
+                  {product.featured ? <Badge variant="gold">Destaque</Badge> : null}
+                  {product.seasonal ? <Badge variant="neutral">Sazonal</Badge> : null}
+                </div>
+
+                <dl className="mt-4 grid gap-2 text-sm">
+                  <div>
+                    <dt className="font-medium text-zinc-600">Categoria</dt>
+                    <dd className="font-semibold text-zinc-950">{product.category.name}</dd>
+                  </div>
+                  {product.category.active ? null : (
+                    <div>
+                      <dt className="font-medium text-zinc-600">Aviso</dt>
+                      <dd className="font-semibold text-zinc-950">Categoria inativa</dd>
+                    </div>
+                  )}
+                </dl>
+
+                <div className="mt-4 grid gap-2">
+                  <Link
+                    className="inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                    href={`/admin/produtos/${product.id}/editar`}
+                  >
+                    Editar
+                  </Link>
+                  <form action={toggleProductActive}>
+                    <input name="productId" type="hidden" value={product.id} />
+                    <button
+                      className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-zinc-500 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                      type="submit"
+                    >
+                      {product.active ? "Desativar" : "Ativar"}
+                    </button>
+                  </form>
+                  <form action={toggleProductFeatured}>
+                    <input name="productId" type="hidden" value={product.id} />
+                    <button
+                      className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-amber-300 bg-white px-3 py-2 text-sm font-semibold text-amber-900 transition hover:border-amber-500 hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
+                      type="submit"
+                    >
+                      {product.featured ? "Remover destaque" : "Destacar"}
+                    </button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden overflow-hidden rounded-lg border border-rose-100 bg-white shadow-sm shadow-rose-950/5 md:block">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-rose-100 text-left text-sm">
               <thead className="bg-rose-50/80 text-xs font-semibold uppercase text-zinc-600">
@@ -173,7 +264,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                     <td className="px-4 py-4 align-top">
                       <div className="flex min-w-52 flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
                         <Link
-                          className="inline-flex min-h-9 items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                          className="inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
                           href={`/admin/produtos/${product.id}/editar`}
                         >
                           Editar
@@ -181,7 +272,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                         <form action={toggleProductActive}>
                           <input name="productId" type="hidden" value={product.id} />
                           <button
-                            className="inline-flex min-h-9 w-full items-center justify-center rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-zinc-500 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                            className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-zinc-500 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
                             type="submit"
                           >
                             {product.active ? "Desativar" : "Ativar"}
@@ -190,7 +281,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                         <form action={toggleProductFeatured}>
                           <input name="productId" type="hidden" value={product.id} />
                           <button
-                            className="inline-flex min-h-9 w-full items-center justify-center rounded-md border border-amber-300 bg-white px-3 py-2 text-sm font-semibold text-amber-900 transition hover:border-amber-500 hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
+                            className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-amber-300 bg-white px-3 py-2 text-sm font-semibold text-amber-900 transition hover:border-amber-500 hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
                             type="submit"
                           >
                             {product.featured ? "Remover destaque" : "Destacar"}
@@ -203,11 +294,21 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
               </tbody>
             </table>
           </div>
-        </div>
+          </div>
+        </>
       ) : (
-        <div className="rounded-lg border border-dashed border-zinc-300 bg-white p-5 text-sm leading-6 text-zinc-600">
-          Nenhum produto cadastrado ainda.
-        </div>
+        <EmptyState
+          action={
+            <Link
+              className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              href="/admin/produtos/novo"
+            >
+              Cadastrar produto
+            </Link>
+          }
+          description="Cadastre o primeiro produto para começar a montar o catálogo público."
+          title="Nenhum produto cadastrado ainda"
+        />
       )}
     </section>
   );

@@ -18,24 +18,22 @@ export default async function CarrinhoPage() {
   const settings = await getSettings();
 
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
-      <div className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-8 sm:py-16">
-        <nav aria-label="Navegação" className="mb-8 text-sm text-zinc-500">
-          <Link className="hover:text-rose-700 hover:underline" href="/produtos">
-            Produtos
-          </Link>
-          <span aria-hidden="true" className="mx-2">
-            /
-          </span>
-          <span className="text-zinc-950">Meu pedido</span>
-        </nav>
+    <div className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-8 sm:py-16">
+      <nav aria-label="Navegação" className="mb-8 text-sm text-zinc-500">
+        <Link className="hover:text-rose-700 hover:underline" href="/produtos">
+          Produtos
+        </Link>
+        <span aria-hidden="true" className="mx-2">
+          /
+        </span>
+        <span className="text-zinc-950">Meu pedido</span>
+      </nav>
 
-        <h1 className="mb-8 text-3xl font-bold text-zinc-950 sm:text-4xl">Meu pedido</h1>
+      <h1 className="mb-8 text-3xl font-bold text-zinc-950 sm:text-4xl">Meu pedido</h1>
 
-        <CartProvider>
-          <CartView whatsappNumber={settings.whatsappNumber} />
-        </CartProvider>
-      </div>
-    </main>
+      <CartProvider>
+        <CartView whatsappNumber={settings.whatsappNumber} />
+      </CartProvider>
+    </div>
   );
 }

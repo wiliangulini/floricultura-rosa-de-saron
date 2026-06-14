@@ -47,7 +47,7 @@ export function Toast({
       {onClose ? (
         <button
           aria-label="Fechar aviso"
-          className="inline-flex size-7 shrink-0 items-center justify-center rounded-md opacity-70 transition hover:bg-white/60 hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-md opacity-80 transition hover:bg-white/60 hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
           onClick={onClose}
           type="button"
         >

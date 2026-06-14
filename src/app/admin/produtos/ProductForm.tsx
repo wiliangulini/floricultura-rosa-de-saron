@@ -287,8 +287,8 @@ export function ProductForm({
                 autoComplete="off"
                 disabled={isPending}
                 error={state.fieldErrors.imageUrl}
-                helperText="Usada quando nenhum arquivo é enviado. Deixe em branco para remover a imagem principal."
-                label="URL manual da imagem principal"
+                helperText="Usado quando nenhum arquivo é enviado. Deixe em branco para remover a imagem principal."
+                label="Link manual da imagem principal"
                 name="imageUrl"
                 onChange={(event) => setManualImageUrl(event.target.value)}
                 placeholder="https://..."
@@ -316,9 +316,9 @@ export function ProductForm({
               autoComplete="off"
               defaultValue={initialValues.seoTitle ?? ""}
               disabled={isPending}
-              label="Título para SEO"
+              label="Título para Google"
               name="seoTitle"
-              placeholder="Título exibido nos resultados de busca."
+              placeholder="Título exibido nos resultados de busca e compartilhamentos."
               type="text"
             />
 
@@ -326,9 +326,9 @@ export function ProductForm({
               autoComplete="off"
               defaultValue={initialValues.seoDescription ?? ""}
               disabled={isPending}
-              label="Descrição para SEO"
+              label="Descrição para Google e compartilhamentos"
               name="seoDescription"
-              placeholder="Resumo para mecanismos de busca e compartilhamento."
+              placeholder="Resumo exibido nos resultados de busca e em links compartilhados."
               type="text"
             />
           </div>
@@ -480,9 +480,10 @@ function CheckboxField({
   return (
     <label className="flex items-start gap-3 rounded-md border border-rose-100 bg-rose-50/60 px-3.5 py-3 text-sm text-zinc-700">
       <input
-        className="mt-1 size-4 rounded border-rose-300 text-rose-700 focus:ring-rose-500"
+        className="mt-0.5 size-5 rounded border-rose-300 text-rose-700 focus:ring-rose-500"
         defaultChecked={defaultChecked}
         disabled={disabled}
+        id={name}
         name={name}
         type="checkbox"
       />

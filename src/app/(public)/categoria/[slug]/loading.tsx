@@ -17,8 +17,13 @@ function ProductCardSkeleton() {
 
 export default function CategoriaLoading() {
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
-      <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8">
+    <section
+      aria-live="polite"
+      className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8"
+      role="status"
+    >
+      <span className="sr-only">Carregando categoria.</span>
+      <div aria-hidden="true">
         <div className="max-w-3xl animate-pulse">
           <div className="h-3 w-24 rounded bg-rose-200" />
           <div className="mt-3 h-8 w-72 rounded bg-zinc-200" />
@@ -38,7 +43,7 @@ export default function CategoriaLoading() {
             </li>
           ))}
         </ul>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

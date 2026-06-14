@@ -26,7 +26,17 @@ export default async function AdminLayout({
   if (!session) {
     return (
       <div className="min-h-screen bg-rose-50 text-zinc-950">
-        <main className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-10">
+        <a
+          className="fixed left-4 top-4 z-50 -translate-y-24 rounded-md bg-zinc-950 px-4 py-3 text-sm font-semibold text-white shadow-lg transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-rose-300"
+          href="#conteudo-principal"
+        >
+          Pular para o conteúdo
+        </a>
+        <main
+          className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-10"
+          id="conteudo-principal"
+          tabIndex={-1}
+        >
           <div className="w-full">{children}</div>
         </main>
       </div>
@@ -35,11 +45,21 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-zinc-100 text-zinc-950">
+      <a
+        className="fixed left-4 top-4 z-50 -translate-y-24 rounded-md bg-zinc-950 px-4 py-3 text-sm font-semibold text-white shadow-lg transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-rose-300"
+        href="#conteudo-principal"
+      >
+        Pular para o conteúdo
+      </a>
       <div className="flex min-h-screen flex-col md:flex-row">
         <AdminSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <AdminHeader adminEmail={session.email} />
-          <main className="w-full px-4 py-6 sm:px-6 lg:px-8">
+          <main
+            className="w-full px-4 py-6 sm:px-6 lg:px-8"
+            id="conteudo-principal"
+            tabIndex={-1}
+          >
             <div className="mx-auto w-full max-w-6xl">{children}</div>
           </main>
         </div>

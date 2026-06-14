@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { CartProvider } from "@/context/CartContext";
 import { getCartProduct } from "@/lib/cart";
 import { formatCurrencyBRL } from "@/lib/money";
+import { createWhatsappUrl } from "@/lib/whatsapp";
 import { getProductBySlug, type PublicProduct } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
 
@@ -101,6 +102,29 @@ function createProductJsonLd(product: PublicProduct): Record<string, unknown> {
   return jsonLd;
 }
 
+function createProductWhatsappMessage(product: PublicProduct, settings: PublicSettings): string {
+  return [
+    `Olá! Vim pelo site da ${getBusinessName(settings)} e gostaria de pedir ou consultar este produto:`,
+    product.name,
+    "",
+    "Sei que valores, disponibilidade, entrega e pagamento serão confirmados pela floricultura.",
+  ].join("\n");
+}
+
+function getProductWhatsappHref(product: PublicProduct, settings: PublicSettings): string | null {
+  const whatsappNumber = getTrimmedValue(settings.whatsappNumber);
+  const whatsappDigits = whatsappNumber?.replace(/\D/g, "");
+
+  if (!whatsappNumber || !whatsappDigits) {
+    return null;
+  }
+
+  return createWhatsappUrl({
+    phoneNumber: whatsappNumber,
+    message: createProductWhatsappMessage(product, settings),
+  });
+}
+
 function serializeJsonLd(jsonLd: Record<string, unknown>): string {
   return JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 }
@@ -143,7 +167,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProdutoPage({ params }: Props) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, settings] = await Promise.all([getProductBySlug(slug), getSettings()]);
 
   if (!product) {
     notFound();
@@ -152,9 +176,10 @@ export default async function ProdutoPage({ params }: Props) {
   const imageAlt = product.mainImage?.altText || product.name;
   const galleryImages = product.images.filter((image) => image.url !== product.mainImage?.url);
   const productJsonLd = createProductJsonLd(product);
+  const whatsappHref = getProductWhatsappHref(product, settings);
 
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
+    <>
       <script
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(productJsonLd) }}
         type="application/ld+json"
@@ -258,13 +283,24 @@ export default async function ProdutoPage({ params }: Props) {
                   variant="primary"
                 />
               </CartProvider>
-              <Button className="w-full sm:flex-1" disabled size="lg" variant="outline">
-                Pedir pelo WhatsApp
-              </Button>
+              {whatsappHref ? (
+                <a
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-md border border-rose-300 bg-white/85 px-6 py-3 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:flex-1"
+                  href={whatsappHref}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Pedir pelo WhatsApp
+                </a>
+              ) : (
+                <Button className="w-full sm:flex-1" disabled size="lg" variant="outline">
+                  WhatsApp indisponível
+                </Button>
+              )}
             </div>
           </section>
         </article>
       </section>
-    </main>
+    </>
   );
 }

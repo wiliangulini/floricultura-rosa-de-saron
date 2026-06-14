@@ -180,7 +180,7 @@ export default async function ContatoPage() {
   const googleMapsHref = getGoogleMapsHref(settings);
 
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
+    <>
       <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8 lg:py-20">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
@@ -299,6 +299,6 @@ export default async function ContatoPage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

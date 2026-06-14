@@ -44,7 +44,7 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
             width={80}
           />
         ) : (
-          <div className="flex h-full items-center justify-center px-2 text-center text-xs text-rose-400">
+          <div className="flex h-full items-center justify-center px-2 text-center text-xs font-semibold text-rose-900">
             Sem foto
           </div>
         )}
@@ -63,8 +63,8 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1">
             <button
-              aria-label="Diminuir quantidade"
-              className="flex size-8 items-center justify-center rounded border border-rose-200 bg-white text-zinc-700 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label={`Diminuir quantidade de ${item.name}`}
+              className="flex size-11 items-center justify-center rounded border border-rose-200 bg-white text-zinc-800 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={item.quantity <= 1}
               onClick={() => onQuantityChange(item.productId, item.quantity - 1)}
               type="button"
@@ -80,8 +80,8 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
             </span>
 
             <button
-              aria-label="Aumentar quantidade"
-              className="flex size-8 items-center justify-center rounded border border-rose-200 bg-white text-zinc-700 transition hover:border-rose-400 hover:bg-rose-50"
+              aria-label={`Aumentar quantidade de ${item.name}`}
+              className="flex size-11 items-center justify-center rounded border border-rose-200 bg-white text-zinc-800 transition hover:border-rose-400 hover:bg-rose-50"
               onClick={() => onQuantityChange(item.productId, item.quantity + 1)}
               type="button"
             >
@@ -93,7 +93,7 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
             <p className="text-sm font-semibold text-zinc-950">{formatItemSubtotal(item)}</p>
             <button
               aria-label={`Remover ${item.name} do carrinho`}
-              className="text-sm text-zinc-400 underline-offset-2 hover:text-red-600 hover:underline"
+              className="inline-flex min-h-11 items-center rounded-md px-2 text-sm font-semibold text-red-700 underline-offset-2 hover:bg-red-50 hover:text-red-800 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
               onClick={() => onRemoveItem(item.productId)}
               type="button"
             >

@@ -29,7 +29,7 @@ export default async function AdminPage() {
 
   const stats = [
     {
-      description: "Total de produtos registrados no banco.",
+      description: "Total de produtos cadastrados na loja.",
       label: "Produtos cadastrados",
       value: totalProducts,
     },

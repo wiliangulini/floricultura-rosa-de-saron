@@ -18,6 +18,7 @@ type CheckoutFormProps = {
 export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
   const { items, removeItem, updateQuantity, getTotal } = useCart();
   const { estimatedTotal, hasOnRequestItems } = getTotal();
+  const hasWhatsappNumber = Boolean(whatsappNumber.trim().replace(/\D/g, ""));
 
   const [customerName, setCustomerName] = useState("");
   const [desiredDate, setDesiredDate] = useState("");
@@ -31,8 +32,11 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
     return (
       <EmptyState
         action={
-          <Link href="/produtos">
-            <Button variant="primary">Ver produtos</Button>
+          <Link
+            className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+            href="/produtos"
+          >
+            Ver produtos
           </Link>
         }
         description="Adicione produtos ao carrinho para revisar seu pedido antes do envio."
@@ -49,6 +53,10 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!hasWhatsappNumber) {
+      return;
+    }
 
     if (!customerName.trim()) {
       setCustomerNameError("Informe seu nome para enviar o pedido.");
@@ -88,7 +96,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
           <Input
             autoComplete="name"
             error={customerNameError}
-            label="Nome *"
+            label="Seu nome *"
             name="customerName"
             onChange={handleCustomerNameChange}
             placeholder="Seu nome"
@@ -98,7 +106,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
           />
 
           <Input
-            label="Data/prazo desejado"
+            label="Data ou horário desejado"
             name="desiredDate"
             onChange={(e) => setDesiredDate(e.target.value)}
             placeholder="Ex.: hoje à tarde, 15/07 pela manhã"
@@ -107,7 +115,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
           />
 
           <Input
-            label="Forma de pagamento"
+            label="Como pretende pagar"
             name="paymentMethod"
             onChange={(e) => setPaymentMethod(e.target.value)}
             placeholder="Ex.: Pix, cartão, dinheiro"
@@ -125,7 +133,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
           />
 
           <Textarea
-            label="Observações gerais"
+            label="Observações para a loja"
             name="notes"
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Informe endereço, retirada, preferências ou outros detalhes importantes"
@@ -134,8 +142,14 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
           />
         </div>
 
-        <Button className="mt-8 w-full sm:w-auto" size="lg" type="submit" variant="primary">
-          Enviar pedido pelo WhatsApp
+        <Button
+          className="mt-8 w-full sm:w-auto"
+          disabled={!hasWhatsappNumber}
+          size="lg"
+          type="submit"
+          variant="primary"
+        >
+          {hasWhatsappNumber ? "Enviar pedido pelo WhatsApp" : "WhatsApp indisponível"}
         </Button>
 
         {successMessage ? (

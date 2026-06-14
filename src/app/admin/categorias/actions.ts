@@ -198,7 +198,7 @@ function validateCategoryForm(formData: FormData):
   if (!name) {
     fieldErrors.name = "Informe o nome da categoria.";
   } else if (!slug) {
-    fieldErrors.name = "Informe um nome com letras ou números para gerar o slug.";
+    fieldErrors.name = "Informe um nome com letras ou números.";
   }
 
   const sortOrder = parseSortOrder(sortOrderValue);

@@ -262,14 +262,14 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
                 Google e compartilhamentos
               </h2>
               <p className="mt-1 text-sm leading-6 text-zinc-600">
-                Título, descrição e imagem padrão usados em SEO e prévias de links.
+                Título, descrição e imagem padrão usados no Google e nas prévias de links.
               </p>
             </div>
 
             <Input
               defaultValue={initialValues.seoDefaultTitle}
               disabled={isPending}
-              label="Título padrão para SEO"
+              label="Título padrão para Google"
               name="seoDefaultTitle"
               placeholder="Ex.: Floricultura em Pato Branco | Buquês e presentes"
               type="text"
@@ -278,7 +278,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
             <Textarea
               defaultValue={initialValues.seoDefaultDescription}
               disabled={isPending}
-              label="Descrição padrão para SEO"
+              label="Descrição padrão para Google e compartilhamentos"
               name="seoDefaultDescription"
               placeholder="Resumo da floricultura para aparecer no Google e em compartilhamentos."
               rows={3}
@@ -289,7 +289,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
               disabled={isPending}
               error={state.fieldErrors.ogImageUrl}
               helperText={
-                "Informe uma URL https:// de imagem já publicada. Upload fica para etapa futura."
+                "Informe um link https:// de imagem já publicada. Envio direto de arquivo fica para etapa futura."
               }
               label="Imagem padrão de compartilhamento"
               name="ogImageUrl"
@@ -329,9 +329,10 @@ function CheckboxField({
   return (
     <label className="flex items-start gap-3 rounded-md border border-rose-100 bg-rose-50/60 px-3.5 py-3 text-sm text-zinc-700">
       <input
-        className="mt-1 size-4 rounded border-rose-300 text-rose-700 focus:ring-rose-500"
+        className="mt-0.5 size-5 rounded border-rose-300 text-rose-700 focus:ring-rose-500"
         defaultChecked={defaultChecked}
         disabled={disabled}
+        id={name}
         name={name}
         type="checkbox"
       />

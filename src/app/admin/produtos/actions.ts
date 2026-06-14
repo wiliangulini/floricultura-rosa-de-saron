@@ -331,7 +331,7 @@ function validateProductForm(formData: FormData):
   const imageUrl = parseImageUrl(imageUrlValue);
 
   if (imageUrlValue && !imageUrl) {
-    fieldErrors.imageUrl = "Informe uma URL de imagem começando com https://.";
+    fieldErrors.imageUrl = "Informe um link de imagem começando com https://.";
   }
 
   if (Object.keys(fieldErrors).length > 0 || !priceType) {

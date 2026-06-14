@@ -67,13 +67,17 @@ function buildWhatsAppMessage(items: CartItem[], estimatedTotal: number, hasOnRe
 export function CartView({ whatsappNumber }: CartViewProps) {
   const { items, removeItem, updateQuantity, clearCart, getTotal } = useCart();
   const { estimatedTotal, hasOnRequestItems } = getTotal();
+  const hasWhatsappNumber = Boolean(whatsappNumber.trim().replace(/\D/g, ""));
 
   if (items.length === 0) {
     return (
       <EmptyState
         action={
-          <Link href="/produtos">
-            <Button variant="primary">Ver produtos</Button>
+          <Link
+            className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+            href="/produtos"
+          >
+            Ver produtos
           </Link>
         }
         description="Adicione produtos para montar seu pedido e enviar pelo WhatsApp."
@@ -83,9 +87,23 @@ export function CartView({ whatsappNumber }: CartViewProps) {
   }
 
   function handleSendOrder() {
+    if (!hasWhatsappNumber) {
+      return;
+    }
+
     const message = buildWhatsAppMessage(items, estimatedTotal, hasOnRequestItems);
     const url = createWhatsappUrl({ phoneNumber: whatsappNumber, message });
     window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function handleClearCart() {
+    const confirmed = window.confirm(
+      "Tem certeza que deseja apagar todos os produtos do seu pedido?",
+    );
+
+    if (confirmed) {
+      clearCart();
+    }
   }
 
   return (
@@ -105,7 +123,7 @@ export function CartView({ whatsappNumber }: CartViewProps) {
                     width={96}
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-xs text-rose-400">
+                  <div className="flex h-full items-center justify-center text-xs font-semibold text-rose-900">
                     Sem foto
                   </div>
                 )}
@@ -128,8 +146,8 @@ export function CartView({ whatsappNumber }: CartViewProps) {
                 <div className="mt-auto flex items-center justify-between gap-4">
                   <div className="flex items-center gap-1">
                     <button
-                      aria-label="Diminuir quantidade"
-                      className="flex size-8 items-center justify-center rounded border border-rose-200 bg-white text-zinc-700 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
+                      aria-label={`Diminuir quantidade de ${item.name}`}
+                      className="flex size-11 items-center justify-center rounded border border-rose-200 bg-white text-zinc-800 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={item.quantity <= 1}
                       onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                       type="button"
@@ -145,8 +163,8 @@ export function CartView({ whatsappNumber }: CartViewProps) {
                     </span>
 
                     <button
-                      aria-label="Aumentar quantidade"
-                      className="flex size-8 items-center justify-center rounded border border-rose-200 bg-white text-zinc-700 transition hover:border-rose-400 hover:bg-rose-50"
+                      aria-label={`Aumentar quantidade de ${item.name}`}
+                      className="flex size-11 items-center justify-center rounded border border-rose-200 bg-white text-zinc-800 transition hover:border-rose-400 hover:bg-rose-50"
                       onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                       type="button"
                     >
@@ -160,7 +178,7 @@ export function CartView({ whatsappNumber }: CartViewProps) {
                     </p>
                     <button
                       aria-label={`Remover ${item.name} do pedido`}
-                      className="text-sm text-zinc-400 underline-offset-2 hover:text-red-600 hover:underline"
+                      className="inline-flex min-h-11 items-center rounded-md px-2 text-sm font-semibold text-red-700 underline-offset-2 hover:bg-red-50 hover:text-red-800 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
                       onClick={() => removeItem(item.productId)}
                       type="button"
                     >
@@ -175,8 +193,8 @@ export function CartView({ whatsappNumber }: CartViewProps) {
 
         <div className="mt-4 border-t border-rose-100 pt-4">
           <button
-            className="text-sm text-zinc-400 underline-offset-2 hover:text-red-600 hover:underline"
-            onClick={clearCart}
+            className="inline-flex min-h-11 items-center rounded-md px-2 text-sm font-semibold text-red-700 underline-offset-2 hover:bg-red-50 hover:text-red-800 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+            onClick={handleClearCart}
             type="button"
           >
             Limpar pedido
@@ -216,9 +234,24 @@ export function CartView({ whatsappNumber }: CartViewProps) {
             ) : null}
           </div>
 
-          <Button className="mt-6 w-full" onClick={handleSendOrder} size="lg" variant="primary">
-            Enviar pelo WhatsApp
-          </Button>
+          <div className="mt-6 grid gap-3">
+            <Link
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              href="/pedido"
+            >
+              Revisar dados do pedido
+            </Link>
+
+            <Button
+              className="w-full"
+              disabled={!hasWhatsappNumber}
+              onClick={handleSendOrder}
+              size="lg"
+              variant="outline"
+            >
+              {hasWhatsappNumber ? "Enviar direto pelo WhatsApp" : "WhatsApp indisponível"}
+            </Button>
+          </div>
 
           <p className="mt-3 text-center text-xs leading-5 text-zinc-500">
             Valores, disponibilidade, entrega e pagamento serão confirmados pela floricultura

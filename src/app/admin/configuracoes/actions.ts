@@ -154,7 +154,7 @@ function validateSettingsForm(formData: FormData):
   }
 
   if (ogImageUrlValue && !ogImageUrl) {
-    fieldErrors.ogImageUrl = "Informe uma URL de imagem começando com https://.";
+    fieldErrors.ogImageUrl = "Informe um link de imagem começando com https://.";
   }
 
   if (Object.keys(fieldErrors).length > 0) {

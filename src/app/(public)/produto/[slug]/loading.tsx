@@ -1,7 +1,12 @@
 export default function ProdutoLoading() {
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
-      <article className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8">
+    <article
+      aria-live="polite"
+      className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8"
+      role="status"
+    >
+      <span className="sr-only">Carregando produto.</span>
+      <div aria-hidden="true">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="animate-pulse space-y-4">
             <div className="aspect-[4/3] overflow-hidden rounded-xl bg-rose-100" />
@@ -29,7 +34,7 @@ export default function ProdutoLoading() {
             </div>
           </div>
         </div>
-      </article>
-    </main>
+      </div>
+    </article>
   );
 }

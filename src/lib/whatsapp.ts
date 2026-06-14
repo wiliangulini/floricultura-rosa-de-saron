@@ -70,10 +70,10 @@ function formatItemSubtotal(item: CartItem): string {
 
 function getOptionalCheckoutLines(checkoutData: CheckoutFormData): string[] {
   const fields = [
-    ["Data/prazo desejado", checkoutData.desiredDate],
-    ["Forma de pagamento", checkoutData.paymentMethod],
+    ["Data ou horário desejado", checkoutData.desiredDate],
+    ["Como pretende pagar", checkoutData.paymentMethod],
     ["Mensagem para cartão", checkoutData.cardMessage],
-    ["Observações gerais", checkoutData.notes],
+    ["Observações para a loja", checkoutData.notes],
   ] as const;
 
   return fields.flatMap(([label, value]) => {
@@ -129,4 +129,3 @@ export function buildOrderWhatsAppMessage(
 
   return lines.join("\n");
 }
-

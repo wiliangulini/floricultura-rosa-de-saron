@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { CategoryFilter } from "@/components/public/CategoryFilter";
 import { ProductCard } from "@/components/public/ProductCard";
@@ -63,41 +64,47 @@ export default async function ProdutosPage() {
   const [products, categories] = await Promise.all([getActiveProducts(), getActiveCategories()]);
 
   return (
-    <main className="min-h-screen bg-rose-50 text-zinc-950">
-      <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8">
-        <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
-            Catálogo
-          </p>
-          <h1 className="mt-4 text-4xl font-bold sm:text-5xl">Produtos da floricultura</h1>
-          <p className="mt-5 text-lg leading-8 text-zinc-700">
-            Escolha entre flores, buquês, arranjos e presentes preparados com cuidado. Valores,
-            disponibilidade e entrega são confirmados pela loja antes do fechamento do pedido.
-          </p>
-        </div>
+    <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8">
+      <div className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
+          Catálogo
+        </p>
+        <h1 className="mt-4 text-4xl font-bold sm:text-5xl">Produtos da floricultura</h1>
+        <p className="mt-5 text-lg leading-8 text-zinc-700">
+          Escolha entre flores, buquês, arranjos e presentes preparados com cuidado. Valores,
+          disponibilidade e entrega são confirmados pela loja antes do fechamento do pedido.
+        </p>
+      </div>
 
-        <div className="mt-8">
-          <CategoryFilter activeSlug={null} categories={categories} />
-        </div>
+      <div className="mt-8">
+        <CategoryFilter activeSlug={null} categories={categories} />
+      </div>
 
-        {products.length > 0 ? (
-          <CartProvider>
-            <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((product) => (
-                <li key={product.slug} className="flex">
-                  <ProductCard product={product} />
-                </li>
-              ))}
-            </ul>
-          </CartProvider>
-        ) : (
-          <EmptyState
-            className="mt-10"
-            description="A loja ainda não possui produtos ativos no catálogo. Volte em breve ou fale com a floricultura pelo WhatsApp."
-            title="Nenhum produto disponível"
-          />
-        )}
-      </section>
-    </main>
+      {products.length > 0 ? (
+        <CartProvider>
+          <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <li key={product.slug} className="flex">
+                <ProductCard product={product} />
+              </li>
+            ))}
+          </ul>
+        </CartProvider>
+      ) : (
+        <EmptyState
+          action={
+            <Link
+              className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              href="/contato"
+            >
+              Falar com a loja
+            </Link>
+          }
+          className="mt-10"
+          description="A loja ainda não possui produtos ativos no catálogo. Volte em breve ou fale com a floricultura pelo WhatsApp."
+          title="Nenhum produto disponível"
+        />
+      )}
+    </section>
   );
 }

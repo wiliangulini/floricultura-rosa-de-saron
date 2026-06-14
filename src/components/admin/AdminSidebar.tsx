@@ -36,7 +36,7 @@ export function AdminSidebar() {
             return (
               <Link
                 aria-current={active ? "page" : undefined}
-                className={`rounded-md px-3 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 ${
+                className={`inline-flex min-h-11 items-center rounded-md px-3.5 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 ${
                   active
                     ? "bg-rose-100 text-rose-800"
                     : "text-zinc-700 hover:bg-rose-50 hover:text-rose-800"
@@ -52,7 +52,7 @@ export function AdminSidebar() {
           <form action="/admin/logout" method="post">
             <button
               aria-label="Sair da conta"
-              className="rounded-md px-3 py-2 text-sm font-semibold text-rose-900 transition hover:bg-rose-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              className="inline-flex min-h-11 items-center rounded-md px-3.5 py-2 text-sm font-semibold text-rose-900 transition hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
               type="submit"
             >
               Sair

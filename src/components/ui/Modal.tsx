@@ -105,7 +105,7 @@ export function Modal({
           </div>
           <button
             aria-label={closeLabel}
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-md text-zinc-500 transition hover:bg-rose-50 hover:text-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-md text-zinc-600 transition hover:bg-rose-50 hover:text-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
             onClick={onClose}
             type="button"
           >
