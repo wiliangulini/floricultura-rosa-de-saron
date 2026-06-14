@@ -69,6 +69,12 @@ describe("buildWhatsAppUrl", () => {
     expect(url).toContain("?text=");
     expect(url).toContain(encodeURIComponent(message));
   });
+
+  it("remove o símbolo + de número no formato internacional", () => {
+    const url = buildWhatsAppUrl("+55 (11) 9 9999-9999", "teste");
+    expect(url).toContain("/5511999999999?");
+    expect(url).not.toContain("+");
+  });
 });
 
 // ─── createWhatsappUrl ───────────────────────────────────────────────────────
@@ -246,6 +252,14 @@ describe("buildOrderWhatsAppMessage", () => {
     expect(message).not.toContain("Nome:");
   });
 
+  it("omite nome do cliente quando contém apenas espaços em branco", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      { ...emptyCheckout, customerName: "   " },
+    );
+    expect(message).not.toContain("Nome:");
+  });
+
   // ─── campos opcionais do checkout ────────────────────────────────────────
 
   it("exibe data ou prazo desejado quando preenchido", () => {
@@ -285,6 +299,14 @@ describe("buildOrderWhatsAppMessage", () => {
     expect(message).not.toContain("Data ou horário desejado:");
     expect(message).not.toContain("Como pretende pagar:");
     expect(message).not.toContain("Mensagem para cartão:");
+    expect(message).not.toContain("Observações para a loja:");
+  });
+
+  it("omite campo opcional quando contém apenas espaços em branco", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      { ...emptyCheckout, notes: "   " },
+    );
     expect(message).not.toContain("Observações para a loja:");
   });
 });
