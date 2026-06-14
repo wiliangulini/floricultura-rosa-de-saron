@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CategoryFilter } from "@/components/public/CategoryFilter";
 import { ProductCard } from "@/components/public/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { createSiteUrl } from "@/lib/site-url";
 import { getActiveCategories, getCategoryBySlug, type PublicCategory } from "@/server/categories";
 import { getProductsByCategorySlug } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
@@ -29,7 +30,16 @@ function getMetadataTitle(category: PublicCategory, settings: PublicSettings): s
 }
 
 function getMetadataDescription(category: PublicCategory, settings: PublicSettings): string {
-  return `Veja opções de ${category.name.toLowerCase()} em ${getCityName(settings)} na ${getBusinessName(settings)}. Produtos disponíveis para pedir pelo WhatsApp, com confirmação de valores, entrega e disponibilidade pela loja.`;
+  return (
+    category.description?.trim() ||
+    `Veja opções de ${category.name.toLowerCase()} em ${getCityName(settings)} na ${getBusinessName(settings)}. Produtos disponíveis para pedir pelo WhatsApp, com confirmação de valores, entrega e disponibilidade pela loja.`
+  );
+}
+
+function getOgImages(settings: PublicSettings): Array<{ url: string }> | undefined {
+  const ogImageUrl = settings.ogImageUrl?.trim();
+
+  return ogImageUrl ? [{ url: ogImageUrl }] : undefined;
 }
 
 function createBreadcrumbJsonLd(category: PublicCategory): Record<string, unknown> {
@@ -41,19 +51,19 @@ function createBreadcrumbJsonLd(category: PublicCategory): Record<string, unknow
         "@type": "ListItem",
         position: 1,
         name: "Início",
-        item: "/",
+        item: createSiteUrl("/"),
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Produtos",
-        item: "/produtos",
+        item: createSiteUrl("/produtos"),
       },
       {
         "@type": "ListItem",
         position: 3,
         name: category.name,
-        item: `/categoria/${category.slug}`,
+        item: createSiteUrl(`/categoria/${category.slug}`),
       },
     ],
   };
@@ -75,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = getMetadataTitle(category, settings);
   const description = getMetadataDescription(category, settings);
-  const ogImages = settings.ogImageUrl ? [{ url: settings.ogImageUrl }] : undefined;
+  const ogImages = getOgImages(settings);
 
   return {
     title,
@@ -85,7 +95,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       images: ogImages,
+      locale: "pt_BR",
+      siteName: getBusinessName(settings),
       type: "website",
+      url: `/categoria/${category.slug}`,
     },
     twitter: {
       card: ogImages ? "summary_large_image" : "summary",

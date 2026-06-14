@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e31]:
+    - complementary [ref=e32]:
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - paragraph [ref=e35]: Administração
+          - paragraph [ref=e36]: Rosa de Saron
+        - navigation "Navegação administrativa" [ref=e37]:
+          - link "Painel" [ref=e38] [cursor=pointer]:
+            - /url: /admin
+          - link "Produtos" [ref=e39] [cursor=pointer]:
+            - /url: /admin/produtos
+          - link "Categorias" [ref=e40] [cursor=pointer]:
+            - /url: /admin/categorias
+          - link "Configurações" [ref=e41] [cursor=pointer]:
+            - /url: /admin/configuracoes
+          - button "Sair da conta" [ref=e43]: Sair
+    - generic [ref=e44]:
+      - banner [ref=e45]:
+        - generic [ref=e46]:
+          - paragraph [ref=e47]: Painel administrativo
+          - paragraph [ref=e48]: "Conectado como: admin@floricultura.com"
+      - main [ref=e49]:
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - heading "Painel administrativo" [level=1] [ref=e54]
+              - paragraph [ref=e55]: Acompanhe um resumo simples dos produtos cadastrados na floricultura.
+            - link "Cadastrar produto" [ref=e56] [cursor=pointer]:
+              - /url: /admin/produtos/novo
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]:
+                - heading "Produtos cadastrados" [level=3] [ref=e60]
+                - paragraph [ref=e61]: Total de produtos registrados no banco.
+              - paragraph [ref=e63]: "4"
+            - generic [ref=e64]:
+              - generic [ref=e65]:
+                - heading "Produtos ativos" [level=3] [ref=e66]
+                - paragraph [ref=e67]: Produtos visíveis para os clientes.
+              - paragraph [ref=e69]: "4"
+            - generic [ref=e70]:
+              - generic [ref=e71]:
+                - heading "Produtos em destaque" [level=3] [ref=e72]
+                - paragraph [ref=e73]: Produtos ativos marcados para destaque.
+              - paragraph [ref=e75]: "3"
+  - button "Open Next.js Dev Tools" [ref=e26] [cursor=pointer]:
+    - img [ref=e27]
+  - alert [ref=e30]

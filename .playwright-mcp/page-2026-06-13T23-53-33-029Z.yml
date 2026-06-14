@@ -1,0 +1,18 @@
+- generic [active] [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Login administrativo" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Acesse com o e-mail e a senha da administradora para gerenciar a floricultura.
+      - generic [ref=e9]:
+        - heading "Acessar painel" [level=3] [ref=e11]
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - generic [ref=e15]: E-mail
+            - textbox "E-mail" [ref=e16]:
+              - /placeholder: admin@floricultura.com
+          - generic [ref=e17]:
+            - generic [ref=e18]: Senha
+            - textbox "Senha" [ref=e19]
+          - button "Entrar" [ref=e20]
+  - alert [ref=e21]

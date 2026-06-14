@@ -1,0 +1,135 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - paragraph [ref=e7]: Administração
+          - paragraph [ref=e8]: Rosa de Saron
+        - navigation "Navegação administrativa" [ref=e9]:
+          - link "Painel" [ref=e10] [cursor=pointer]:
+            - /url: /admin
+          - link "Produtos" [ref=e11] [cursor=pointer]:
+            - /url: /admin/produtos
+          - link "Categorias" [ref=e12] [cursor=pointer]:
+            - /url: /admin/categorias
+          - link "Configurações" [ref=e13] [cursor=pointer]:
+            - /url: /admin/configuracoes
+          - button "Sair da conta" [ref=e15]: Sair
+    - generic [ref=e16]:
+      - banner [ref=e17]:
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: Painel administrativo
+          - paragraph [ref=e20]: "Conectado como: admin@floricultura.com"
+      - main [ref=e21]:
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Configurações" [level=1] [ref=e25]
+            - paragraph [ref=e26]: Edite os dados principais da floricultura. Essas informações aparecem no site, no WhatsApp, no Google e nos compartilhamentos.
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - region "Dados da floricultura" [ref=e30]:
+                - generic [ref=e31]:
+                  - heading "Dados da floricultura" [level=2] [ref=e32]
+                  - paragraph [ref=e33]: Nome, WhatsApp e contato usados nas páginas públicas e no envio de pedidos.
+                - generic [ref=e34]:
+                  - generic [ref=e35]:
+                    - generic [ref=e36]: Nome da floricultura
+                    - textbox "Nome da floricultura" [ref=e37]:
+                      - /placeholder: "Ex.: Floricultura Rosa de Saron"
+                      - text: Floricultura
+                  - generic [ref=e38]:
+                    - generic [ref=e39]: WhatsApp
+                    - textbox "WhatsApp" [invalid] [ref=e40]:
+                      - /placeholder: "5546999999999"
+                      - text: "5546991168949"
+                    - paragraph [ref=e41]: "Use DDI e DDD. Ex.: 5546999999999."
+                    - paragraph [ref=e120]: Informe o WhatsApp com DDI e DDD, usando de 10 a 15 dígitos.
+                  - generic [ref=e42]:
+                    - generic [ref=e43]: Telefone
+                    - textbox "Telefone" [ref=e44]:
+                      - /placeholder: "Ex.: (46) 99999-9999"
+                  - generic [ref=e45]:
+                    - generic [ref=e46]: E-mail
+                    - textbox "E-mail" [ref=e47]:
+                      - /placeholder: contato@floricultura.com.br
+              - region "Endereço e atendimento" [ref=e48]:
+                - generic [ref=e49]:
+                  - heading "Endereço e atendimento" [level=2] [ref=e50]
+                  - paragraph [ref=e51]: Dados exibidos no site e usados nas informações locais para busca.
+                - generic [ref=e52]:
+                  - generic [ref=e53]: Endereço
+                  - textbox "Endereço" [ref=e54]:
+                    - /placeholder: Rua, número e complemento
+                - generic [ref=e55]:
+                  - generic [ref=e56]:
+                    - generic [ref=e57]: Bairro
+                    - textbox "Bairro" [ref=e58]:
+                      - /placeholder: "Ex.: Centro"
+                  - generic [ref=e59]:
+                    - generic [ref=e60]: Cidade
+                    - textbox "Cidade" [ref=e61]:
+                      - /placeholder: "Ex.: Pato Branco"
+                      - text: Pato Branco
+                  - generic [ref=e62]:
+                    - generic [ref=e63]: Estado
+                    - textbox "Estado" [ref=e64]:
+                      - /placeholder: "Ex.: PR"
+                      - text: PR
+                - generic [ref=e65]:
+                  - generic [ref=e66]: Link do Google Maps
+                  - textbox "Link do Google Maps" [ref=e67]:
+                    - /placeholder: https://maps.google.com/...
+                - generic [ref=e68]:
+                  - generic [ref=e69]: Horário de atendimento
+                  - textbox "Horário de atendimento" [ref=e70]:
+                    - /placeholder: "Ex.: Segunda a sexta, das 9h às 18h."
+              - region "Entrega" [ref=e71]:
+                - generic [ref=e72]:
+                  - heading "Entrega" [level=2] [ref=e73]
+                  - paragraph [ref=e74]: Informações mostradas ao cliente antes do contato pelo WhatsApp.
+                - generic [ref=e75]:
+                  - checkbox "Entrega disponível Marque quando a floricultura puder combinar entrega com o cliente." [ref=e76]
+                  - generic [ref=e77]:
+                    - generic [ref=e78]: Entrega disponível
+                    - generic [ref=e79]: Marque quando a floricultura puder combinar entrega com o cliente.
+                - generic [ref=e80]:
+                  - generic [ref=e81]: Descrição da entrega
+                  - textbox "Descrição da entrega" [ref=e82]:
+                    - /placeholder: "Ex.: Entregas em Pato Branco com taxa combinada pelo WhatsApp."
+              - region "Redes sociais" [ref=e83]:
+                - generic [ref=e84]:
+                  - heading "Redes sociais" [level=2] [ref=e85]
+                  - paragraph [ref=e86]: Links públicos usados no site e nas informações de compartilhamento.
+                - generic [ref=e87]:
+                  - generic [ref=e88]:
+                    - generic [ref=e89]: Instagram
+                    - textbox "Instagram" [ref=e90]:
+                      - /placeholder: https://instagram.com/sua-floricultura
+                  - generic [ref=e91]:
+                    - generic [ref=e92]: Facebook
+                    - textbox "Facebook" [ref=e93]:
+                      - /placeholder: https://facebook.com/sua-floricultura
+              - region "Google e compartilhamentos" [ref=e94]:
+                - generic [ref=e95]:
+                  - heading "Google e compartilhamentos" [level=2] [ref=e96]
+                  - paragraph [ref=e97]: Título, descrição e imagem padrão usados em SEO e prévias de links.
+                - generic [ref=e98]:
+                  - generic [ref=e99]: Título padrão para SEO
+                  - textbox "Título padrão para SEO" [ref=e100]:
+                    - /placeholder: "Ex.: Floricultura em Pato Branco | Buquês e presentes"
+                    - text: Floricultura em Pato Branco | Buquês, arranjos e presentes
+                - generic [ref=e101]:
+                  - generic [ref=e102]: Descrição padrão para SEO
+                  - textbox "Descrição padrão para SEO" [ref=e103]:
+                    - /placeholder: Resumo da floricultura para aparecer no Google e em compartilhamentos.
+                    - text: Floricultura em Pato Branco com buquês, arranjos, cestas e flores naturais para presentear. Envie seu pedido pelo WhatsApp.
+                - generic [ref=e104]:
+                  - generic [ref=e105]: Imagem padrão de compartilhamento
+                  - textbox "Imagem padrão de compartilhamento" [ref=e106]:
+                    - /placeholder: https://exemplo.com/imagem.jpg
+                  - paragraph [ref=e107]: Informe uma URL https:// de imagem já publicada. Upload fica para etapa futura.
+              - alert [ref=e121]: Corrija os campos destacados para salvar as configurações.
+            - button "Salvar configurações" [ref=e109]
+  - button "Open Next.js Dev Tools" [ref=e115] [cursor=pointer]:
+    - img [ref=e116]
+  - alert [ref=e119]

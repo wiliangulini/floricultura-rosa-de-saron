@@ -8,10 +8,23 @@ import { Button } from "@/components/ui/Button";
 import { getCartProduct } from "@/lib/cart";
 import { formatCurrencyBRL } from "@/lib/money";
 import { getProductBySlug, type PublicProduct } from "@/server/products";
+import { getSettings, type PublicSettings } from "@/server/settings";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export const dynamic = "force-dynamic";
+
+const fallbackBusinessName = "Floricultura";
+
+function getTrimmedValue(value: string | null | undefined): string | null {
+  const trimmedValue = value?.trim();
+
+  return trimmedValue ? trimmedValue : null;
+}
+
+function getBusinessName(settings: PublicSettings): string {
+  return getTrimmedValue(settings.businessName) ?? fallbackBusinessName;
+}
 
 function formatProductPrice(product: PublicProduct): string {
   const price = product.price !== null ? Number(product.price) : null;
@@ -29,8 +42,33 @@ function formatProductPrice(product: PublicProduct): string {
   return formattedPrice;
 }
 
-function getProductDescription(product: PublicProduct): string | undefined {
-  return product.seoDescription ?? product.shortDescription ?? undefined;
+function getProductDescription(product: PublicProduct, settings: PublicSettings): string | undefined {
+  return (
+    getTrimmedValue(product.seoDescription) ??
+    getTrimmedValue(product.shortDescription) ??
+    getTrimmedValue(settings.seoDefaultDescription) ??
+    undefined
+  );
+}
+
+function getOgImages(
+  product: PublicProduct,
+  settings: PublicSettings,
+): Array<{ url: string; width?: number; height?: number; alt?: string }> | undefined {
+  if (product.mainImage) {
+    return [
+      {
+        url: product.mainImage.url,
+        width: 1200,
+        height: 900,
+        alt: product.mainImage.altText ?? product.name,
+      },
+    ];
+  }
+
+  const ogImageUrl = getTrimmedValue(settings.ogImageUrl);
+
+  return ogImageUrl ? [{ url: ogImageUrl }] : undefined;
 }
 
 function createProductJsonLd(product: PublicProduct): Record<string, unknown> {
@@ -70,7 +108,7 @@ function serializeJsonLd(jsonLd: Record<string, unknown>): string {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, settings] = await Promise.all([getProductBySlug(slug), getSettings()]);
 
   if (!product) {
     return {
@@ -78,11 +116,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = product.seoTitle ?? product.name;
-  const description = getProductDescription(product);
-  const ogImages = product.mainImage
-    ? [{ url: product.mainImage.url, width: 1200, height: 900 }]
-    : undefined;
+  const title = getTrimmedValue(product.seoTitle) ?? product.name;
+  const description = getProductDescription(product, settings);
+  const ogImages = getOgImages(product, settings);
 
   return {
     title,
@@ -92,7 +128,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       images: ogImages,
+      locale: "pt_BR",
+      siteName: getBusinessName(settings),
       type: "website",
+      url: `/produto/${product.slug}`,
     },
     twitter: {
       card: ogImages ? "summary_large_image" : "summary",

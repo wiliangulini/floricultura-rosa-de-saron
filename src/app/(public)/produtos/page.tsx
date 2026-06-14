@@ -5,31 +5,55 @@ import { ProductCard } from "@/components/public/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getActiveCategories } from "@/server/categories";
 import { getActiveProducts } from "@/server/products";
-import { getSettings } from "@/server/settings";
+import { getSettings, type PublicSettings } from "@/server/settings";
 
-const pageTitle = "Catálogo de produtos | Floricultura";
 const pageDescription =
   "Veja flores, buquês, arranjos e presentes disponíveis na floricultura para pedir pelo WhatsApp.";
+const fallbackBusinessName = "Floricultura";
 
 export const dynamic = "force-dynamic";
 
+function getTrimmedValue(value: string | null | undefined): string | null {
+  const trimmedValue = value?.trim();
+
+  return trimmedValue ? trimmedValue : null;
+}
+
+function getBusinessName(settings: PublicSettings): string {
+  return getTrimmedValue(settings.businessName) ?? fallbackBusinessName;
+}
+
+function getPageTitle(settings: PublicSettings): string {
+  return `Catálogo de produtos | ${getBusinessName(settings)}`;
+}
+
+function getOgImages(settings: PublicSettings): Array<{ url: string }> | undefined {
+  const ogImageUrl = getTrimmedValue(settings.ogImageUrl);
+
+  return ogImageUrl ? [{ url: ogImageUrl }] : undefined;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  const ogImages = settings.ogImageUrl ? [{ url: settings.ogImageUrl }] : undefined;
+  const title = getPageTitle(settings);
+  const ogImages = getOgImages(settings);
 
   return {
-    title: pageTitle,
+    title,
     description: pageDescription,
     alternates: { canonical: "/produtos" },
     openGraph: {
-      title: pageTitle,
+      title,
       description: pageDescription,
       images: ogImages,
+      locale: "pt_BR",
+      siteName: getBusinessName(settings),
       type: "website",
+      url: "/produtos",
     },
     twitter: {
       card: ogImages ? "summary_large_image" : "summary",
-      title: pageTitle,
+      title,
       description: pageDescription,
       images: ogImages,
     },

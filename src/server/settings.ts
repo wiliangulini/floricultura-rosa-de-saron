@@ -22,8 +22,17 @@ const publicSettingsSelect = {
   ogImageUrl: true,
 } satisfies Prisma.SettingsSelect;
 
+const adminSettingsSelect = {
+  id: true,
+  ...publicSettingsSelect,
+} satisfies Prisma.SettingsSelect;
+
 export type PublicSettings = Prisma.SettingsGetPayload<{
   select: typeof publicSettingsSelect;
+}>;
+
+export type AdminSettings = Prisma.SettingsGetPayload<{
+  select: typeof adminSettingsSelect;
 }>;
 
 const fallbackSettings: PublicSettings = {
@@ -55,4 +64,13 @@ export async function getSettings(): Promise<PublicSettings> {
   });
 
   return settings ?? fallbackSettings;
+}
+
+export async function getAdminSettings(): Promise<AdminSettings | null> {
+  return prisma.settings.findFirst({
+    select: adminSettingsSelect,
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
 }

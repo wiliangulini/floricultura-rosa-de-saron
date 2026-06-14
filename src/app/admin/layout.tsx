@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 
@@ -6,6 +7,13 @@ import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { ADMIN_SESSION_COOKIE, readAdminSessionCookie } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function AdminLayout({
   children,
