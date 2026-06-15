@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -173,6 +174,9 @@ export default async function SobrePage() {
   const cityState = getCityStateLabel(settings);
   const neighborhood = getTrimmedValue(settings.neighborhood);
   const deliveryDescription = getTrimmedValue(settings.deliveryDescription);
+  const ownerName = getTrimmedValue(settings.ownerName);
+  const ownerDescription = getTrimmedValue(settings.ownerDescription);
+  const ownerPhotoUrl = getTrimmedValue(settings.ownerPhotoUrl);
   const whatsappHref = getWhatsappHref(settings);
 
   return (
@@ -209,18 +213,36 @@ export default async function SobrePage() {
 
       <section className="bg-white">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:py-16">
-          <div>
+          <div className="space-y-5">
             <p className="text-sm font-semibold uppercase text-emerald-900">Atendimento local</p>
             <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
-              Flores e presentes com atendimento próximo
+              {ownerName
+                ? `${ownerName} cuida dos detalhes da floricultura`
+                : "Flores e presentes com atendimento próximo"}
             </h2>
+            {ownerPhotoUrl ? (
+              <div className="max-w-xs overflow-hidden rounded-lg border border-emerald-100 bg-emerald-50 shadow-sm shadow-emerald-950/5">
+                <Image
+                  alt={ownerName ? `Foto de ${ownerName}` : "Foto da proprietária"}
+                  className="aspect-square h-auto w-full object-cover"
+                  height={640}
+                  sizes="(min-width: 1024px) 320px, 80vw"
+                  src={ownerPhotoUrl}
+                  width={640}
+                />
+              </div>
+            ) : null}
           </div>
 
           <div className="space-y-5 text-base leading-7 text-zinc-700">
-            <p>
-              A loja reúne opções de flores, buquês e arranjos para aniversários, homenagens,
-              agradecimentos e gestos de carinho no dia a dia.
-            </p>
+            {ownerDescription ? (
+              <p>{ownerDescription}</p>
+            ) : (
+              <p>
+                A loja reúne opções de flores, buquês e arranjos para aniversários, homenagens,
+                agradecimentos e gestos de carinho no dia a dia.
+              </p>
+            )}
             <p>
               O pedido é conversado diretamente pelo WhatsApp, onde a floricultura confirma
               valores, disponibilidade, entrega, retirada e forma de pagamento antes da finalização.

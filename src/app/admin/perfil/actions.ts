@@ -2,11 +2,13 @@
 
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { ADMIN_SESSION_COOKIE, readAdminSessionCookie } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { getOwnerPhotoFile, OwnerPhotoUploadError, uploadOwnerPhoto } from "@/server/images";
 
 type PasswordChangeFieldErrors = {
   confirmPassword?: string;
@@ -20,8 +22,34 @@ export type PasswordChangeActionState = {
   status: "idle" | "error" | "success";
 };
 
+type OwnerProfileFieldErrors = {
+  ownerDescription?: string;
+  ownerName?: string;
+  ownerPhoto?: string;
+};
+
+export type OwnerProfileFormValues = {
+  ownerDescription: string;
+  ownerName: string;
+  ownerPhotoUrl: string;
+};
+
+export type OwnerProfileActionState = {
+  fieldErrors: OwnerProfileFieldErrors;
+  message: string;
+  status: "idle" | "error" | "success";
+  values?: OwnerProfileFormValues;
+};
+
+type ValidatedOwnerProfileData = {
+  ownerDescription: string | null;
+  ownerName: string | null;
+};
+
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 200;
+const MAX_OWNER_NAME_LENGTH = 120;
+const MAX_OWNER_DESCRIPTION_LENGTH = 900;
 
 export async function changePassword(
   _previousState: PasswordChangeActionState,
@@ -107,6 +135,99 @@ export async function changePassword(
   };
 }
 
+export async function saveOwnerProfile(
+  _previousState: OwnerProfileActionState,
+  formData: FormData,
+): Promise<OwnerProfileActionState> {
+  await requireAdminSession();
+
+  const validation = validateOwnerProfileForm(formData);
+  const ownerPhotoFile = getOwnerPhotoFile(formData);
+  const currentSettings = await prisma.settings.findFirst({
+    orderBy: {
+      createdAt: "asc",
+    },
+    select: {
+      id: true,
+      ownerPhotoUrl: true,
+    },
+  });
+
+  if (!validation.data) {
+    const values = validation.state.values ?? {
+      ownerDescription: "",
+      ownerName: "",
+      ownerPhotoUrl: "",
+    };
+
+    return {
+      ...validation.state,
+      values: {
+        ...values,
+        ownerPhotoUrl: currentSettings?.ownerPhotoUrl ?? "",
+      },
+    };
+  }
+
+  let ownerPhotoUrl = currentSettings?.ownerPhotoUrl ?? null;
+
+  if (ownerPhotoFile) {
+    try {
+      const upload = await uploadOwnerPhoto({
+        file: ownerPhotoFile,
+        ownerName: validation.data.ownerName,
+      });
+      ownerPhotoUrl = upload.url;
+    } catch (error) {
+      if (error instanceof OwnerPhotoUploadError) {
+        return {
+          fieldErrors: {
+            ownerPhoto: error.message,
+          },
+          message: "Corrija a foto selecionada para salvar os dados da proprietária.",
+          status: "error",
+          values: createOwnerProfileValues(validation.data, currentSettings?.ownerPhotoUrl ?? null),
+        };
+      }
+
+      throw error;
+    }
+  }
+
+  const data = {
+    ownerDescription: validation.data.ownerDescription,
+    ownerName: validation.data.ownerName,
+    ownerPhotoUrl,
+  };
+
+  if (currentSettings) {
+    await prisma.settings.update({
+      data,
+      where: {
+        id: currentSettings.id,
+      },
+    });
+  } else {
+    await prisma.settings.create({
+      data: {
+        businessName: "",
+        whatsappNumber: "",
+        ...data,
+      },
+    });
+  }
+
+  revalidatePath("/");
+  revalidatePath("/sobre");
+
+  return {
+    fieldErrors: {},
+    message: "Dados da proprietária salvos com sucesso.",
+    status: "success",
+    values: createOwnerProfileValues(validation.data, ownerPhotoUrl),
+  };
+}
+
 async function requireAdminSession() {
   const cookieStore = await cookies();
   const session = await readAdminSessionCookie(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
@@ -161,8 +282,69 @@ function validatePasswordFields({
   return fieldErrors;
 }
 
+function validateOwnerProfileForm(formData: FormData):
+  | {
+      data: ValidatedOwnerProfileData;
+      state?: never;
+    }
+  | {
+      data?: never;
+      state: OwnerProfileActionState;
+    } {
+  const ownerName = getOptionalText(formData, "ownerName");
+  const ownerDescription = getOptionalText(formData, "ownerDescription");
+  const fieldErrors: OwnerProfileFieldErrors = {};
+
+  if (ownerName && ownerName.length > MAX_OWNER_NAME_LENGTH) {
+    fieldErrors.ownerName = "O nome da proprietária deve ter no máximo 120 caracteres.";
+  }
+
+  if (ownerDescription && ownerDescription.length > MAX_OWNER_DESCRIPTION_LENGTH) {
+    fieldErrors.ownerDescription = "A descrição deve ter no máximo 900 caracteres.";
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return {
+      state: {
+        fieldErrors,
+        message: "Corrija os campos destacados para salvar os dados da proprietária.",
+        status: "error",
+        values: {
+          ownerDescription: ownerDescription ?? "",
+          ownerName: ownerName ?? "",
+          ownerPhotoUrl: "",
+        },
+      },
+    };
+  }
+
+  return {
+    data: {
+      ownerDescription,
+      ownerName,
+    },
+  };
+}
+
+function createOwnerProfileValues(
+  data: ValidatedOwnerProfileData,
+  ownerPhotoUrl: string | null,
+): OwnerProfileFormValues {
+  return {
+    ownerDescription: data.ownerDescription ?? "",
+    ownerName: data.ownerName ?? "",
+    ownerPhotoUrl: ownerPhotoUrl ?? "",
+  };
+}
+
 function getFormValue(formData: FormData, fieldName: string) {
   const value = formData.get(fieldName);
 
   return typeof value === "string" ? value : "";
+}
+
+function getOptionalText(formData: FormData, fieldName: string) {
+  const value = getFormValue(formData, fieldName).trim();
+
+  return value || null;
 }

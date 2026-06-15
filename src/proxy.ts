@@ -32,6 +32,20 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
+  if (isAdminPasswordRecoveryPath(pathname)) {
+    const response = NextResponse.next();
+
+    if (session) {
+      return withRefreshedSession(response, session);
+    }
+
+    if (sessionCookie) {
+      clearSessionCookie(response);
+    }
+
+    return response;
+  }
+
   if (!session) {
     if (isAdminApiPath(pathname)) {
       const response = NextResponse.json({ message: "Não autorizado." }, { status: 401 });
@@ -79,6 +93,15 @@ function clearSessionCookie(response: NextResponse) {
 
 function isAdminLoginPath(pathname: string) {
   return pathname === "/admin/login" || pathname === "/admin/login/";
+}
+
+function isAdminPasswordRecoveryPath(pathname: string) {
+  return (
+    pathname === "/admin/esqueci-senha" ||
+    pathname === "/admin/esqueci-senha/" ||
+    pathname === "/admin/redefinir-senha" ||
+    pathname === "/admin/redefinir-senha/"
+  );
 }
 
 function isAdminApiPath(pathname: string) {

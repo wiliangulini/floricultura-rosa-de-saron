@@ -4,6 +4,9 @@ import { prisma } from "@/lib/db";
 
 const publicSettingsSelect = {
   businessName: true,
+  ownerName: true,
+  ownerPhotoUrl: true,
+  ownerDescription: true,
   whatsappNumber: true,
   phone: true,
   email: true,
@@ -37,6 +40,9 @@ export type AdminSettings = Prisma.SettingsGetPayload<{
 
 const fallbackSettings: PublicSettings = {
   businessName: "",
+  ownerName: null,
+  ownerPhotoUrl: null,
+  ownerDescription: null,
   whatsappNumber: "",
   phone: null,
   email: null,

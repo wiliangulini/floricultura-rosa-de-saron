@@ -507,22 +507,43 @@ function AboutPreviewSection({ settings }: { settings: PublicSettings }) {
   const cityName = getCityName(settings);
   const neighborhood = getTrimmedValue(settings.neighborhood);
   const deliveryDescription = getTrimmedValue(settings.deliveryDescription);
+  const ownerName = getTrimmedValue(settings.ownerName);
+  const ownerDescription = getTrimmedValue(settings.ownerDescription);
+  const ownerPhotoUrl = getTrimmedValue(settings.ownerPhotoUrl);
 
   return (
     <section className="bg-emerald-50">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-16">
-        <div>
+        <div className="space-y-5">
           <p className="text-sm font-semibold uppercase text-emerald-900">Sobre a floricultura</p>
           <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
-            Atendimento próximo para presentear com delicadeza
+            {ownerName
+              ? `${ownerName} aproxima cada atendimento`
+              : "Atendimento próximo para presentear com delicadeza"}
           </h2>
+          {ownerPhotoUrl ? (
+            <div className="max-w-xs overflow-hidden rounded-lg border border-emerald-100 bg-white shadow-sm shadow-emerald-950/5">
+              <Image
+                alt={ownerName ? `Foto de ${ownerName}` : "Foto da proprietária"}
+                className="aspect-square h-auto w-full object-cover"
+                height={640}
+                sizes="(min-width: 1024px) 320px, 80vw"
+                src={ownerPhotoUrl}
+                width={640}
+              />
+            </div>
+          ) : null}
         </div>
         <div className="space-y-5 text-base leading-7 text-zinc-700">
-          <p>
-            A {businessName} atende clientes em {cityName}
-            {neighborhood ? `, especialmente na região de ${neighborhood}` : ""}, com flores,
-            buquês e arranjos preparados para ocasiões especiais e gestos do dia a dia.
-          </p>
+          {ownerDescription ? (
+            <p>{ownerDescription}</p>
+          ) : (
+            <p>
+              A {businessName} atende clientes em {cityName}
+              {neighborhood ? `, especialmente na região de ${neighborhood}` : ""}, com flores,
+              buquês e arranjos preparados para ocasiões especiais e gestos do dia a dia.
+            </p>
+          )}
           <p>
             {settings.deliveryAvailable
               ? deliveryDescription ??

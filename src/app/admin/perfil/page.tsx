@@ -1,21 +1,19 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Textarea,
-  Input,
-} from "@/components/ui";
+import { getAdminSettings } from "@/server/settings";
 
-import { changePassword } from "./actions";
+import { changePassword, saveOwnerProfile, type OwnerProfileFormValues } from "./actions";
+import { OwnerProfileForm } from "./OwnerProfileForm";
 import { PasswordChangeForm } from "./PasswordChangeForm";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminPerfilPage() {
+export default async function AdminPerfilPage() {
+  const settings = await getAdminSettings();
+  const ownerProfileInitialValues: OwnerProfileFormValues = {
+    ownerDescription: settings?.ownerDescription ?? "",
+    ownerName: settings?.ownerName ?? "",
+    ownerPhotoUrl: settings?.ownerPhotoUrl ?? "",
+  };
+
   return (
     <section className="space-y-6">
       <div>
@@ -28,44 +26,10 @@ export default function AdminPerfilPage() {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <PasswordChangeForm action={changePassword} />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Dados da proprietária</CardTitle>
-            <CardDescription>
-              Informações institucionais usadas para apresentar a história da floricultura.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <Input
-              autoComplete="name"
-              disabled
-              label="Nome da proprietária"
-              name="ownerName"
-              placeholder="Ex.: Maria Aparecida"
-              type="text"
-            />
-            <Input
-              accept="image/jpeg,image/png,image/webp"
-              disabled
-              helperText="Formatos aceitos: JPG, PNG ou WebP."
-              label="Foto da proprietária"
-              name="ownerPhoto"
-              type="file"
-            />
-            <Textarea
-              disabled
-              label="Descrição"
-              name="ownerDescription"
-              placeholder="Conte um pouco sobre a proprietária e a floricultura."
-              rows={6}
-            />
-          </CardContent>
-          <CardFooter className="justify-end">
-            <Button disabled type="button">
-              Salvar dados
-            </Button>
-          </CardFooter>
-        </Card>
+        <OwnerProfileForm
+          action={saveOwnerProfile}
+          initialValues={ownerProfileInitialValues}
+        />
       </div>
     </section>
   );

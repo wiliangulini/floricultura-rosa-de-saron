@@ -17,30 +17,32 @@ Corrija apenas problemas reais de segurança, tipagem, arquitetura, UX, validaç
 
 Meta revisada:
 
-META 4
-Meta 4 concluída. Não avancei para a Meta 5.
+META 5
+Meta 5 concluída. Não avancei para a Meta 6.
 
-Criados/alterados:
+Alterei:
+- [src/server/settings.ts](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/server/settings.ts)
+- [src/server/images.ts](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/server/images.ts)
 - [src/app/admin/perfil/actions.ts](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/app/admin/perfil/actions.ts)
-- [src/app/admin/perfil/PasswordChangeForm.tsx](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/app/admin/perfil/PasswordChangeForm.tsx)
+- [src/app/admin/perfil/OwnerProfileForm.tsx](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/app/admin/perfil/OwnerProfileForm.tsx)
 - [src/app/admin/perfil/page.tsx](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/app/admin/perfil/page.tsx)
+- [src/app/(public)/sobre/page.tsx](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/app/(public)/sobre/page.tsx)
+- [src/app/(public)/page.tsx](/home/mr-robot/Documents/projetos/floricultura-rosa-de-saron/src/app/(public)/page.tsx)
 
 O que foi feito:
-- Criada a Server Action `changePassword`.
-- A action lê a sessão autenticada, usa `session.userId`, busca o `User`, exige `active=true` e `role=ADMIN`.
-- Valida senha atual, nova senha mínima de 8 caracteres, confirmação e bloqueio de senha igual à atual.
-- Compara a senha atual com `bcrypt.compare()`.
-- Salva a nova senha com `bcrypt.hash(newPassword, 12)`.
-- Mantém a sessão ativa após sucesso, sem logout automático.
-- O formulário limpa os campos após sucesso com `formRef.current?.reset()`.
+- `Settings` agora expõe `ownerName`, `ownerPhotoUrl` e `ownerDescription` em leitura admin/pública.
+- O perfil admin salva somente os campos `owner*`, sem sobrescrever dados reais da floricultura.
+- A foto da proprietária usa upload Cloudinary com validação server-side: JPG/PNG/WebP, limite 5 MB, assinatura real do arquivo e bloqueio de SVG.
+- O formulário mostra foto atual e preview local antes do envio.
+- `/sobre` e a seção institucional da home usam nome, foto e descrição da proprietária quando existirem, mantendo fallback quando vazios.
+- Não alterei login, proxy, rotas de recuperação, email, SMTP, `package.json`, `.env.example` ou README.
 
-Validações executadas:
+Comandos executados:
+- `npm run db:generate`: passou, apenas para atualizar Prisma Client local após os campos da Meta 2.
 - `npm run lint`: passou.
 - `npm run typecheck`: passou.
 
-Não implementei dados/foto da proprietária, upload, settings, reset por email ou qualquer fluxo da Meta 5+.
-
-Uso registrado do goal: 77.559 tokens, aproximadamente 3min33s.
+Uso registrado do goal: 174.763 tokens, aproximadamente 9min32s.
 
 Objetivo da revisão:
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
@@ -39,6 +40,14 @@ export function LoginForm() {
             name="password"
             type="password"
           />
+          <div className="text-right">
+            <Link
+              className="text-sm font-semibold text-rose-800 transition hover:text-rose-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              href="/admin/esqueci-senha"
+            >
+              Esqueceu sua senha?
+            </Link>
+          </div>
           {state.message ? (
             <p
               className="rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-700"
