@@ -7,6 +7,7 @@ const adminMenuItems = [
   { href: "/admin", label: "Painel" },
   { href: "/admin/produtos", label: "Produtos" },
   { href: "/admin/categorias", label: "Categorias" },
+  { href: "/admin/perfil", label: "Perfil" },
   { href: "/admin/configuracoes", label: "Configurações" },
 ] as const;
 
