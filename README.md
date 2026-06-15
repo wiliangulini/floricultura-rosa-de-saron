@@ -8,6 +8,7 @@ Vitrine digital para floricultura local com catálogo de produtos, carrinho no n
 - **Tailwind CSS** v4
 - **Prisma** ORM + PostgreSQL
 - **Autenticação** customizada com HMAC-SHA256 (sessão em cookie)
+- **Recuperação de senha** por token e email SMTP
 - **Testes** com Vitest
 
 ## Requisitos
@@ -81,6 +82,12 @@ Acesse em: `http://localhost:3000`
 
 Painel admin: `http://localhost:3000/admin`
 
+## Recuperação de senha do admin
+
+O login administrativo tem o link **Esqueceu sua senha?**. O fluxo gera um token seguro, salva apenas o hash SHA-256 no banco, expira em 30 minutos e envia o link por email.
+
+Para usar em produção, configure `NEXT_PUBLIC_SITE_URL` com a URL pública do site e preencha as variáveis SMTP (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`).
+
 ## Testes
 
 ```bash
@@ -122,12 +129,17 @@ npm start
 | Variável | Obrigatória | Descrição |
 |----------|-------------|-----------|
 | `DATABASE_URL` | Sim | String de conexão PostgreSQL |
-| `NEXT_PUBLIC_SITE_URL` | Sim (produção) | URL pública do site — usada em canonical, OG e sitemap |
+| `NEXT_PUBLIC_SITE_URL` | Sim (produção) | URL pública do site — usada em canonical, OG, sitemap e links de recuperação |
 | `AUTH_SECRET` | Sim | Segredo HMAC para sessão admin — mínimo 32 caracteres aleatórios |
-| `CLOUDINARY_CLOUD_NAME` | Não (MVP) | Cloud name Cloudinary — upload previsto para fase posterior |
-| `CLOUDINARY_API_KEY` | Não (MVP) | API key Cloudinary |
-| `CLOUDINARY_API_SECRET` | Não (MVP) | API secret Cloudinary |
-| `CLOUDINARY_FOLDER` | Não (MVP) | Pasta no Cloudinary (padrão: `produtos`) |
+| `SMTP_HOST` | Sim (recuperação) | Host SMTP para envio do link de redefinição de senha |
+| `SMTP_PORT` | Sim (recuperação) | Porta SMTP, normalmente `587` ou `465` |
+| `SMTP_USER` | Sim (recuperação) | Usuário SMTP |
+| `SMTP_PASS` | Sim (recuperação) | Senha SMTP |
+| `SMTP_FROM` | Sim (recuperação) | Remetente dos emails de recuperação |
+| `CLOUDINARY_CLOUD_NAME` | Sim (upload) | Cloud name Cloudinary para imagens de produto e foto da proprietária |
+| `CLOUDINARY_API_KEY` | Sim (upload) | API key Cloudinary |
+| `CLOUDINARY_API_SECRET` | Sim (upload) | API secret Cloudinary |
+| `CLOUDINARY_FOLDER` | Não | Pasta base no Cloudinary (padrão: `produtos`) |
 
 Gere um `AUTH_SECRET` seguro:
 
@@ -142,6 +154,8 @@ openssl rand -base64 32
 - [ ] `DATABASE_URL` apontando para o banco de produção
 - [ ] `AUTH_SECRET` definido com 32+ caracteres aleatórios
 - [ ] `NEXT_PUBLIC_SITE_URL` definido com a URL real do site
+- [ ] SMTP configurado se a recuperação de senha for usada
+- [ ] Cloudinary configurado se upload de produto ou foto da proprietária for usado
 - [ ] Migrations executadas (`npm run db:migrate:deploy`)
 - [ ] Seed executado se banco estiver vazio (`npm run db:seed`)
 - [ ] Senha do admin trocada após o seed
@@ -157,6 +171,7 @@ openssl rand -base64 32
 - **Sem Docker.** O projeto roda diretamente com Node.js e PostgreSQL local ou gerenciado.
 - **Sem pagamento online.** A confirmação de valores, entrega e pagamento é feita pela floricultura via WhatsApp.
 - **Pedidos via WhatsApp.** O carrinho gera uma mensagem formatada enviada para o número da loja via `wa.me`.
-- **Admin protegido.** Todas as rotas `/admin/*` e `/api/admin/*` exigem sessão válida (proxy.ts).
+- **Admin protegido.** As rotas administrativas exigem sessão válida (proxy.ts), exceto login e recuperação de senha.
+- **Recuperação de senha.** O token puro é enviado apenas por email; o banco armazena somente `tokenHash`, com expiração curta e uso único.
 - **SEO local.** O projeto prioriza SEO para buscas locais com dados estruturados JSON-LD, sitemap, robots e metadados Open Graph.
-- **Upload de imagens** está planejado para uma fase posterior ao MVP. As variáveis Cloudinary existem no código mas o upload não está exposto na interface.
+- **Upload de imagens.** Produtos e foto da proprietária usam Cloudinary, aceitando JPG, PNG e WebP até 5 MB com validação no servidor.
