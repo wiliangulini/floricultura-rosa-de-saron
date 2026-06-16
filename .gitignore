@@ -13,7 +13,11 @@ dist
 # Artefatos de teste e ferramentas locais
 .playwright-mcp/
 coverage/
+e2e/.auth/
+e2e/test-results/
+playwright-report/
 
 # Prompts locais
 claudeCode_prompt.md
 codex_prompt.md
+checklist-etapa28-testes.md

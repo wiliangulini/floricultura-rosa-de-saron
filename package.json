@@ -14,7 +14,11 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "db:seed:e2e": "tsx prisma/seed.e2e.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -28,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
+    "@playwright/test": "^1.61.0",
     "@tailwindcss/postcss": "^4.3.0",
     "@types/node": "^25.9.2",
     "@types/nodemailer": "^8.0.1",
