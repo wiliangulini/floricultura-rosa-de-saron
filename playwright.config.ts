@@ -1,9 +1,14 @@
+import "dotenv/config";
+
 import { defineConfig, devices } from "@playwright/test";
+
+import { getE2EDatabaseUrl } from "./prisma/seed-utils";
+
+const databaseUrlE2E = getE2EDatabaseUrl();
 
 export default defineConfig({
   testDir: "./e2e",
   outputDir: "./e2e/test-results",
-  // Execução serial para evitar conflitos de estado no banco compartilhado
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -13,8 +18,6 @@ export default defineConfig({
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
   },
-  // Usa tsconfig específico para E2E (module: CommonJS) para compatibilidade com Node.js 22
-  // O tsconfig principal usa moduleResolution: "bundler" que causa erros no runner de testes
   tsconfig: "./tsconfig.e2e.json",
   projects: [
     {
@@ -22,11 +25,16 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  // O app deve estar rodando antes dos testes (npm run dev em outro terminal)
   webServer: {
     command: "npm run dev",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    // reuseExistingServer: false garante que o servidor sobe com DATABASE_URL correto.
+    // Falha por porta ocupada é preferível a rodar contra o banco errado.
+    reuseExistingServer: false,
     timeout: 120_000,
+    env: {
+      DATABASE_URL: databaseUrlE2E,
+      DATABASE_URL_E2E: databaseUrlE2E,
+    },
   },
 });

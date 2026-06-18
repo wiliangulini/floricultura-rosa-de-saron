@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, PriceType, UserRole } from "@prisma/client";
 
 import { slugify } from "../src/lib/slug";
+import { getAdminInitialPassword } from "./seed-utils";
 
 function getDatabaseUrl() {
   const databaseUrl = process.env.DATABASE_URL;
@@ -18,7 +19,6 @@ const adapter = new PrismaPg(getDatabaseUrl());
 const prisma = new PrismaClient({ adapter });
 
 const ADMIN_EMAIL = "admin@floricultura.com";
-const TEMPORARY_ADMIN_PASSWORD = "admin123";
 const SETTINGS_ID = "default-settings";
 const STORE_WHATSAPP_NUMBER = "5546991168949";
 
@@ -95,25 +95,36 @@ const products = [
 async function main() {
   console.log("Iniciando seed...\n");
 
-  const passwordHash = await bcrypt.hash(TEMPORARY_ADMIN_PASSWORD, 12);
-
-  await prisma.user.upsert({
+  const existingAdmin = await prisma.user.findUnique({
     where: { email: ADMIN_EMAIL },
-    update: {
-      name: "Administradora",
-      passwordHash,
-      role: UserRole.ADMIN,
-      active: true,
-    },
-    create: {
-      name: "Administradora",
-      email: ADMIN_EMAIL,
-      passwordHash,
-      role: UserRole.ADMIN,
-      active: true,
-    },
+    select: { id: true },
   });
-  console.log(`✔ Usuário admin: ${ADMIN_EMAIL}`);
+
+  if (existingAdmin) {
+    await prisma.user.update({
+      where: { email: ADMIN_EMAIL },
+      data: {
+        name: "Administradora",
+        // passwordHash, active e role preservados intencionalmente.
+        // O seed não deve resetar credenciais nem reativar conta desativada.
+      },
+    });
+    console.log(`✔ Usuário admin atualizado (senha preservada): ${ADMIN_EMAIL}`);
+  } else {
+    const initialPassword = getAdminInitialPassword();
+    const passwordHash = await bcrypt.hash(initialPassword, 12);
+
+    await prisma.user.create({
+      data: {
+        name: "Administradora",
+        email: ADMIN_EMAIL,
+        passwordHash,
+        role: UserRole.ADMIN,
+        active: true,
+      },
+    });
+    console.log(`✔ Usuário admin criado: ${ADMIN_EMAIL}`);
+  }
 
   await prisma.settings.upsert({
     where: { id: SETTINGS_ID },

@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const AUTH_STATE_PATH = "e2e/.auth/e2e-admin.json";
-const E2E_ADMIN_EMAIL = "e2e-test@floricultura.com";
-const E2E_ADMIN_PASSWORD = "SenhaTestE2E@123!";
+import { AUTH_STATE_PATH, E2E_ADMIN_EMAIL, E2E_ADMIN_PASSWORD } from "./constants";
 
 async function loginAsE2EAdmin(page: import("@playwright/test").Page) {
   await page.goto("/admin/login");

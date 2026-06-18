@@ -4,23 +4,12 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, PriceType, UserRole } from "@prisma/client";
 
 import { slugify } from "../src/lib/slug";
+import { getE2EDatabaseUrl } from "./seed-utils";
+import { E2E_ADMIN_EMAIL, E2E_ADMIN_PASSWORD, E2E_INACTIVE_EMAIL } from "../e2e/constants";
 
-function getDatabaseUrl() {
-  const databaseUrl = process.env.DATABASE_URL;
-
-  if (!databaseUrl) {
-    throw new Error("DATABASE_URL não definida. Configure a variável antes de rodar o seed.");
-  }
-
-  return databaseUrl;
-}
-
-const adapter = new PrismaPg(getDatabaseUrl());
+const adapter = new PrismaPg(getE2EDatabaseUrl());
 const prisma = new PrismaClient({ adapter });
 
-const E2E_ADMIN_EMAIL = "e2e-test@floricultura.com";
-const E2E_ADMIN_PASSWORD = "SenhaTestE2E@123!";
-const E2E_INACTIVE_EMAIL = "inativo-e2e@floricultura.com";
 const E2E_CATEGORY_NAME = "Categoria de Teste E2E";
 const E2E_CATEGORY_SLUG = slugify(E2E_CATEGORY_NAME);
 const E2E_PRODUCT_NAME = "Produto de Teste E2E";

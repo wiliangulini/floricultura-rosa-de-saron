@@ -18,7 +18,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
-    "db:seed:e2e": "tsx prisma/seed.e2e.ts"
+    "db:seed:e2e": "tsx prisma/seed.e2e.ts",
+    "db:setup:e2e": "bash scripts/setup-e2e-db.sh"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

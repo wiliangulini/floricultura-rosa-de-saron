@@ -1,19 +1,17 @@
+import "dotenv/config";
 import { execSync } from "child_process";
+import { dirname } from "path";
+import { mkdirSync } from "fs";
 
 import { chromium } from "@playwright/test";
 
-// Constantes definidas inline para evitar problemas de resolução de módulo
-// no contexto do globalSetup (executado como Node.js puro, fora do transformer do Playwright)
-const E2E_ADMIN_EMAIL = "e2e-test@floricultura.com";
-const E2E_ADMIN_PASSWORD = "SenhaTestE2E@123!";
-const AUTH_STATE_PATH = "e2e/.auth/e2e-admin.json";
-const BASE_URL = "http://localhost:3000";
+import { AUTH_STATE_PATH, BASE_URL, E2E_ADMIN_EMAIL, E2E_ADMIN_PASSWORD } from "./constants";
 
 export default async function globalSetup() {
-  // Reseta a senha do usuário E2E e garante os dados de teste no banco
+  mkdirSync(dirname(AUTH_STATE_PATH), { recursive: true });
+
   execSync("npm run db:seed:e2e", { stdio: "inherit" });
 
-  // Realiza login e salva o estado de autenticação para reuso nos testes
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
