@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
 import { CartSummary } from "@/components/public/CartSummary";
 import { Button } from "@/components/ui/Button";
@@ -9,7 +9,14 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { useCart } from "@/context/CartContext";
-import { buildOrderWhatsAppMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
+import { loadReviewedCheckout, saveReviewedCheckout } from "@/lib/checkout-storage";
+import { cn } from "@/lib/cn";
+import {
+  buildOrderWhatsAppMessage,
+  createWhatsappUrl,
+  type CheckoutFormData,
+  type FulfillmentMode,
+} from "@/lib/whatsapp";
 
 type CheckoutFormProps = {
   whatsappNumber: string;
@@ -27,6 +34,44 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
   const [notes, setNotes] = useState("");
   const [customerNameError, setCustomerNameError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const [fulfillmentMode, setFulfillmentMode] = useState<FulfillmentMode | "">("");
+  const [fulfillmentModeError, setFulfillmentModeError] = useState("");
+  const [street, setStreet] = useState("");
+  const [streetError, setStreetError] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [houseNumberError, setHouseNumberError] = useState("");
+  const [neighborhood, setNeighborhood] = useState("");
+  const [neighborhoodError, setNeighborhoodError] = useState("");
+  const [city, setCity] = useState("");
+  const [cityError, setCityError] = useState("");
+  const [referencePoint, setReferencePoint] = useState("");
+  const [referencePointError, setReferencePointError] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactPhoneError, setContactPhoneError] = useState("");
+
+  const hasLoadedRef = useRef(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      hasLoadedRef.current = true;
+      const saved = loadReviewedCheckout();
+      if (!saved) return;
+      setCustomerName(saved.customerName);
+      setDesiredDate(saved.desiredDate);
+      setPaymentMethod(saved.paymentMethod);
+      setCardMessage(saved.cardMessage);
+      setNotes(saved.notes);
+      setFulfillmentMode(saved.fulfillmentMode);
+      setStreet(saved.street);
+      setHouseNumber(saved.houseNumber);
+      setNeighborhood(saved.neighborhood);
+      setCity(saved.city);
+      setReferencePoint(saved.referencePoint);
+      setContactPhone(saved.contactPhone);
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, []);
 
   if (items.length === 0) {
     return (
@@ -64,15 +109,61 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
       return;
     }
 
-    const message = buildOrderWhatsAppMessage(items, {
+    if (!fulfillmentMode) {
+      setFulfillmentModeError("Selecione a modalidade do pedido.");
+      return;
+    }
+
+    if (fulfillmentMode === "delivery") {
+      let hasDeliveryError = false;
+
+      if (!street.trim()) {
+        setStreetError("Informe a rua.");
+        hasDeliveryError = true;
+      }
+      if (!houseNumber.trim()) {
+        setHouseNumberError("Informe o número.");
+        hasDeliveryError = true;
+      }
+      if (!neighborhood.trim()) {
+        setNeighborhoodError("Informe o bairro.");
+        hasDeliveryError = true;
+      }
+      if (!city.trim()) {
+        setCityError("Informe a cidade.");
+        hasDeliveryError = true;
+      }
+      if (!referencePoint.trim()) {
+        setReferencePointError("Informe o ponto de referência.");
+        hasDeliveryError = true;
+      }
+      if (!contactPhone.trim()) {
+        setContactPhoneError("Informe o telefone para contato.");
+        hasDeliveryError = true;
+      }
+
+      if (hasDeliveryError) return;
+    }
+
+    const checkoutData: CheckoutFormData = {
       customerName: customerName.trim(),
       desiredDate,
       paymentMethod,
       cardMessage,
       notes,
-    });
+      fulfillmentMode,
+      street,
+      houseNumber,
+      neighborhood,
+      city,
+      referencePoint,
+      contactPhone,
+    };
 
-    const url = buildWhatsAppUrl(whatsappNumber, message);
+    saveReviewedCheckout(checkoutData);
+
+    const message = buildOrderWhatsAppMessage(items, checkoutData);
+    const url = createWhatsappUrl({ phoneNumber: whatsappNumber, message });
     window.open(url, "_blank", "noopener,noreferrer");
     setSuccessMessage("Pedido aberto no WhatsApp. Seu carrinho continua salvo.");
   }
@@ -93,6 +184,136 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
         </div>
 
         <div className="grid gap-5">
+          <fieldset>
+            <legend className="mb-2 text-sm font-semibold text-zinc-900">
+              Modalidade <span aria-hidden="true">*</span>
+            </legend>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              {(["pickup", "delivery"] as const).map((mode) => {
+                const label = mode === "pickup" ? "Retirar na Loja" : "Receber em casa";
+                const inputId = `fulfillment-${mode}`;
+                return (
+                  <label
+                    key={mode}
+                    htmlFor={inputId}
+                    className={cn(
+                      "flex cursor-pointer items-center gap-3 rounded-md border px-4 py-3 text-sm font-medium transition",
+                      fulfillmentMode === mode
+                        ? "border-rose-700 bg-rose-50 text-rose-900 ring-1 ring-rose-700"
+                        : "border-rose-200 bg-white text-zinc-700 hover:border-rose-400 hover:bg-rose-50",
+                    )}
+                  >
+                    <input
+                      aria-describedby={fulfillmentModeError ? "fulfillment-error" : undefined}
+                      checked={fulfillmentMode === mode}
+                      className="sr-only"
+                      id={inputId}
+                      name="fulfillmentMode"
+                      onChange={() => {
+                        setFulfillmentMode(mode);
+                        if (fulfillmentModeError) setFulfillmentModeError("");
+                      }}
+                      type="radio"
+                      value={mode}
+                    />
+                    {label}
+                  </label>
+                );
+              })}
+            </div>
+            {fulfillmentModeError ? (
+              <p className="mt-2 text-sm text-red-700" id="fulfillment-error" role="alert">
+                {fulfillmentModeError}
+              </p>
+            ) : null}
+          </fieldset>
+
+          <div
+            className={cn(
+              "grid gap-5 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out",
+              fulfillmentMode === "delivery" ? "max-h-200 opacity-100" : "max-h-0 opacity-0",
+            )}
+          >
+            <Input
+              error={streetError}
+              label="Rua *"
+              name="street"
+              onChange={(e) => {
+                setStreet(e.target.value);
+                if (streetError) setStreetError("");
+              }}
+              placeholder="Nome da rua ou avenida"
+              required={fulfillmentMode === "delivery"}
+              value={street}
+            />
+
+            <Input
+              error={houseNumberError}
+              label="Número da casa *"
+              name="houseNumber"
+              onChange={(e) => {
+                setHouseNumber(e.target.value);
+                if (houseNumberError) setHouseNumberError("");
+              }}
+              placeholder="Ex.: 123, s/n"
+              required={fulfillmentMode === "delivery"}
+              value={houseNumber}
+            />
+
+            <Input
+              error={neighborhoodError}
+              label="Bairro *"
+              name="neighborhood"
+              onChange={(e) => {
+                setNeighborhood(e.target.value);
+                if (neighborhoodError) setNeighborhoodError("");
+              }}
+              placeholder="Nome do bairro"
+              required={fulfillmentMode === "delivery"}
+              value={neighborhood}
+            />
+
+            <Input
+              error={cityError}
+              label="Cidade *"
+              name="city"
+              onChange={(e) => {
+                setCity(e.target.value);
+                if (cityError) setCityError("");
+              }}
+              placeholder="Nome da cidade"
+              required={fulfillmentMode === "delivery"}
+              value={city}
+            />
+
+            <Input
+              error={referencePointError}
+              label="Ponto de referência *"
+              name="referencePoint"
+              onChange={(e) => {
+                setReferencePoint(e.target.value);
+                if (referencePointError) setReferencePointError("");
+              }}
+              placeholder="Ex.: próximo ao mercado central"
+              required={fulfillmentMode === "delivery"}
+              value={referencePoint}
+            />
+
+            <Input
+              error={contactPhoneError}
+              label="Telefone para contato *"
+              name="contactPhone"
+              onChange={(e) => {
+                setContactPhone(e.target.value);
+                if (contactPhoneError) setContactPhoneError("");
+              }}
+              placeholder="Ex.: (11) 9 9999-9999"
+              required={fulfillmentMode === "delivery"}
+              type="tel"
+              value={contactPhone}
+            />
+          </div>
+
           <Input
             autoComplete="name"
             error={customerNameError}
@@ -136,7 +357,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
             label="Observações para a loja"
             name="notes"
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Informe endereço, retirada, preferências ou outros detalhes importantes"
+            placeholder="Preferências, cuidados especiais ou outras informações"
             rows={4}
             value={notes}
           />

@@ -4,6 +4,7 @@ import {
   buildWhatsAppUrl,
   createWhatsappUrl,
   buildOrderWhatsAppMessage,
+  type CheckoutFormData,
 } from "@/lib/whatsapp";
 
 // Normaliza espaço não-separável (U+00A0) produzido pelo Intl.NumberFormat
@@ -25,12 +26,19 @@ function makeItem(overrides: Partial<CartItem> = {}): CartItem {
   };
 }
 
-const emptyCheckout = {
+const emptyCheckout: CheckoutFormData = {
   customerName: "",
   desiredDate: "",
   paymentMethod: "",
   cardMessage: "",
   notes: "",
+  fulfillmentMode: "pickup",
+  street: "",
+  houseNumber: "",
+  neighborhood: "",
+  city: "",
+  referencePoint: "",
+  contactPhone: "",
 };
 
 // ─── buildWhatsAppUrl ───────────────────────────────────────────────────────
@@ -307,6 +315,109 @@ describe("buildOrderWhatsAppMessage", () => {
       [makeItem()],
       { ...emptyCheckout, notes: "   " },
     );
+    expect(message).not.toContain("Observações para a loja:");
+  });
+
+  // ─── fulfillmentMode e entrega ───────────────────────────────────────────
+
+  it("exibe 'Modalidade: Retirar na Loja' quando pickup", () => {
+    const message = buildOrderWhatsAppMessage([makeItem()], emptyCheckout);
+    expect(message).toContain("Modalidade: Retirar na Loja");
+  });
+
+  it("exibe 'Modalidade: Receber em casa' quando delivery", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      {
+        ...emptyCheckout,
+        fulfillmentMode: "delivery",
+        street: "Rua A",
+        houseNumber: "1",
+        neighborhood: "Centro",
+        city: "SP",
+        referencePoint: "Perto da praça",
+        contactPhone: "11999999999",
+      },
+    );
+    expect(message).toContain("Modalidade: Receber em casa");
+  });
+
+  it("inclui endereço completo quando delivery", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      {
+        ...emptyCheckout,
+        fulfillmentMode: "delivery",
+        street: "Rua das Flores",
+        houseNumber: "42",
+        neighborhood: "Jardim",
+        city: "São Paulo",
+        referencePoint: "Ao lado do banco",
+        contactPhone: "11988887777",
+      },
+    );
+    expect(message).toContain("Rua das Flores");
+    expect(message).toContain("42");
+    expect(message).toContain("Jardim");
+    expect(message).toContain("São Paulo");
+    expect(message).toContain("Ao lado do banco");
+    expect(message).toContain("11988887777");
+  });
+
+  it("omite endereço quando pickup, mesmo com campos preenchidos", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      {
+        ...emptyCheckout,
+        fulfillmentMode: "pickup",
+        street: "Rua A",
+        houseNumber: "1",
+        neighborhood: "Bairro X",
+        city: "Cidade Y",
+        referencePoint: "Ref Z",
+        contactPhone: "11999999999",
+      },
+    );
+    expect(message).not.toContain("Endereço de entrega");
+    expect(message).not.toContain("Rua A");
+    expect(message).not.toContain("11999999999");
+  });
+
+  it("modalidade sempre aparece na mensagem", () => {
+    const message = buildOrderWhatsAppMessage([makeItem()], emptyCheckout);
+    expect(message).toMatch(/Modalidade:/);
+  });
+
+  it("omite telefone quando pickup", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      { ...emptyCheckout, fulfillmentMode: "pickup", contactPhone: "11999999999" },
+    );
+    expect(message).not.toContain("Telefone para contato");
+  });
+
+  it("referencePoint aparece em delivery", () => {
+    const message = buildOrderWhatsAppMessage(
+      [makeItem()],
+      {
+        ...emptyCheckout,
+        fulfillmentMode: "delivery",
+        street: "Rua A",
+        houseNumber: "1",
+        neighborhood: "B",
+        city: "C",
+        referencePoint: "Próximo à escola",
+        contactPhone: "11999999999",
+      },
+    );
+    expect(message).toContain("Próximo à escola");
+  });
+
+  it("campos opcionais continuam omitidos quando vazios — regressão", () => {
+    const message = buildOrderWhatsAppMessage([makeItem()], emptyCheckout);
+    expect(message).not.toContain("Data ou horário desejado:");
+    expect(message).not.toContain("Como pretende pagar:");
+    expect(message).not.toContain("Mensagem para cartão:");
     expect(message).not.toContain("Observações para a loja:");
   });
 });

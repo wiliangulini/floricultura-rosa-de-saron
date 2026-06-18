@@ -19,12 +19,22 @@ export function createWhatsappUrl({ phoneNumber, message }: WhatsappMessageOptio
   return buildWhatsAppUrl(phoneNumber, message);
 }
 
+export type FulfillmentMode = "pickup" | "delivery";
+
 export type CheckoutFormData = {
   customerName: string;
   desiredDate: string;
   paymentMethod: string;
   cardMessage: string;
   notes: string;
+
+  fulfillmentMode: FulfillmentMode;
+  street: string;
+  houseNumber: string;
+  neighborhood: string;
+  city: string;
+  referencePoint: string;
+  contactPhone: string;
 };
 
 const ORDER_CONFIRMATION_NOTICE =
@@ -117,6 +127,22 @@ export function buildOrderWhatsAppMessage(
 
   if (hasOnRequestItems) {
     lines.push("Itens com Valor sob consulta não estão incluídos no total estimado.");
+  }
+
+  lines.push(
+    "",
+    checkoutData.fulfillmentMode === "pickup"
+      ? "Modalidade: Retirar na Loja"
+      : "Modalidade: Receber em casa",
+  );
+
+  if (checkoutData.fulfillmentMode === "delivery") {
+    lines.push("", "Endereço de entrega:");
+    lines.push(`Rua: ${checkoutData.street}, ${checkoutData.houseNumber}`);
+    lines.push(`Bairro: ${checkoutData.neighborhood}`);
+    lines.push(`Cidade: ${checkoutData.city}`);
+    lines.push(`Ponto de referência: ${checkoutData.referencePoint}`);
+    lines.push(`Telefone para contato: ${checkoutData.contactPhone}`);
   }
 
   const optionalCheckoutLines = getOptionalCheckoutLines(checkoutData);
