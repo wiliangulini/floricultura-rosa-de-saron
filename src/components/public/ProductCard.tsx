@@ -34,7 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="flex h-full flex-col">
       <Card className="flex h-full flex-col overflow-hidden">
-        <div className="relative aspect-[4/3] bg-rose-100">
+        <div className="relative aspect-4/3 bg-rose-100">
           {product.mainImage ? (
             <Image
               alt={imageAlt}
@@ -56,7 +56,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <Badge variant="sage">{product.category.name}</Badge>
             {product.featured ? <Badge variant="gold">Destaque</Badge> : null}
           </div>
-          <CardTitle className="pt-2">{product.name}</CardTitle>
+          <CardTitle className="line-clamp-2 pt-2">{product.name}</CardTitle>
           {product.shortDescription ? (
             <p className="text-sm leading-6 text-zinc-600">{product.shortDescription}</p>
           ) : null}
@@ -74,7 +74,7 @@ export function ProductCard({ product }: ProductCardProps) {
           />
           <Link
             aria-label={`Ver detalhes de ${product.name}`}
-            className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-rose-300 bg-white/80 px-5 py-2.5 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:flex-1"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-rose-300 bg-white/80 px-5 py-2.5 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:flex-1"
             href={`/produto/${product.slug}`}
           >
             Ver detalhes

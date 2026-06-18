@@ -185,7 +185,7 @@ export default async function ProdutoPage({ params }: Props) {
         type="application/ld+json"
       />
 
-      <section className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-16 sm:px-8 lg:grid-cols-[1fr_0.9fr] lg:py-20">
+      <section className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-16 sm:px-8 sm:gap-10 lg:grid-cols-[1fr_0.9fr] lg:py-20">
         <div>
           <div className="overflow-hidden rounded-lg border border-rose-200 bg-rose-100">
             {product.mainImage ? (
@@ -206,7 +206,7 @@ export default async function ProdutoPage({ params }: Props) {
           </div>
 
           {galleryImages.length > 0 ? (
-            <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {galleryImages.map((image) => (
                 <div
                   className="overflow-hidden rounded-md border border-rose-200 bg-rose-100"
@@ -234,13 +234,13 @@ export default async function ProdutoPage({ params }: Props) {
             </Badge>
           </div>
 
-          <h1 className="mt-5 text-4xl font-bold text-zinc-950 sm:text-5xl">{product.name}</h1>
+          <h1 className="mt-5 text-3xl font-bold text-zinc-950 sm:text-4xl">{product.name}</h1>
 
           {product.shortDescription ? (
-            <p className="mt-5 text-lg leading-8 text-zinc-700">{product.shortDescription}</p>
+            <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">{product.shortDescription}</p>
           ) : null}
 
-          <p className="mt-8 text-3xl font-bold text-rose-900">{formatProductPrice(product)}</p>
+          <p className="mt-8 text-2xl font-bold text-rose-900 sm:text-3xl">{formatProductPrice(product)}</p>
 
           <section className="mt-10 border-t border-rose-200 pt-8">
             <h2 className="text-2xl font-bold text-zinc-950">Detalhes</h2>

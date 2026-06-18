@@ -33,7 +33,7 @@ export function Toast({
     <div
       {...props}
       className={cn(
-        "flex w-full max-w-sm items-start gap-3 rounded-lg border p-4 shadow-lg shadow-zinc-950/10",
+        "flex w-full max-w-full items-start gap-3 rounded-lg border p-4 shadow-lg shadow-zinc-950/10 sm:max-w-sm",
         variantClasses[variant],
         className,
       )}
@@ -78,7 +78,7 @@ export function ToastContainer({
     <div
       {...props}
       aria-live="polite"
-      className={cn("fixed right-4 top-4 z-50 flex flex-col gap-3", className)}
+      className={cn("fixed left-4 right-4 top-4 z-50 flex flex-col gap-3 sm:left-auto", className)}
     >
       {children}
     </div>

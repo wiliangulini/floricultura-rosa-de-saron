@@ -120,11 +120,11 @@ export function CartView({ whatsappNumber }: CartViewProps) {
         </Modal>
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div className="grid gap-6 md:grid-cols-[1fr_360px]">
         <section aria-label="Itens do pedido">
           <ul className="divide-y divide-rose-100" role="list">
             {items.map((item) => (
-              <li className="flex gap-4 py-6 first:pt-0" key={item.productId}>
+              <li className="flex flex-col gap-3 py-6 first:pt-0 sm:flex-row sm:gap-4" key={item.productId}>
                 <div className="relative size-20 shrink-0 overflow-hidden rounded-md border border-rose-100 bg-rose-50 sm:size-24">
                   {item.imageUrl ? (
                     <Image
@@ -216,7 +216,7 @@ export function CartView({ whatsappNumber }: CartViewProps) {
         </section>
 
         <aside aria-label="Resumo do pedido">
-          <div className="rounded-lg border border-rose-200 bg-white p-6 shadow-sm">
+          <div className="rounded-lg border border-rose-200 bg-white p-4 shadow-sm sm:p-6">
             <h2 className="text-lg font-bold text-zinc-950">Resumo do pedido</h2>
 
             <dl className="mt-4 space-y-2 text-sm">

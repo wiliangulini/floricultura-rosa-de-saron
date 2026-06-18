@@ -136,11 +136,11 @@ export default async function CategoriaPage({ params }: Props) {
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
             Categoria
           </p>
-          <h1 className="mt-4 text-4xl font-bold sm:text-5xl">
+          <h1 className="mt-4 text-3xl font-bold sm:text-4xl">
             {getCategoryTitle(category, settings)}
           </h1>
           {category.description ? (
-            <p className="mt-5 text-lg leading-8 text-zinc-700">{category.description}</p>
+            <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">{category.description}</p>
           ) : null}
         </div>
 

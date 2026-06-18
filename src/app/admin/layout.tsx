@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 
-import { AdminHeader } from "@/components/admin/AdminHeader";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminShell } from "@/components/admin/AdminShell";
 import { ADMIN_SESSION_COOKIE, readAdminSessionCookie } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -51,19 +50,7 @@ export default async function AdminLayout({
       >
         Pular para o conteúdo
       </a>
-      <div className="flex min-h-screen flex-col md:flex-row">
-        <AdminSidebar />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <AdminHeader adminEmail={session.email} />
-          <main
-            className="w-full px-4 py-6 sm:px-6 lg:px-8"
-            id="conteudo-principal"
-            tabIndex={-1}
-          >
-            <div className="mx-auto w-full max-w-6xl">{children}</div>
-          </main>
-        </div>
-      </div>
+      <AdminShell adminEmail={session.email}>{children}</AdminShell>
     </div>
   );
 }

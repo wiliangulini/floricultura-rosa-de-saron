@@ -1,20 +1,12 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 
+import { PublicHeader } from "@/components/public/PublicHeader";
 import { WhatsAppFloatingButton } from "@/components/public/WhatsAppFloatingButton";
 import { getSettings } from "@/server/settings";
 
 type PublicLayoutProps = Readonly<{
   children: ReactNode;
 }>;
-
-const publicNavigationItems = [
-  { href: "/", label: "Início" },
-  { href: "/produtos", label: "Produtos" },
-  { href: "/sobre", label: "Sobre" },
-  { href: "/contato", label: "Contato" },
-  { href: "/carrinho", label: "Meu pedido" },
-] as const;
 
 function getBusinessName(value: string | null | undefined): string {
   const businessName = value?.trim();
@@ -34,28 +26,7 @@ export default async function PublicLayout({ children }: PublicLayoutProps) {
       >
         Pular para o conteúdo
       </a>
-      <header className="border-b border-rose-100 bg-white text-zinc-950">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-4 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
-          <Link
-            className="text-lg font-bold text-rose-900 transition hover:text-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-700"
-            href="/"
-          >
-            {businessName}
-          </Link>
-
-          <nav aria-label="Navegação principal" className="flex flex-wrap gap-2">
-            {publicNavigationItems.map((item) => (
-              <Link
-                className="inline-flex min-h-11 items-center justify-center rounded-md px-3.5 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-rose-50 hover:text-rose-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:text-base"
-                href={item.href}
-                key={item.href}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </header>
+      <PublicHeader businessName={businessName} />
       <main
         className="min-h-screen bg-rose-50 text-zinc-950"
         id="conteudo-principal"

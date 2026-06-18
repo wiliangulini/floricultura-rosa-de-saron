@@ -210,7 +210,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                 {products.map((product) => (
                   <tr key={product.id}>
                     <td className="px-4 py-4 align-top">
-                      <div className="flex min-w-72 items-start gap-3">
+                      <div className="flex min-w-0 flex-1 items-start gap-3">
                         <div className="relative size-16 shrink-0 overflow-hidden rounded-md border border-rose-100 bg-rose-50">
                           {product.mainImage ? (
                             <Image
@@ -229,7 +229,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                         <div>
                           <p className="font-semibold text-zinc-950">{product.name}</p>
                           {product.shortDescription ? (
-                            <p className="mt-1 max-w-md text-sm leading-6 text-zinc-600">
+                            <p className="mt-1 line-clamp-2 max-w-md text-sm leading-6 text-zinc-600">
                               {product.shortDescription}
                             </p>
                           ) : null}
@@ -237,7 +237,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                       </div>
                     </td>
                     <td className="px-4 py-4 align-top">
-                      <div className="flex min-w-48 flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <Badge variant={product.active ? "sage" : "neutral"}>
                           {product.active ? "Ativo" : "Inativo"}
                         </Badge>
@@ -249,7 +249,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                       </div>
                     </td>
                     <td className="px-4 py-4 align-top">
-                      <div className="min-w-36 text-zinc-700">
+                      <div className="text-zinc-700">
                         <p className="font-medium text-zinc-950">{product.category.name}</p>
                         {product.category.active ? null : (
                           <p className="mt-1 text-xs font-medium text-zinc-500">
@@ -262,7 +262,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                       <span className="whitespace-nowrap">{formatAdminProductPrice(product)}</span>
                     </td>
                     <td className="px-4 py-4 align-top">
-                      <div className="flex min-w-52 flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+                      <div className="flex shrink-0 flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
                         <Link
                           className="inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
                           href={`/admin/produtos/${product.id}/editar`}

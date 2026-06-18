@@ -85,7 +85,7 @@ export function Modal({
         aria-labelledby={titleId}
         aria-modal="true"
         className={cn(
-          "relative max-h-[calc(100vh-3rem)] w-full max-w-lg overflow-y-auto rounded-lg border border-rose-100 bg-white p-6 text-zinc-950 shadow-xl shadow-zinc-950/15 outline-none",
+          "relative max-h-[calc(100dvh-3rem)] w-full max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg border border-rose-100 bg-white p-6 text-zinc-950 shadow-xl shadow-zinc-950/15 outline-none sm:max-w-lg",
           className,
         )}
         ref={dialogRef}

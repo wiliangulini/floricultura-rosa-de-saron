@@ -284,13 +284,13 @@ function HeroSection({
 
   return (
     <section className="bg-rose-50">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-20">
+      <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-12 sm:gap-8 sm:px-8 sm:py-16 lg:gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-20">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase text-rose-800">{businessName}</p>
-          <h1 className="mt-4 text-4xl font-bold leading-tight text-zinc-950 sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 text-3xl font-bold leading-tight text-zinc-950 sm:text-4xl lg:text-6xl">
             Floricultura em {cityName} com flores, buquês e arranjos especiais
           </h1>
-          <p className="mt-6 text-lg leading-8 text-zinc-700">
+          <p className="mt-6 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
             Presentes delicados para aniversários, agradecimentos, homenagens e gestos de carinho.
             Escolha no catálogo e finalize o atendimento diretamente pelo WhatsApp da loja.
           </p>
@@ -513,7 +513,7 @@ function AboutPreviewSection({ settings }: { settings: PublicSettings }) {
 
   return (
     <section className="bg-emerald-50">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-16">
+      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 md:grid-cols-[0.9fr_1.1fr] md:items-center lg:py-16">
         <div className="space-y-5">
           <p className="text-sm font-semibold uppercase text-emerald-900">Sobre a floricultura</p>
           <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
@@ -572,7 +572,7 @@ function LocationSection({ settings, whatsappHref }: HomeSectionProps) {
           </h2>
         </div>
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           <Card className="border-rose-100 lg:col-span-2">
             <CardHeader>
               <CardTitle>Endereço</CardTitle>

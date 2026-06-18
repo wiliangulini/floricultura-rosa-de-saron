@@ -169,7 +169,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
   }
 
   return (
-    <form className="grid gap-8 lg:grid-cols-[1fr_400px]" onSubmit={handleSubmit}>
+    <form className="grid gap-6 md:grid-cols-[1fr_400px]" onSubmit={handleSubmit}>
       <section
         aria-labelledby="checkout-form-title"
         className="order-2 rounded-lg border border-rose-200 bg-white p-6 shadow-sm sm:p-8 lg:order-1"
@@ -188,7 +188,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
             <legend className="mb-2 text-sm font-semibold text-zinc-900">
               Modalidade <span aria-hidden="true">*</span>
             </legend>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
               {(["pickup", "delivery"] as const).map((mode) => {
                 const label = mode === "pickup" ? "Retirar na Loja" : "Receber em casa";
                 const inputId = `fulfillment-${mode}`;
@@ -197,7 +197,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
                     key={mode}
                     htmlFor={inputId}
                     className={cn(
-                      "flex cursor-pointer items-center gap-3 rounded-md border px-4 py-3 text-sm font-medium transition",
+                      "flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2.5 text-sm font-medium transition sm:px-4 sm:py-3",
                       fulfillmentMode === mode
                         ? "border-rose-700 bg-rose-50 text-rose-900 ring-1 ring-rose-700"
                         : "border-rose-200 bg-white text-zinc-700 hover:border-rose-400 hover:bg-rose-50",

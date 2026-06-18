@@ -1,13 +1,66 @@
-type AdminHeaderProps = Readonly<{
-  adminEmail: string;
-}>;
+"use client";
 
-export function AdminHeader({ adminEmail }: AdminHeaderProps) {
+interface AdminHeaderProps {
+  adminEmail: string;
+  onMenuToggle: () => void;
+  sidebarOpen: boolean;
+}
+
+export function AdminHeader({ adminEmail, onMenuToggle, sidebarOpen }: AdminHeaderProps) {
   return (
     <header className="border-b border-zinc-200 bg-white">
-      <div className="flex flex-col gap-2 px-4 py-4 sm:px-6 lg:px-8">
-        <p className="text-lg font-semibold text-zinc-950">Painel administrativo</p>
-        <p className="text-sm leading-6 text-zinc-600">Conectado como: {adminEmail}</p>
+      <div className="flex items-center gap-3 px-4 py-4 sm:px-6 lg:px-8">
+        {/* Hambúrguer — visível apenas em < md */}
+        <button
+          aria-controls="admin-sidebar"
+          aria-expanded={sidebarOpen}
+          aria-label={sidebarOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
+          className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-zinc-700 transition hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 md:hidden"
+          onClick={onMenuToggle}
+          type="button"
+        >
+          {sidebarOpen ? (
+            <svg
+              aria-hidden="true"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line x1="18" x2="6" y1="6" y2="18" />
+              <line x1="6" x2="18" y1="6" y2="18" />
+            </svg>
+          ) : (
+            <svg
+              aria-hidden="true"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line x1="3" x2="21" y1="6" y2="6" />
+              <line x1="3" x2="21" y1="12" y2="12" />
+              <line x1="3" x2="21" y1="18" y2="18" />
+            </svg>
+          )}
+        </button>
+
+        <div className="min-w-0 flex-1">
+          <p className="text-lg font-semibold text-zinc-950">Painel administrativo</p>
+          <p className="truncate text-sm leading-6 text-zinc-600">
+            Conectado como: {adminEmail}
+          </p>
+        </div>
       </div>
     </header>
   );

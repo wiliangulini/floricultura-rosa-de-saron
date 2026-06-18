@@ -164,7 +164,7 @@ export function ProductForm({
     <Card>
       <form action={formAction} encType="multipart/form-data" noValidate>
         <CardContent className="space-y-6 pt-5">
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2">
             <Input
               autoComplete="off"
               disabled={isPending}
@@ -214,7 +214,7 @@ export function ProductForm({
             rows={5}
           />
 
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2">
             <SelectField
               defaultValue={initialValues.priceType}
               disabled={isPending}
@@ -247,10 +247,10 @@ export function ProductForm({
             />
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+          <div className="grid gap-5 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
             <div className="space-y-2">
               <p className="text-sm font-semibold text-zinc-900">Prévia da imagem principal</p>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-rose-200 bg-rose-50">
+              <div className="relative aspect-3/2 overflow-hidden rounded-md border border-rose-200 bg-rose-50 sm:aspect-4/3">
                 {previewImageUrl ? (
                   <Image
                     alt={previewImageAlt}
@@ -311,7 +311,7 @@ export function ProductForm({
             </div>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2">
             <Input
               autoComplete="off"
               defaultValue={initialValues.seoTitle ?? ""}

@@ -71,7 +71,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
               </p>
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-2">
+            <div className="grid gap-5 md:grid-cols-2">
               <Input
                 aria-required="true"
                 autoComplete="organization"
@@ -145,7 +145,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
               rows={3}
             />
 
-            <div className="grid gap-5 lg:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               <Input
                 defaultValue={initialValues.neighborhood}
                 disabled={isPending}
@@ -234,7 +234,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
               </p>
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-2">
+            <div className="grid gap-5 md:grid-cols-2">
               <Input
                 defaultValue={initialValues.instagramUrl}
                 disabled={isPending}

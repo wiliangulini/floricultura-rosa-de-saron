@@ -32,7 +32,7 @@ function formatItemSubtotal(item: CartItem): string {
 
 export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRowProps) {
   return (
-    <li className="flex gap-4 py-5 first:pt-0 last:pb-0">
+    <li className="flex flex-col gap-3 py-5 first:pt-0 last:pb-0 sm:flex-row sm:gap-4">
       <div className="relative size-20 shrink-0 overflow-hidden rounded-md border border-rose-100 bg-rose-50">
         {item.imageUrl ? (
           <Image
@@ -93,7 +93,7 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
             <p className="text-sm font-semibold text-zinc-950">{formatItemSubtotal(item)}</p>
             <button
               aria-label={`Remover ${item.name} do carrinho`}
-              className="inline-flex min-h-11 items-center rounded-md px-2 text-sm font-semibold text-red-700 underline-offset-2 hover:bg-red-50 hover:text-red-800 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+              className="inline-flex min-h-11 items-center rounded-md px-2 text-sm font-semibold text-red-700 underline-offset-2 hover:bg-red-50 hover:text-red-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
               onClick={() => onRemoveItem(item.productId)}
               type="button"
             >

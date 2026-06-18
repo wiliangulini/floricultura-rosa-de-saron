@@ -23,6 +23,22 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: ["**/responsive-*.spec.ts"],
+    },
+    {
+      name: "mobile-pixel5",
+      use: { ...devices["Pixel 5"] },
+      testMatch: ["**/responsive-*.spec.ts"],
+    },
+    {
+      name: "mobile-iphone12",
+      use: { ...devices["iPhone 12"] },
+      testMatch: ["**/responsive-*.spec.ts"],
+    },
+    {
+      name: "tablet-ipad",
+      use: { ...devices["iPad Mini"] },
+      testMatch: ["**/responsive-*.spec.ts"],
     },
   ],
   webServer: {

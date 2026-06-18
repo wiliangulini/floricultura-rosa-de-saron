@@ -23,7 +23,7 @@ export default async function AdminPerfilPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <PasswordChangeForm action={changePassword} />
 
         <OwnerProfileForm

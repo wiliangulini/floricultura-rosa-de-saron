@@ -81,7 +81,7 @@ export function OwnerProfileForm({ action, initialValues }: OwnerProfileFormProp
             type="text"
           />
 
-          <div className="grid gap-4 sm:grid-cols-[160px_minmax(0,1fr)] sm:items-start">
+          <div className="grid gap-4 sm:grid-cols-[120px_minmax(0,1fr)] sm:items-start">
             <div className="overflow-hidden rounded-md border border-rose-100 bg-rose-50">
               {displayedPhotoUrl ? (
                 <Image

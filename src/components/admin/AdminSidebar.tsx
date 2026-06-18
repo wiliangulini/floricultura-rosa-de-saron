@@ -11,7 +11,12 @@ const adminMenuItems = [
   { href: "/admin/configuracoes", label: "Configurações" },
 ] as const;
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
 
   function isActive(href: string) {
@@ -23,14 +28,23 @@ export function AdminSidebar() {
   }
 
   return (
-    <aside className="border-b border-zinc-200 bg-white md:min-h-screen md:w-64 md:border-b-0 md:border-r">
+    <aside
+      className={[
+        "fixed inset-y-0 left-0 z-40 w-64 border-r border-zinc-200 bg-white",
+        "transform transition-transform duration-200 ease-in-out",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        "md:relative md:inset-y-auto md:left-auto md:z-auto",
+        "md:translate-x-0 md:min-h-screen md:border-b-0",
+      ].join(" ")}
+      id="admin-sidebar"
+    >
       <div className="flex h-full flex-col gap-5 px-4 py-4 sm:px-6 md:py-6">
         <div>
           <p className="text-sm font-semibold uppercase text-rose-700">Administração</p>
           <p className="mt-1 text-lg font-bold text-zinc-950">Rosa de Saron</p>
         </div>
 
-        <nav aria-label="Navegação administrativa" className="flex flex-wrap gap-2 md:flex-col">
+        <nav aria-label="Navegação administrativa" className="flex flex-col gap-1">
           {adminMenuItems.map((item) => {
             const active = isActive(item.href);
 
@@ -44,6 +58,7 @@ export function AdminSidebar() {
                 }`}
                 href={item.href}
                 key={item.href}
+                onClick={onClose}
               >
                 {item.label}
               </Link>

@@ -69,8 +69,8 @@ export default async function ProdutosPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
           Catálogo
         </p>
-        <h1 className="mt-4 text-4xl font-bold sm:text-5xl">Produtos da floricultura</h1>
-        <p className="mt-5 text-lg leading-8 text-zinc-700">
+        <h1 className="mt-4 text-3xl font-bold sm:text-4xl">Produtos da floricultura</h1>
+        <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
           Escolha entre flores, buquês, arranjos e presentes preparados com cuidado. Valores,
           disponibilidade e entrega são confirmados pela loja antes do fechamento do pedido.
         </p>

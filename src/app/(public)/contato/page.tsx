@@ -186,10 +186,10 @@ export default async function ContatoPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
             Atendimento
           </p>
-          <h1 className="mt-4 text-4xl font-bold leading-tight sm:text-5xl">
+          <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
             Contato da {businessName}
           </h1>
-          <p className="mt-5 text-lg leading-8 text-zinc-700">
+          <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
             Fale com a floricultura para tirar dúvidas, confirmar disponibilidade e combinar
             detalhes de retirada ou entrega antes de finalizar o pedido.
           </p>
@@ -203,7 +203,7 @@ export default async function ContatoPage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 sm:px-8 lg:grid-cols-[1fr_0.8fr] lg:py-16">
+        <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 sm:px-8 md:grid-cols-[1fr_0.8fr] lg:py-16">
           <div className="rounded-lg border border-rose-100 bg-white p-6 shadow-sm shadow-rose-950/5">
             <h2 className="text-2xl font-bold text-zinc-950">Informações de contato</h2>
 
@@ -284,7 +284,7 @@ export default async function ContatoPage() {
             </p>
             {googleMapsHref ? (
               <a
-                className="mt-6 inline-flex min-h-11 items-center justify-center rounded-md border border-emerald-300 bg-white/85 px-5 py-2.5 text-base font-semibold text-emerald-950 transition hover:border-emerald-500 hover:bg-emerald-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+                className="mt-6 inline-flex w-full min-h-11 items-center justify-center rounded-md border border-emerald-300 bg-white/85 px-5 py-2.5 text-base font-semibold text-emerald-950 transition hover:border-emerald-500 hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 sm:w-auto"
                 href={googleMapsHref}
                 rel="noopener noreferrer"
                 target="_blank"

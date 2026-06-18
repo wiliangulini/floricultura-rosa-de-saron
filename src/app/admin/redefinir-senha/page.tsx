@@ -31,7 +31,7 @@ export default async function AdminResetPasswordPage({
   const isTokenValid = token ? await validatePasswordResetToken(token) : false;
 
   return (
-    <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+    <section className="grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
       <div>
         <h1 className="text-3xl font-bold">Criar nova senha</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700">

@@ -186,10 +186,10 @@ export default async function SobrePage() {
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
             Sobre a floricultura
           </p>
-          <h1 className="mt-4 text-4xl font-bold leading-tight sm:text-5xl">
+          <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
             Sobre a {businessName}
           </h1>
-          <p className="mt-5 text-lg leading-8 text-zinc-700">
+          <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
             A {businessName} atende clientes em {cityName}
             {neighborhood ? `, especialmente na região de ${neighborhood}` : ""}, com flores,
             buquês e arranjos preparados para presentear com cuidado em momentos especiais.
@@ -212,7 +212,7 @@ export default async function SobrePage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:py-16">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 md:grid-cols-[0.9fr_1.1fr] md:items-start lg:py-16">
           <div className="space-y-5">
             <p className="text-sm font-semibold uppercase text-emerald-900">Atendimento local</p>
             <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">

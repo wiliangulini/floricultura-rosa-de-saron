@@ -27,7 +27,7 @@ export function CartSummary({
 }: CartSummaryProps) {
   return (
     <aside aria-labelledby="cart-summary-title">
-      <div className="rounded-lg border border-rose-200 bg-white p-6 shadow-sm">
+      <div className="rounded-lg border border-rose-200 bg-white p-4 shadow-sm sm:p-6">
         <h2 id="cart-summary-title" className="text-lg font-bold text-zinc-950">
           Resumo do carrinho
         </h2>
