@@ -20,7 +20,7 @@ const prisma = new PrismaClient({ adapter });
 
 const ADMIN_EMAIL = "admin@floricultura.com";
 const SETTINGS_ID = "default-settings";
-const STORE_WHATSAPP_NUMBER = "5546991168949";
+const STORE_WHATSAPP_NUMBER = "5546999197294";
 
 const categories = [
   {

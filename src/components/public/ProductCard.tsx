@@ -32,8 +32,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageAlt = product.mainImage?.altText || product.name;
 
   return (
-    <article className="flex h-full flex-col">
-      <Card className="flex h-full flex-col overflow-hidden">
+    <article className="flex h-full w-full flex-col">
+      <Card className="flex h-full w-full flex-col overflow-hidden">
         <div className="relative aspect-4/3 bg-rose-100">
           {product.mainImage ? (
             <Image

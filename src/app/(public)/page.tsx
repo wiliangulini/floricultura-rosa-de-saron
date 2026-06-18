@@ -389,9 +389,9 @@ function FeaturedProductsSection({ products }: { products: PublicProduct[] }) {
 
         {visibleProducts.length > 0 ? (
           <CartProvider>
-            <ul className="mt-8 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-8 grid list-none grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {visibleProducts.map((product) => (
-                <li className="flex" key={product.slug}>
+                <li className="flex w-full max-w-sm sm:max-w-none" key={product.slug}>
                   <ProductCard product={product} />
                 </li>
               ))}

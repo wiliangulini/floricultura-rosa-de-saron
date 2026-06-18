@@ -56,7 +56,7 @@ const EXISTING_SETTINGS_ID = "default-settings";
 function createSettingsFormData(overrides: Record<string, string> = {}) {
   const formData = new FormData();
   formData.set("businessName", "Floricultura Rosa de Saron");
-  formData.set("whatsappNumber", "5546991168949");
+  formData.set("whatsappNumber", "5546999197294");
   for (const [key, value] of Object.entries(overrides)) {
     formData.set(key, value);
   }
@@ -106,7 +106,7 @@ describe("saveSettings", () => {
   it("retorna erro de campo quando businessName está vazio", async () => {
     const formData = new FormData();
     formData.set("businessName", "");
-    formData.set("whatsappNumber", "5546991168949");
+    formData.set("whatsappNumber", "5546999197294");
 
     const result = await saveSettings(INITIAL_STATE, formData);
 

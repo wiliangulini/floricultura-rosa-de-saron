@@ -82,9 +82,9 @@ export default async function ProdutosPage() {
 
       {products.length > 0 ? (
         <CartProvider>
-          <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-10 grid list-none grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <li key={product.slug} className="flex">
+              <li key={product.slug} className="flex w-full max-w-sm sm:max-w-none">
                 <ProductCard product={product} />
               </li>
             ))}
