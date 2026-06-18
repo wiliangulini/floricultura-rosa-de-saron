@@ -16,6 +16,25 @@ type SmtpConfig = {
   user: string;
 };
 
+export type EmailDeliveryErrorDetails = {
+  code?: string;
+  command?: string;
+  responseCode?: number;
+};
+
+export type SmtpDiagnostics = {
+  configured: {
+    from: boolean;
+    host: boolean;
+    pass: boolean;
+    port: boolean;
+    user: boolean;
+  };
+  host?: string;
+  port?: number;
+  secure: boolean;
+};
+
 export class EmailConfigurationError extends Error {
   constructor(message: string) {
     super(message);
@@ -24,9 +43,17 @@ export class EmailConfigurationError extends Error {
 }
 
 export class EmailDeliveryError extends Error {
-  constructor(message: string) {
+  cause?: unknown;
+  details: EmailDeliveryErrorDetails;
+
+  constructor(
+    message: string,
+    options: { cause?: unknown; details?: EmailDeliveryErrorDetails } = {},
+  ) {
     super(message);
     this.name = "EmailDeliveryError";
+    this.cause = options.cause;
+    this.details = options.details ?? {};
   }
 }
 
@@ -54,9 +81,35 @@ export async function sendPasswordResetEmail({
       text: createPasswordResetText({ expiresInMinutes, resetUrl }),
       to,
     });
-  } catch {
-    throw new EmailDeliveryError("Não foi possível enviar o email de redefinição de senha.");
+  } catch (error) {
+    throw new EmailDeliveryError("Não foi possível enviar o email de redefinição de senha.", {
+      cause: error,
+      details: getEmailDeliveryErrorDetails(error),
+    });
   }
+}
+
+export function getSmtpDiagnostics(): SmtpDiagnostics {
+  const host = process.env.SMTP_HOST?.trim();
+  const portValue = process.env.SMTP_PORT?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS?.trim();
+  const from = process.env.SMTP_FROM?.trim();
+  const port = portValue ? Number(portValue) : NaN;
+  const isValidPort = Number.isInteger(port) && port > 0 && port <= 65535;
+
+  return {
+    configured: {
+      from: Boolean(from),
+      host: Boolean(host),
+      pass: Boolean(pass),
+      port: Boolean(portValue && isValidPort),
+      user: Boolean(user),
+    },
+    host: host || undefined,
+    port: isValidPort ? port : undefined,
+    secure: port === 465,
+  };
 }
 
 function getSmtpConfig(): SmtpConfig {
@@ -116,4 +169,30 @@ function escapeHtml(value: string): string {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+function getEmailDeliveryErrorDetails(error: unknown): EmailDeliveryErrorDetails {
+  if (!isRecord(error)) {
+    return {};
+  }
+
+  const details: EmailDeliveryErrorDetails = {};
+
+  if (typeof error.code === "string") {
+    details.code = error.code;
+  }
+
+  if (typeof error.command === "string") {
+    details.command = error.command;
+  }
+
+  if (typeof error.responseCode === "number") {
+    details.responseCode = error.responseCode;
+  }
+
+  return details;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
 }

@@ -116,7 +116,8 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
                 defaultValue={initialValues.email}
                 disabled={isPending}
                 error={state.fieldErrors.email}
-                label="E-mail"
+                helperText="Exibido nas páginas públicas do site. Não é a credencial de acesso ao painel."
+                label="E-mail de contato"
                 name="email"
                 placeholder="contato@floricultura.com.br"
                 type="email"

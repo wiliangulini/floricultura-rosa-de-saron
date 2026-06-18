@@ -88,6 +88,12 @@ O login administrativo tem o link **Esqueceu sua senha?**. O fluxo gera um token
 
 Para usar em produção, configure `NEXT_PUBLIC_SITE_URL` com a URL pública do site e preencha as variáveis SMTP (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`).
 
+Em produção, `NEXT_PUBLIC_SITE_URL` deve ser uma URL pública absoluta, por exemplo `https://seudominio.com.br`. O fluxo de recuperação não envia links com `localhost` quando `NODE_ENV=production`.
+
+Para Gmail, use senha de app em `SMTP_PASS`, não a senha normal da conta. Use `SMTP_HOST=smtp.gmail.com` com `SMTP_PORT=587` para STARTTLS ou `SMTP_PORT=465` para TLS direto. O `SMTP_FROM` deve usar a própria conta autenticada ou um alias/remetente autorizado pelo provedor.
+
+Em desenvolvimento, `PASSWORD_RESET_DEV_LOG_LINK=true` registra o link de redefinição no log do servidor. Esse modo é ignorado em produção e não substitui a validação operacional de entrega real pelo provedor SMTP.
+
 ## Testes
 
 ```bash
@@ -136,6 +142,7 @@ npm start
 | `SMTP_USER` | Sim (recuperação) | Usuário SMTP |
 | `SMTP_PASS` | Sim (recuperação) | Senha SMTP |
 | `SMTP_FROM` | Sim (recuperação) | Remetente dos emails de recuperação |
+| `PASSWORD_RESET_DEV_LOG_LINK` | Não | Registra o link de reset no servidor somente fora de produção |
 | `CLOUDINARY_CLOUD_NAME` | Sim (upload) | Cloud name Cloudinary para imagens de produto e foto da proprietária |
 | `CLOUDINARY_API_KEY` | Sim (upload) | API key Cloudinary |
 | `CLOUDINARY_API_SECRET` | Sim (upload) | API secret Cloudinary |
