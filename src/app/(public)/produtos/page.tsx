@@ -13,6 +13,8 @@ const pageDescription =
   "Veja flores, buquês, arranjos e presentes disponíveis na floricultura para pedir pelo WhatsApp.";
 const fallbackBusinessName = "Floricultura";
 
+export const dynamic = "force-dynamic";
+
 function getTrimmedValue(value: string | null | undefined): string | null {
   const trimmedValue = value?.trim();
 

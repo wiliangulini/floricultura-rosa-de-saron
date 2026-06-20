@@ -13,6 +13,8 @@ import { getSettings, type PublicSettings } from "@/server/settings";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamic = "force-dynamic";
+
 function getCityName(settings: PublicSettings): string {
   return settings.city?.trim() || "sua cidade";
 }

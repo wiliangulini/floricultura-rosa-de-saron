@@ -8,6 +8,8 @@ type PublicLayoutProps = Readonly<{
   children: ReactNode;
 }>;
 
+export const dynamic = "force-dynamic";
+
 function getBusinessName(value: string | null | undefined): string {
   const businessName = value?.trim();
 

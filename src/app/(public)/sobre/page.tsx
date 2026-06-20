@@ -25,6 +25,8 @@ type PageMetadataContent = {
   title: string;
 };
 
+export const dynamic = "force-dynamic";
+
 const actionLinkBaseClasses =
   "inline-flex min-h-12 items-center justify-center rounded-md px-6 py-3 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 

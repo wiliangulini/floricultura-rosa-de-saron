@@ -14,6 +14,8 @@ import { getSettings, type PublicSettings } from "@/server/settings";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamic = "force-dynamic";
+
 const fallbackBusinessName = "Floricultura";
 
 function getTrimmedValue(value: string | null | undefined): string | null {

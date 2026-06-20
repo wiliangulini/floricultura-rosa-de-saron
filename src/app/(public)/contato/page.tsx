@@ -19,6 +19,8 @@ type PageMetadataContent = {
   title: string;
 };
 
+export const dynamic = "force-dynamic";
+
 const actionLinkClasses =
   "inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700";
 
