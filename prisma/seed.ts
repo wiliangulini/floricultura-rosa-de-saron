@@ -109,21 +109,21 @@ async function main() {
     update: {
       businessName: "Floricultura",
       whatsappNumber: STORE_WHATSAPP_NUMBER,
-      city: "Pato Branco",
+      city: "Coronel Vivida",
       state: "PR",
-      seoDefaultTitle: "Floricultura em Pato Branco | Buquês, arranjos e presentes",
+      seoDefaultTitle: "Floricultura em Coronel Vivida | Buquês, arranjos e presentes",
       seoDefaultDescription:
-        "Floricultura em Pato Branco com buquês, arranjos, cestas e flores naturais para presentear. Envie seu pedido pelo WhatsApp.",
+        "Floricultura em Coronel Vivida com buquês, arranjos, cestas e flores naturais para presentear. Envie seu pedido pelo WhatsApp.",
     },
     create: {
       id: SETTINGS_ID,
       businessName: "Floricultura",
       whatsappNumber: STORE_WHATSAPP_NUMBER,
-      city: "Pato Branco",
+      city: "Coronel Vivida",
       state: "PR",
-      seoDefaultTitle: "Floricultura em Pato Branco | Buquês, arranjos e presentes",
+      seoDefaultTitle: "Floricultura em Coronel Vivida | Buquês, arranjos e presentes",
       seoDefaultDescription:
-        "Floricultura em Pato Branco com buquês, arranjos, cestas e flores naturais para presentear. Envie seu pedido pelo WhatsApp.",
+        "Floricultura em Coronel Vivida com buquês, arranjos, cestas e flores naturais para presentear. Envie seu pedido pelo WhatsApp.",
     },
   });
   console.log("✔ Configurações da loja");
@@ -172,7 +172,7 @@ async function main() {
         available: true,
         featured: product.featured,
         seasonal: product.seasonal,
-        seoTitle: `${product.name} em Pato Branco | Floricultura`,
+        seoTitle: `${product.name} em Coronel Vivida | Floricultura`,
         seoDescription: product.shortDescription,
       },
       create: {
@@ -187,7 +187,7 @@ async function main() {
         available: true,
         featured: product.featured,
         seasonal: product.seasonal,
-        seoTitle: `${product.name} em Pato Branco | Floricultura`,
+        seoTitle: `${product.name} em Coronel Vivida | Floricultura`,
         seoDescription: product.shortDescription,
       },
     });

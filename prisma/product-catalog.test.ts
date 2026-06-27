@@ -60,6 +60,15 @@ describe("productCatalog", () => {
     }
   });
 
+  it("usa Coronel Vivida nos metadados locais e não mantém a cidade legada", () => {
+    for (const product of productCatalog) {
+      expect(product.seoTitle).toContain("Coronel Vivida");
+      expect(product.seoDescription).toContain("Coronel Vivida");
+      expect(product.seoTitle).not.toContain("Pato Branco");
+      expect(product.seoDescription).not.toContain("Pato Branco");
+    }
+  });
+
   it("mantém exatamente uma imagem principal por produto", () => {
     for (const product of productCatalog) {
       expect(product.images.filter((image) => image.isMain)).toHaveLength(1);

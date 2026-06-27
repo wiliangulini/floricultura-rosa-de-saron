@@ -91,6 +91,23 @@ npm run db:update:categories:apply
 
 O comando é idempotente, preserva o estado ativo/inativo das categorias existentes e não altera produtos, usuários ou configurações. Categorias ausentes no catálogo são criadas como ativas; categorias adicionais não são removidas.
 
+## Corrigir localização em banco existente
+
+Para diagnosticar referências à cidade antiga sem alterar o banco:
+
+```bash
+npm run db:update:store-location
+```
+
+Depois de confirmar o banco configurado e revisar o diagnóstico:
+
+```bash
+npm run db:update:store-location:apply
+```
+
+O comando aceita somente `Pato Branco` ou `Coronel Vivida` como cidade atual, corrige
+localização e SEO em uma transação e é idempotente.
+
 ## Importar produtos das imagens locais
 
 O catálogo em `prisma/product-catalog.ts` mapeia explicitamente os produtos e as imagens
@@ -114,6 +131,45 @@ O importador usa slugs e IDs de imagem determinísticos. Reexecuções atualizam
 produtos do catálogo, reutilizam imagens já registradas e preservam produtos e imagens externos
 ao catálogo. O modo de aplicação pode fazer uploads antes da transação de cada produto; uma
 falha posterior pode deixar um asset sem referência no Cloudinary para limpeza manual.
+
+Os quatro produtos demonstrativos do seed antigo podem ser diagnosticados e removidos
+sem afetar produtos com outros slugs:
+
+```bash
+npm run db:remove:legacy-products
+npm run db:remove:legacy-products:apply
+```
+
+Para conferir se categorias, catálogo, imagens e localização gerenciados estão completos:
+
+```bash
+npm run db:verify:catalog
+```
+
+## Deploy para a VPS
+
+O deploy comum atualiza código, dependências, build e migrations sem alterar o catálogo:
+
+```bash
+./deploy-to-vps.sh
+```
+
+Quando a atualização também incluir o catálogo versionado, use a flag explícita:
+
+```bash
+./deploy-to-vps.sh --sync-catalog
+```
+
+Esse modo cria um backup PostgreSQL em `/var/backups/rosa-de-saron.com`, executa os
+diagnósticos, atualiza categorias, importa produtos e imagens ausentes, corrige a localização,
+remove somente os produtos demonstrativos conhecidos e verifica o resultado antes de promover
+a nova release. `--sync-catalog` não pode ser combinado com `--seed`.
+
+Antes do deploy real, simule a transferência sem alterar a VPS:
+
+```bash
+./deploy-to-vps.sh --dry-run --sync-catalog
+```
 
 ## Desenvolvimento
 

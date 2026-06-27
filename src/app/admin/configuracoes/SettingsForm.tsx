@@ -161,7 +161,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
                 disabled={isPending}
                 label="Cidade"
                 name="city"
-                placeholder="Ex.: Pato Branco"
+                placeholder="Ex.: Coronel Vivida"
                 type="text"
               />
 
@@ -219,7 +219,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
               disabled={isPending}
               label="Descrição da entrega"
               name="deliveryDescription"
-              placeholder="Ex.: Entregas em Pato Branco com taxa combinada pelo WhatsApp."
+              placeholder="Ex.: Entregas em Coronel Vivida com taxa combinada pelo WhatsApp."
               rows={3}
             />
           </section>
@@ -272,7 +272,7 @@ export function SettingsForm({ action, initialValues, submitLabel }: SettingsFor
               disabled={isPending}
               label="Título padrão para Google"
               name="seoDefaultTitle"
-              placeholder="Ex.: Floricultura em Pato Branco | Buquês e presentes"
+              placeholder="Ex.: Floricultura em Coronel Vivida | Buquês e presentes"
               type="text"
             />
 

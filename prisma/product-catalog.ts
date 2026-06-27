@@ -40,8 +40,8 @@ export const productCatalog = [
     price: "158.00",
     shortDescription: "Buquê preparado com seis rosas vermelhas.",
     description: "Buquê com seis rosas vermelhas para presentear em ocasiões especiais.",
-    seoTitle: "Buquê com 6 Rosas Vermelhas em Pato Branco | Floricultura",
-    seoDescription: "Buquê com seis rosas vermelhas disponível em Pato Branco.",
+    seoTitle: "Buquê com 6 Rosas Vermelhas em Coronel Vivida | Floricultura",
+    seoDescription: "Buquê com seis rosas vermelhas disponível em Coronel Vivida.",
     images: [
       productImage(
         "Buquês/buque-6-rosas-vermelhas-158.jpeg",
@@ -61,8 +61,8 @@ export const productCatalog = [
     price: "178.00",
     shortDescription: "Buquê preparado com astromélias rosas.",
     description: "Buquê de astromélias rosas para presentear em diferentes ocasiões.",
-    seoTitle: "Buquê de Astromélias Rosas em Pato Branco | Floricultura",
-    seoDescription: "Buquê de astromélias rosas disponível em Pato Branco.",
+    seoTitle: "Buquê de Astromélias Rosas em Coronel Vivida | Floricultura",
+    seoDescription: "Buquê de astromélias rosas disponível em Coronel Vivida.",
     images: [
       productImage(
         "Buquês/buque-de-astromelias-rosas-178.jpeg",
@@ -77,8 +77,8 @@ export const productCatalog = [
     price: "148.00",
     shortDescription: "Buquê preparado com lírio.",
     description: "Buquê de lírio para presentear em ocasiões especiais.",
-    seoTitle: "Buquê de Lírio em Pato Branco | Floricultura",
-    seoDescription: "Buquê de lírio disponível em Pato Branco.",
+    seoTitle: "Buquê de Lírio em Coronel Vivida | Floricultura",
+    seoDescription: "Buquê de lírio disponível em Coronel Vivida.",
     images: [productImage("Buquês/buque-de-lirio-148.jpeg", "Buquê de lírio")],
   },
   {
@@ -88,8 +88,8 @@ export const productCatalog = [
     price: "138.00",
     shortDescription: "Buquê Impacto para presentear.",
     description: "Buquê Impacto preparado para presentear em diferentes ocasiões.",
-    seoTitle: "Buquê Impacto em Pato Branco | Floricultura",
-    seoDescription: "Buquê Impacto disponível em Pato Branco.",
+    seoTitle: "Buquê Impacto em Coronel Vivida | Floricultura",
+    seoDescription: "Buquê Impacto disponível em Coronel Vivida.",
     images: [productImage("Buquês/buque-inpacto-138.jpeg", "Buquê Impacto")],
   },
   {
@@ -99,8 +99,8 @@ export const productCatalog = [
     price: "75.00",
     shortDescription: "Antúrio natural para presentear ou decorar.",
     description: "Antúrio natural indicado para presentear e decorar ambientes.",
-    seoTitle: "Antúrio em Pato Branco | Floricultura",
-    seoDescription: "Antúrio natural disponível em Pato Branco.",
+    seoTitle: "Antúrio em Coronel Vivida | Floricultura",
+    seoDescription: "Antúrio natural disponível em Coronel Vivida.",
     images: [productImage("Flores naturais/anturio-75.jpeg", "Antúrio natural")],
   },
   {
@@ -110,8 +110,8 @@ export const productCatalog = [
     price: "95.00",
     shortDescription: "Antúrio natural apresentado com cachepô.",
     description: "Antúrio natural com cachepô para presentear ou decorar ambientes.",
-    seoTitle: "Antúrio com Cachepô em Pato Branco | Floricultura",
-    seoDescription: "Antúrio natural com cachepô disponível em Pato Branco.",
+    seoTitle: "Antúrio com Cachepô em Coronel Vivida | Floricultura",
+    seoDescription: "Antúrio natural com cachepô disponível em Coronel Vivida.",
     images: [
       productImage(
         "Flores naturais/anturio-com-cachepo-95.jpeg",
@@ -126,8 +126,8 @@ export const productCatalog = [
     price: "45.00",
     shortDescription: "Antúrio natural sem cachepô.",
     description: "Antúrio natural na opção sem cachepô.",
-    seoTitle: "Antúrio sem Cachepô em Pato Branco | Floricultura",
-    seoDescription: "Antúrio natural sem cachepô disponível em Pato Branco.",
+    seoTitle: "Antúrio sem Cachepô em Coronel Vivida | Floricultura",
+    seoDescription: "Antúrio natural sem cachepô disponível em Coronel Vivida.",
     images: [
       productImage(
         "Flores naturais/anturios-sem-cachepo-45-com-cachepo-65.jpeg",
@@ -142,8 +142,8 @@ export const productCatalog = [
     price: "65.00",
     shortDescription: "Antúrio natural apresentado com cachepô.",
     description: "Antúrio natural na opção com cachepô.",
-    seoTitle: "Antúrio com Cachepô em Pato Branco | Floricultura",
-    seoDescription: "Antúrio natural com cachepô disponível em Pato Branco.",
+    seoTitle: "Antúrio com Cachepô em Coronel Vivida | Floricultura",
+    seoDescription: "Antúrio natural com cachepô disponível em Coronel Vivida.",
     images: [
       productImage(
         "Flores naturais/anturios-sem-cachepo-45-com-cachepo-65.jpeg",
@@ -158,8 +158,8 @@ export const productCatalog = [
     price: "75.00",
     shortDescription: "Begônia natural para presentear ou decorar.",
     description: "Begônia natural indicada para presentear e decorar ambientes.",
-    seoTitle: "Begônia em Pato Branco | Floricultura",
-    seoDescription: "Begônia natural disponível em Pato Branco.",
+    seoTitle: "Begônia em Coronel Vivida | Floricultura",
+    seoDescription: "Begônia natural disponível em Coronel Vivida.",
     images: [productImage("Flores naturais/begonia-75.jpeg", "Begônia natural")],
   },
   {
@@ -169,8 +169,8 @@ export const productCatalog = [
     price: "29.00",
     shortDescription: "Calandiva natural apresentada com cachepô.",
     description: "Calandiva natural com cachepô para presentear ou decorar.",
-    seoTitle: "Calandiva com Cachepô em Pato Branco | Floricultura",
-    seoDescription: "Calandiva natural com cachepô disponível em Pato Branco.",
+    seoTitle: "Calandiva com Cachepô em Coronel Vivida | Floricultura",
+    seoDescription: "Calandiva natural com cachepô disponível em Coronel Vivida.",
     images: [
       productImage(
         "Flores naturais/calandiva-com-cachepo-29.jpeg",
@@ -185,8 +185,8 @@ export const productCatalog = [
     price: "60.00",
     shortDescription: "Calandiva natural apresentada com cachepô.",
     description: "Calandiva natural com cachepô para presentear ou decorar.",
-    seoTitle: "Calandiva com Cachepô em Pato Branco | Floricultura",
-    seoDescription: "Calandiva natural com cachepô disponível em Pato Branco.",
+    seoTitle: "Calandiva com Cachepô em Coronel Vivida | Floricultura",
+    seoDescription: "Calandiva natural com cachepô disponível em Coronel Vivida.",
     images: [
       productImage(
         "Flores naturais/calandiva-com-cachepo-60.jpeg",
@@ -201,8 +201,8 @@ export const productCatalog = [
     price: "45.00",
     shortDescription: "Aglaonema natural para decorar ambientes.",
     description: "Aglaonema natural indicada para trazer verde aos ambientes.",
-    seoTitle: "Aglaonema em Pato Branco | Floricultura",
-    seoDescription: "Aglaonema natural disponível em Pato Branco.",
+    seoTitle: "Aglaonema em Coronel Vivida | Floricultura",
+    seoDescription: "Aglaonema natural disponível em Coronel Vivida.",
     images: [productImage("Folhagens/aglonema-45.jpeg", "Aglaonema natural")],
   },
   {
@@ -212,8 +212,8 @@ export const productCatalog = [
     price: "168.00",
     shortDescription: "Bambu da sorte para presentear ou decorar.",
     description: "Bambu da sorte preparado para presentear e decorar ambientes.",
-    seoTitle: "Bambu da Sorte em Pato Branco | Floricultura",
-    seoDescription: "Bambu da sorte disponível em Pato Branco.",
+    seoTitle: "Bambu da Sorte em Coronel Vivida | Floricultura",
+    seoDescription: "Bambu da sorte disponível em Coronel Vivida.",
     images: [
       productImage("Folhagens/bambu-da-sorte-168.jpeg", "Bambu da sorte"),
       productImage(
@@ -235,8 +235,8 @@ export const productCatalog = [
     price: "188.00",
     shortDescription: "Bambu da sorte para presentear ou decorar.",
     description: "Bambu da sorte preparado para presentear e decorar ambientes.",
-    seoTitle: "Bambu da Sorte em Pato Branco | Floricultura",
-    seoDescription: "Bambu da sorte disponível em Pato Branco.",
+    seoTitle: "Bambu da Sorte em Coronel Vivida | Floricultura",
+    seoDescription: "Bambu da sorte disponível em Coronel Vivida.",
     images: [productImage("Folhagens/bambu-da-sorte-188.jpeg", "Bambu da sorte")],
   },
   {
@@ -246,8 +246,8 @@ export const productCatalog = [
     price: "45.00",
     shortDescription: "Calateia natural para decorar ambientes.",
     description: "Calateia natural indicada para trazer verde aos ambientes.",
-    seoTitle: "Calateia em Pato Branco | Floricultura",
-    seoDescription: "Calateia natural disponível em Pato Branco.",
+    seoTitle: "Calateia em Coronel Vivida | Floricultura",
+    seoDescription: "Calateia natural disponível em Coronel Vivida.",
     images: [productImage("Folhagens/cataleia-45.jpeg", "Calateia natural")],
   },
   {
@@ -257,8 +257,8 @@ export const productCatalog = [
     price: "75.00",
     shortDescription: "Orquídea Phap para presentear ou decorar.",
     description: "Orquídea Phap indicada para presentear e decorar ambientes.",
-    seoTitle: "Orquídea Phap em Pato Branco | Floricultura",
-    seoDescription: "Orquídea Phap disponível em Pato Branco.",
+    seoTitle: "Orquídea Phap em Coronel Vivida | Floricultura",
+    seoDescription: "Orquídea Phap disponível em Coronel Vivida.",
     images: [productImage("Orquídeas/Oquideas-phap-75.jpeg", "Orquídea Phap")],
   },
   {
@@ -268,8 +268,8 @@ export const productCatalog = [
     price: "110.00",
     shortDescription: "Orquídea e Cymbidium para presentear ou decorar.",
     description: "Orquídea e Cymbidium indicados para presentear e decorar ambientes.",
-    seoTitle: "Orquídea e Cymbidium em Pato Branco | Floricultura",
-    seoDescription: "Orquídea e Cymbidium disponíveis em Pato Branco.",
+    seoTitle: "Orquídea e Cymbidium em Coronel Vivida | Floricultura",
+    seoDescription: "Orquídea e Cymbidium disponíveis em Coronel Vivida.",
     images: [
       productImage(
         "Orquídeas/orquidea-e-cymbidium-110.jpeg",
@@ -284,8 +284,8 @@ export const productCatalog = [
     price: "89.00",
     shortDescription: "Orquídea e Cymbidium para presentear ou decorar.",
     description: "Orquídea e Cymbidium indicados para presentear e decorar ambientes.",
-    seoTitle: "Orquídea e Cymbidium em Pato Branco | Floricultura",
-    seoDescription: "Orquídea e Cymbidium disponíveis em Pato Branco.",
+    seoTitle: "Orquídea e Cymbidium em Coronel Vivida | Floricultura",
+    seoDescription: "Orquídea e Cymbidium disponíveis em Coronel Vivida.",
     images: [
       productImage(
         "Orquídeas/orquidea-e-cymbidium-89.jpeg",
@@ -305,8 +305,8 @@ export const productCatalog = [
     price: "110.00",
     shortDescription: "Orquídea Phap em cascata para presentear ou decorar.",
     description: "Orquídea Phap em cascata indicada para presentear e decorar ambientes.",
-    seoTitle: "Orquídea Phap Cascata em Pato Branco | Floricultura",
-    seoDescription: "Orquídea Phap em cascata disponível em Pato Branco.",
+    seoTitle: "Orquídea Phap Cascata em Coronel Vivida | Floricultura",
+    seoDescription: "Orquídea Phap em cascata disponível em Coronel Vivida.",
     images: [
       productImage(
         "Orquídeas/orquidea-phap-cascata-110.jpeg",
