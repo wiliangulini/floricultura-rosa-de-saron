@@ -25,3 +25,7 @@ checklist-etapa28-testes.md
 # Arquivos locais
 .vscode/settings.json
 deploy-to-vps.sh
+
+# Configurações e materiais locais de agentes
+_tmp/
+.claude/settings.local.json

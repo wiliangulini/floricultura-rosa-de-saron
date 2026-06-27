@@ -1,0 +1,13 @@
+# Configuração compartilhada do Codex para este repositório confiável.
+# Preferências pessoais, autenticação e credenciais não pertencem a este arquivo.
+
+model_reasoning_effort = "high"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "cached"
+file_opener = "vscode"
+
+# AGENTS.md é a entrada principal. Os fallbacks só são usados quando ele não
+# existir no nível consultado; AGENTS.md manda ler os documentos complementares.
+project_doc_max_bytes = 65536
+project_doc_fallback_filenames = ["PROJECT_RULES.md", "CODEX.md"]

@@ -36,7 +36,7 @@ Regras obrigatórias da stack:
 - Não adicionar tecnologias fora da stack sem necessidade real.
 - Não implementar pagamento online.
 - Não usar `any` no TypeScript sem um comentário explicando o motivo.
-- No Prisma 7, a URL do banco deve ser configurada exclusivamente em `prisma/prisma.config.ts`. Não incluir `url` no bloco `datasource` do `schema.prisma`.
+- No Prisma 7, a URL do banco deve ser configurada exclusivamente em `prisma.config.ts`. Não incluir `url` no bloco `datasource` do `schema.prisma`.
 
 ## 3. Regras de arquitetura
 
