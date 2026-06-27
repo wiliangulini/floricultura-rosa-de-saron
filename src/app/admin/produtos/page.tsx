@@ -163,13 +163,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                   )}
                 </dl>
 
-                <div className="mt-4 grid gap-2">
-                  <Link
-                    className="inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
-                    href={`/admin/produtos/${product.id}/editar`}
-                  >
-                    Editar
-                  </Link>
+                <div className="mt-4 grid grid-cols-2 gap-2">
                   <form action={toggleProductActive}>
                     <input name="productId" type="hidden" value={product.id} />
                     <button
@@ -188,6 +182,12 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                       {product.featured ? "Remover destaque" : "Destacar"}
                     </button>
                   </form>
+                  <Link
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                    href={`/admin/produtos/${product.id}/editar`}
+                  >
+                    Editar
+                  </Link>
                   <DeleteProductButton productId={product.id} productName={product.name} />
                 </div>
               </li>
@@ -272,13 +272,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                       <span className="whitespace-nowrap">{formatAdminProductPrice(product)}</span>
                     </td>
                     <td className="px-4 py-4 align-top">
-                      <div className="flex shrink-0 flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
-                        <Link
-                          className="inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
-                          href={`/admin/produtos/${product.id}/editar`}
-                        >
-                          Editar
-                        </Link>
+                      <div className="grid grid-cols-2 gap-2">
                         <form action={toggleProductActive}>
                           <input name="productId" type="hidden" value={product.id} />
                           <button
@@ -297,6 +291,12 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                             {product.featured ? "Remover destaque" : "Destacar"}
                           </button>
                         </form>
+                        <Link
+                          className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                          href={`/admin/produtos/${product.id}/editar`}
+                        >
+                          Editar
+                        </Link>
                         <DeleteProductButton productId={product.id} productName={product.name} />
                       </div>
                     </td>
