@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, PriceType, UserRole } from "@prisma/client";
 
 import { slugify } from "../src/lib/slug";
+import { categoryCatalog } from "./category-catalog";
 import { getAdminInitialPassword } from "./seed-utils";
 
 function getDatabaseUrl() {
@@ -21,29 +22,6 @@ const prisma = new PrismaClient({ adapter });
 const ADMIN_EMAIL = "admin@floricultura.com";
 const SETTINGS_ID = "default-settings";
 const STORE_WHATSAPP_NUMBER = "5546999197294";
-
-const categories = [
-  {
-    name: "Buquês",
-    description: "Buquês para presentes, celebrações e datas especiais.",
-  },
-  {
-    name: "Arranjos",
-    description: "Arranjos florais delicados para decorar e presentear.",
-  },
-  {
-    name: "Cestas",
-    description: "Cestas especiais com flores e itens para presente.",
-  },
-  {
-    name: "Flores naturais",
-    description: "Flores naturais selecionadas conforme a disponibilidade da loja.",
-  },
-  {
-    name: "Presentes",
-    description: "Opções presenteáveis com flores e complementos especiais.",
-  },
-] as const;
 
 const products = [
   {
@@ -152,27 +130,25 @@ async function main() {
 
   const categoryIdsBySlug = new Map<string, string>();
 
-  for (const [index, category] of categories.entries()) {
-    const slug = slugify(category.name);
+  for (const category of categoryCatalog) {
     const savedCategory = await prisma.category.upsert({
-      where: { slug },
+      where: { slug: category.slug },
       update: {
         name: category.name,
         description: category.description,
-        active: true,
-        sortOrder: index + 1,
+        sortOrder: category.sortOrder,
       },
       create: {
         name: category.name,
-        slug,
+        slug: category.slug,
         description: category.description,
         active: true,
-        sortOrder: index + 1,
+        sortOrder: category.sortOrder,
       },
     });
 
-    categoryIdsBySlug.set(slug, savedCategory.id);
-    console.log(`✔ Categoria: ${category.name} (${slug})`);
+    categoryIdsBySlug.set(category.slug, savedCategory.id);
+    console.log(`✔ Categoria: ${category.name} (${category.slug})`);
   }
 
   for (const product of products) {

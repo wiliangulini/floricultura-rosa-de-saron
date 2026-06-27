@@ -75,6 +75,46 @@ Se o admin existente estiver desativado e o seed não o reativar (comportamento 
 UPDATE "User" SET active = true WHERE email = 'admin@floricultura.com';
 ```
 
+## Atualizar categorias em banco existente
+
+Para conferir as novas descrições e ordens sem alterar o banco, execute:
+
+```bash
+npm run db:update:categories
+```
+
+Depois de revisar o diagnóstico e confirmar que `DATABASE_URL` aponta para o banco correto, aplique somente a atualização das categorias:
+
+```bash
+npm run db:update:categories:apply
+```
+
+O comando é idempotente, preserva o estado ativo/inativo das categorias existentes e não altera produtos, usuários ou configurações. Categorias ausentes no catálogo são criadas como ativas; categorias adicionais não são removidas.
+
+## Importar produtos das imagens locais
+
+O catálogo em `prisma/product-catalog.ts` mapeia explicitamente os produtos e as imagens
+armazenadas em `src/assets/images/Categorias`. Antes de importar, configure `DATABASE_URL` e
+as variáveis `CLOUDINARY_*` sem expor seus valores.
+
+Para validar os arquivos, conferir as categorias e visualizar o diagnóstico sem alterar o banco
+ou enviar imagens:
+
+```bash
+npm run db:import:products
+```
+
+Depois de revisar o diagnóstico e confirmar o banco configurado, execute:
+
+```bash
+npm run db:import:products:apply
+```
+
+O importador usa slugs e IDs de imagem determinísticos. Reexecuções atualizam somente os
+produtos do catálogo, reutilizam imagens já registradas e preservam produtos e imagens externos
+ao catálogo. O modo de aplicação pode fazer uploads antes da transação de cada produto; uma
+falha posterior pode deixar um asset sem referência no Cloudinary para limpeza manual.
+
 ## Desenvolvimento
 
 ```bash

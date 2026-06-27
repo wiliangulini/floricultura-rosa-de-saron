@@ -103,6 +103,10 @@ export async function uploadProductImage({
   });
 }
 
+export async function validateProductImageFile(file: File): Promise<void> {
+  await validateImageFile(file, ProductImageUploadError);
+}
+
 export async function uploadOwnerPhoto({
   file,
   ownerName,
