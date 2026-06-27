@@ -19,6 +19,7 @@ export const adminCategorySelect = {
   description: true,
   active: true,
   sortOrder: true,
+  _count: { select: { products: true } },
 } satisfies Prisma.CategorySelect;
 
 export type AdminCategory = Prisma.CategoryGetPayload<{

@@ -12,10 +12,12 @@ type ModalProps = {
   children: ReactNode;
   className?: string;
   closeLabel?: string;
+  closable?: boolean;
   description?: string;
   footer?: ReactNode;
   onClose: () => void;
   open: boolean;
+  role?: "dialog" | "alertdialog";
   title: string;
 };
 
@@ -23,10 +25,12 @@ export function Modal({
   children,
   className,
   closeLabel = "Fechar modal",
+  closable = true,
   description,
   footer,
   onClose,
   open,
+  role = "dialog",
   title,
 }: ModalProps) {
   const titleId = useId();
@@ -40,7 +44,7 @@ export function Modal({
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        onClose();
+        if (closable) onClose();
         return;
       }
 
@@ -69,7 +73,7 @@ export function Modal({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, open]);
+  }, [closable, onClose, open]);
 
   if (!open) return null;
 
@@ -78,7 +82,7 @@ export function Modal({
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-zinc-950/35"
-        onClick={onClose}
+        onClick={closable ? onClose : undefined}
       />
       <div
         aria-describedby={description ? descriptionId : undefined}
@@ -89,7 +93,7 @@ export function Modal({
           className,
         )}
         ref={dialogRef}
-        role="dialog"
+        role={role}
         tabIndex={-1}
       >
         <div className="flex items-start justify-between gap-4">
@@ -105,7 +109,8 @@ export function Modal({
           </div>
           <button
             aria-label={closeLabel}
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-md text-zinc-600 transition hover:bg-rose-50 hover:text-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-md text-zinc-600 transition hover:bg-rose-50 hover:text-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!closable}
             onClick={onClose}
             type="button"
           >

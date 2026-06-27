@@ -26,6 +26,11 @@ export type ProductActionState = {
   status: "idle" | "error";
 };
 
+export type DeleteProductActionState = {
+  message: string;
+  status: "idle" | "error";
+};
+
 type ProductPriceType = (typeof validPriceTypes)[number];
 
 type ValidatedProductData = {
@@ -247,6 +252,42 @@ export async function toggleProductActive(formData: FormData): Promise<void> {
     productSlugs: [product.slug],
   });
   redirect(`/admin/produtos?resultado=${nextActive ? "produto-ativado" : "produto-desativado"}`);
+}
+
+export async function deleteProduct(
+  _previousState: DeleteProductActionState,
+  formData: FormData,
+): Promise<DeleteProductActionState> {
+  await requireAdminSession();
+
+  const productId = getFormValue(formData, "productId").trim();
+
+  if (!productId) {
+    return { status: "error", message: "ID do produto inválido." };
+  }
+
+  const product = await findProductReference(productId);
+
+  if (!product) {
+    return { status: "error", message: "Produto não encontrado." };
+  }
+
+  try {
+    await prisma.product.delete({ where: { id: productId } });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      return { status: "error", message: "Produto não encontrado." };
+    }
+
+    throw error;
+  }
+
+  revalidateProductPaths({
+    categorySlugs: [product.category.slug],
+    productSlugs: [product.slug],
+  });
+
+  redirect("/admin/produtos?resultado=produto-excluido");
 }
 
 export async function toggleProductFeatured(formData: FormData): Promise<void> {

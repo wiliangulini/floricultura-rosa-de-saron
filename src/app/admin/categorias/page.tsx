@@ -4,6 +4,7 @@ import { Badge, EmptyState } from "@/components/ui";
 import { getAdminCategories } from "@/server/categories";
 
 import { toggleCategoryActive } from "./actions";
+import { DeleteCategoryButton } from "./DeleteCategoryButton";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,14 @@ const resultMessages = {
   },
   "erro-alternar": {
     text: "Não foi possível alterar o status da categoria.",
+    type: "error",
+  },
+  "categoria-excluida": {
+    text: "Categoria excluída com sucesso.",
+    type: "success",
+  },
+  "erro-excluir-categoria": {
+    text: "Não foi possível excluir a categoria.",
     type: "error",
   },
 } satisfies Record<string, ResultMessage>;
@@ -122,6 +131,11 @@ export default async function AdminCategoriasPage({ searchParams }: AdminCategor
                       {category.active ? "Desativar" : "Ativar"}
                     </button>
                   </form>
+                  <DeleteCategoryButton
+                    categoryId={category.id}
+                    categoryName={category.name}
+                    productCount={category._count.products}
+                  />
                 </div>
               </li>
             ))}
@@ -180,6 +194,11 @@ export default async function AdminCategoriasPage({ searchParams }: AdminCategor
                             {category.active ? "Desativar" : "Ativar"}
                           </button>
                         </form>
+                        <DeleteCategoryButton
+                          categoryId={category.id}
+                          categoryName={category.name}
+                          productCount={category._count.products}
+                        />
                       </div>
                     </td>
                   </tr>

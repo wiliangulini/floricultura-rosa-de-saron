@@ -6,6 +6,7 @@ import { formatCurrencyBRL } from "@/lib/money";
 import { getAdminProducts, type AdminProduct } from "@/server/products";
 
 import { toggleProductActive, toggleProductFeatured } from "./actions";
+import { DeleteProductButton } from "./DeleteProductButton";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,14 @@ const resultMessages = {
   },
   "erro-destaque": {
     text: "Não foi possível alterar o destaque do produto.",
+    type: "error",
+  },
+  "produto-excluido": {
+    text: "Produto excluído com sucesso.",
+    type: "success",
+  },
+  "erro-excluir": {
+    text: "Não foi possível excluir o produto.",
     type: "error",
   },
 } satisfies Record<string, ResultMessage>;
@@ -179,6 +188,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                       {product.featured ? "Remover destaque" : "Destacar"}
                     </button>
                   </form>
+                  <DeleteProductButton productId={product.id} productName={product.name} />
                 </div>
               </li>
             ))}
@@ -287,6 +297,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
                             {product.featured ? "Remover destaque" : "Destacar"}
                           </button>
                         </form>
+                        <DeleteProductButton productId={product.id} productName={product.name} />
                       </div>
                     </td>
                   </tr>

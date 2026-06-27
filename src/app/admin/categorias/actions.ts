@@ -20,6 +20,12 @@ export type CategoryActionState = {
   status: "idle" | "error";
 };
 
+export type DeleteCategoryActionState = {
+  message: string;
+  productCount?: number;
+  status: "idle" | "error";
+};
+
 type ValidatedCategoryData = {
   active: boolean;
   description: string | null;
@@ -140,6 +146,59 @@ export async function updateCategory(
 
   revalidateCategoryPaths([currentCategory.slug, validation.data.slug]);
   redirect("/admin/categorias?resultado=categoria-atualizada");
+}
+
+export async function deleteCategory(
+  _previousState: DeleteCategoryActionState,
+  formData: FormData,
+): Promise<DeleteCategoryActionState> {
+  await requireAdminSession();
+
+  const categoryId = getFormValue(formData, "categoryId").trim();
+
+  if (!categoryId) {
+    return { status: "error", message: "ID da categoria inválido." };
+  }
+
+  const category = await prisma.category.findUnique({
+    select: { slug: true, _count: { select: { products: true } } },
+    where: { id: categoryId },
+  });
+
+  if (!category) {
+    return { status: "error", message: "Categoria não encontrada." };
+  }
+
+  if (category._count.products > 0) {
+    return {
+      status: "error",
+      productCount: category._count.products,
+      message: `Esta categoria possui ${category._count.products} produto(s) vinculado(s). Mova ou exclua os produtos antes de excluir a categoria.`,
+    };
+  }
+
+  try {
+    await prisma.category.delete({ where: { id: categoryId } });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2025") {
+        return { status: "error", message: "Categoria não encontrada." };
+      }
+
+      if (error.code === "P2003") {
+        return {
+          status: "error",
+          message:
+            "Esta categoria possui produtos vinculados. Mova ou exclua os produtos antes de excluir a categoria.",
+        };
+      }
+    }
+
+    throw error;
+  }
+
+  revalidateCategoryPaths([category.slug]);
+  redirect("/admin/categorias?resultado=categoria-excluida");
 }
 
 export async function toggleCategoryActive(formData: FormData): Promise<void> {
