@@ -540,6 +540,7 @@ rsync_to_staging() {
     --exclude '.git/' \
     --exclude '.env' \
     --exclude '.env.*' \
+    --exclude '.claude/' \
     --exclude 'node_modules/' \
     --exclude '.next/' \
     --exclude 'out/' \
