@@ -59,26 +59,11 @@ permitida após leitura mínima e confirmação do escopo.
 
 ## Comandos do projeto
 
-Os comandos em `.claude/commands/` são atalhos específicos do Claude Code:
-
-- `/create-code`, `/review-code`, `/refactor-code`, `/architecture-decision` e `/debug-app`;
-- `/continue-from-codex`, `/final-audit` e `/checklist-merge`;
-- `/melhorar-ui-ux`, `/revisar-performance` e `/revisar-seguranca`;
-- `/implementation-plan` e `/revisar-prisma-banco`.
+> Moved to [`docs/resources/comandos-do-projeto.md`](docs/resources/comandos-do-projeto.md) — load on demand.
 
 ## Skills do projeto
 
-Use as skills em `.claude/skills/` somente quando o workflow correspondente for necessário:
-
-- `senior-code-agent`;
-- `senior-code-review`;
-- `safe-refactor`;
-- `legacy-code-audit`;
-- `architecture-review`;
-- `implementation-planning`;
-- `seo-ux-review`.
-
-Skills e comandos não ampliam o escopo autorizado pela tarefa.
+> Moved to [`docs/resources/skills-do-projeto.md`](docs/resources/skills-do-projeto.md) — load on demand.
 
 ## Rules do projeto
 
@@ -88,10 +73,7 @@ apontam para a seção correspondente.
 
 ## Compatibilidade com Codex
 
-- Preserve `CODEX.md` e `.codex/`.
-- Não desfaça alteração válida do Codex sem evidência no código ou no Git.
-- Use o estado real do repositório como fonte de verdade quando houver divergência com um relatório anterior.
-- Registre decisões, validações e próximo passo para permitir continuidade sem retrabalho.
+> Moved to [`docs/areas/compatibilidade-codex.md`](docs/areas/compatibilidade-codex.md) — load on demand.
 
 ## Regras para revisão final
 
@@ -105,3 +87,22 @@ Ao finalizar, responda com:
 6. Pontos que precisam de validação manual.
 
 Quando for necessário um relatório persistente, use `docs/ai-reports/TEMPLATE-agent-report.md`.
+
+<!-- drydocs:index:start -->
+## Documentation index
+
+### Areas
+- [Compatibilidade com Codex](docs/areas/compatibilidade-codex.md)
+
+### Resources
+- [Comandos do projeto](docs/resources/comandos-do-projeto.md)
+- [Skills do projeto](docs/resources/skills-do-projeto.md)
+
+### Docs
+- [Manual completo das configurações de IA](docs/MANUAL-AGENTES-COMPLETO.md)
+- [Manual resumido das configurações de IA](docs/MANUAL-AGENTES-RESUMIDO.md)
+
+### Ai-reports
+- [Relatório de tarefa — [NOME]](docs/ai-reports/TEMPLATE-agent-report.md)
+
+<!-- drydocs:index:end -->
