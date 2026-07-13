@@ -36,11 +36,26 @@ Antes de implementar qualquer alteração relevante:
 - Preserve o padrão existente do projeto.
 - Não crie arquitetura nova sem necessidade.
 - Não misture feature, refatoração e correção de bug na mesma alteração sem motivo.
-- Não altere autenticação customizada, `src/proxy.ts` ou schema Prisma sem autorização e análise de impacto.
-- Não altere SEO sem validar metadata, canonical, sitemap e dados estruturados quando aplicável.
-- Preserve o carrinho em `localStorage`, a montagem da mensagem do WhatsApp e a separação entre área pública e administrativa.
-- Preserve Next.js App Router, TypeScript estrito, Tailwind CSS v4, Prisma 7 com PostgreSQL, Vitest e Playwright.
 - Não adicione dependências nem execute migrations sem autorização explícita.
+
+Antes de editar um arquivo, consulte a rule em `.claude/rules/` cujo `paths` casa com o
+caminho (mapa completo em `AGENTS.md`, seção "Roteamento por domínio"). As invariantes de
+autenticação admin, `src/proxy.ts`, Prisma, SEO, carrinho/WhatsApp e UI mobile vivem nas
+rules — não as repita aqui.
+
+## Quando usar Plan Mode
+
+Use Plan Mode antes de editar quando a tarefa:
+
+- afetar mais de um arquivo ou módulo;
+- envolver autenticação admin, `src/proxy.ts`, sessão ou permissões;
+- envolver Prisma, migrations, seed ou schema;
+- envolver SEO local, metadata ou dados estruturados;
+- envolver carrinho, checkout ou a mensagem do WhatsApp;
+- tiver escopo ambíguo ou risco de regressão.
+
+Para correções triviais, localizadas e de baixo risco, a implementação direta é
+permitida após leitura mínima e confirmação do escopo.
 
 ## Comandos do projeto
 
@@ -48,7 +63,8 @@ Os comandos em `.claude/commands/` são atalhos específicos do Claude Code:
 
 - `/create-code`, `/review-code`, `/refactor-code`, `/architecture-decision` e `/debug-app`;
 - `/continue-from-codex`, `/final-audit` e `/checklist-merge`;
-- `/melhorar-ui-ux`, `/revisar-performance` e `/revisar-seguranca`.
+- `/melhorar-ui-ux`, `/revisar-performance` e `/revisar-seguranca`;
+- `/implementation-plan` e `/revisar-prisma-banco`.
 
 ## Skills do projeto
 
@@ -59,9 +75,16 @@ Use as skills em `.claude/skills/` somente quando o workflow correspondente for 
 - `safe-refactor`;
 - `legacy-code-audit`;
 - `architecture-review`;
-- `implementation-planning`.
+- `implementation-planning`;
+- `seo-ux-review`.
 
 Skills e comandos não ampliam o escopo autorizado pela tarefa.
+
+## Rules do projeto
+
+As rules em `.claude/rules/` são invariantes curtas por domínio, lidas sob demanda por
+`paths` (mapa completo em `AGENTS.md`). Elas não substituem `PROJECT_RULES.md`; apenas
+apontam para a seção correspondente.
 
 ## Compatibilidade com Codex
 

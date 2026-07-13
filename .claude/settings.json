@@ -6,11 +6,16 @@
     "allow": [
       "Bash(git status)",
       "Bash(git status *)",
+      "Bash(git branch)",
       "Bash(git branch --show-current)",
       "Bash(git diff)",
       "Bash(git diff *)",
       "Bash(git log)",
       "Bash(git log *)",
+      "Bash(find *)",
+      "Bash(ls *)",
+      "Bash(rg *)",
+      "Bash(cat package.json)",
       "Bash(npm run lint)",
       "Bash(npm run typecheck)",
       "Bash(npm run build)",
@@ -40,6 +45,8 @@
       "Bash(npm run db:studio)"
     ],
     "deny": [
+      "Read(./.claude/settings.local.json)",
+      "Edit(./.claude/settings.local.json)",
       "Read(./.env)",
       "Read(./.env.local)",
       "Read(./.env.development)",
@@ -85,11 +92,13 @@
       "Bash(git push *)",
       "Bash(sudo *)",
       "Bash(su *)",
+      "Bash(ssh *)",
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(docker *)",
       "Bash(docker-compose *)",
       "Bash(psql *)",
+      "Bash(pg_dump *)",
       "Bash(mysql *)",
       "Bash(mongosh *)",
       "Bash(redis-cli *)",
@@ -98,7 +107,20 @@
       "Bash(chown *)",
       "Bash(dd *)",
       "Bash(mkfs *)",
-      "Bash(shred *)"
+      "Bash(shred *)",
+      "Bash(truncate *)",
+      "Bash(git clean *)",
+      "Bash(vercel*)",
+      "Bash(*npm run deploy*)"
     ]
-  }
+  },
+  "cleanupPeriodDays": 14,
+  "claudeMdExcludes": [
+    "**/node_modules/**/CLAUDE.md",
+    "**/.next/**/CLAUDE.md",
+    "**/dist/**/CLAUDE.md",
+    "**/build/**/CLAUDE.md",
+    "**/coverage/**/CLAUDE.md"
+  ],
+  "autoCompactEnabled": true
 }

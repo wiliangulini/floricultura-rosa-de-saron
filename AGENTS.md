@@ -14,6 +14,59 @@ Leia também o documento específico do agente:
 
 Este projeto é uma vitrine digital para a Floricultura Rosa de Saron, desenvolvida com Next.js App Router, TypeScript, Tailwind CSS, Prisma e PostgreSQL.
 
+## Hierarquia e prioridade das instruções
+
+Em caso de conflito entre instruções, siga esta ordem:
+
+1. Solicitação explícita do usuário na tarefa atual.
+2. `PROJECT_RULES.md` — fonte de verdade única das regras técnicas, de produto e de segurança.
+3. Este `AGENTS.md` — roteador operacional comum a todos os agentes.
+4. `CLAUDE.md`, `.claude/instructions.md`, `.claude/rules/*`, `.claude/commands/*` e
+   `.claude/skills/*` — quando estiver usando Claude Code.
+5. `CODEX.md` e `.codex/instructions.md` — quando estiver usando Codex ou houver
+   continuidade entre agentes.
+6. Código, testes e documentação já existentes no repositório.
+7. Boas práticas atuais de Next.js App Router, TypeScript, Tailwind, Prisma/PostgreSQL e
+   segurança web.
+
+Em conflito, priorize sempre segurança, integridade de dados, autenticação admin, o
+fluxo de carrinho/WhatsApp e SEO local. Comunique antes de aplicar mudanças amplas.
+
+### Mapa de responsabilidades
+
+Cada assunto tem um dono. Não duplique conteúdo entre arquivos — referencie o dono.
+
+| Arquivo | Responsabilidade | Não deve |
+| --- | --- | --- |
+| `PROJECT_RULES.md` | Fonte de verdade única: escopo, stack, domínio, segurança, SEO, comandos de validação. | — |
+| `AGENTS.md` | Roteador comum a todos os agentes: hierarquia, mapa de responsabilidades, roteamento por domínio, continuidade. | Recopiar seções inteiras de `PROJECT_RULES.md`. |
+| `CLAUDE.md` | Comportamento operacional do Claude Code (Plan Mode, permissões, commands/skills). | Duplicar regras de domínio já em `PROJECT_RULES.md`. |
+| `.claude/instructions.md` | Protocolo específico do Claude Code (ordem de leitura, permissões compartilhadas). | Duplicar `PROJECT_RULES.md`. |
+| `CODEX.md` + `.codex/instructions.md` | Comportamento operacional do Codex. | Criar formato de relatório concorrente. |
+| `.claude/commands/*` | Entrypoints de tarefa (`/nome` + `$ARGUMENTS`): papel, regra principal, checklist e saída. | Recopiar o protocolo comum. |
+| `.claude/skills/**` | Metodologias reutilizáveis. Não concedem autorização de escrita. | Virar workflow duplicado de um command. |
+| `.claude/rules/*` | Invariantes de domínio acionáveis por `paths`, derivadas de uma seção de `PROJECT_RULES.md`. | Repetir procedimento/validação/bloqueio genéricos. |
+| `docs/ai-reports/` | Template e histórico de relatórios. | Ser fonte de regra concorrente. |
+
+### Roteamento por domínio
+
+Antes de editar um arquivo, consulte a rule em `.claude/rules/` cujo frontmatter `paths`
+casa com o caminho e leia-a. O protocolo comum (validação, formato de relatório,
+proibições) vive em `PROJECT_RULES.md` e neste `AGENTS.md`; rules **referenciam**, não
+recopiam.
+
+| Domínio | Seção em `PROJECT_RULES.md` | Rule |
+| --- | --- | --- |
+| App Router, Server/Client Components | §3 | `.claude/rules/next-app-router.md` |
+| Autenticação admin, sessão, `src/proxy.ts` | §6 | `.claude/rules/admin-auth.md` |
+| Prisma, schema, migrations, seed | §2/§3 | `.claude/rules/prisma-database.md` |
+| SEO local, metadata, sitemap, JSON-LD | §4 | `.claude/rules/seo-local.md` |
+| Carrinho local e checkout via WhatsApp | §8 | `.claude/rules/whatsapp-checkout.md` |
+| Upload de imagens (Cloudinary) | §6 | `.claude/rules/cloudinary-upload.md` |
+| UI, UX e performance mobile | §5/§7 | `.claude/rules/ui-mobile.md` |
+
+Não trate uma área como impactada sem evidência real no repositório.
+
 ## Regras principais
 
 1. Não implementar nada fora do escopo solicitado.
