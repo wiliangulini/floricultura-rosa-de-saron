@@ -61,7 +61,7 @@ export function OwnerProfileForm({ action, initialValues }: OwnerProfileFormProp
 
   return (
     <Card>
-      <form action={handleFormAction} encType="multipart/form-data" noValidate>
+      <form action={handleFormAction} noValidate>
         <CardHeader>
           <CardTitle>Dados da proprietária</CardTitle>
           <CardDescription>

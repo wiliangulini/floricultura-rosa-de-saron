@@ -11,7 +11,7 @@ export default async function AdminNovoProdutoPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h1 className="text-3xl font-bold text-zinc-950">Cadastrar produto</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">Cadastrar produto</h1>
         <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-700">
           Informe os dados do produto e adicione a imagem principal quando houver.
         </p>

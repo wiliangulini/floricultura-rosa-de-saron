@@ -78,7 +78,7 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
       <EmptyState
         action={
           <Link
-            className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-7 py-3 text-base font-semibold text-primary-foreground shadow-soft transition hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             href="/produtos"
           >
             Ver produtos
@@ -172,13 +172,16 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
     <form className="grid gap-6 md:grid-cols-[1fr_400px]" onSubmit={handleSubmit}>
       <section
         aria-labelledby="checkout-form-title"
-        className="order-2 rounded-lg border border-rose-200 bg-white p-6 shadow-sm sm:p-8 lg:order-1"
+        className="order-2 rounded-2xl border border-border bg-surface p-6 shadow-soft sm:p-8 lg:order-1"
       >
         <div className="mb-6">
-          <h2 id="checkout-form-title" className="text-xl font-bold text-zinc-950">
+          <h2
+            id="checkout-form-title"
+            className="font-display text-2xl font-semibold tracking-tight text-foreground"
+          >
             Dados para confirmação
           </h2>
-          <p className="mt-2 text-sm leading-6 text-zinc-600">
+          <p className="mt-2 text-sm leading-6 text-muted">
             A floricultura vai confirmar os detalhes pelo WhatsApp antes de fechar o pedido.
           </p>
         </div>
@@ -197,10 +200,10 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
                     key={mode}
                     htmlFor={inputId}
                     className={cn(
-                      "flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2.5 text-sm font-medium transition sm:px-4 sm:py-3",
+                      "flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium transition sm:px-4 sm:py-3",
                       fulfillmentMode === mode
-                        ? "border-rose-700 bg-rose-50 text-rose-900 ring-1 ring-rose-700"
-                        : "border-rose-200 bg-white text-zinc-700 hover:border-rose-400 hover:bg-rose-50",
+                        ? "border-primary bg-primary-soft text-rose-900 ring-1 ring-primary"
+                        : "border-border bg-surface text-zinc-700 hover:border-rose-300 hover:bg-primary-soft/60",
                     )}
                   >
                     <input
@@ -374,12 +377,12 @@ export function CheckoutForm({ whatsappNumber }: CheckoutFormProps) {
         </Button>
 
         {successMessage ? (
-          <p className="mt-3 text-sm font-medium leading-5 text-emerald-700" role="status">
+          <p className="mt-3 text-sm font-medium leading-5 text-success" role="status">
             {successMessage}
           </p>
         ) : null}
 
-        <p className="mt-3 text-sm leading-5 text-zinc-500">
+        <p className="mt-3 text-sm leading-5 text-muted">
           Valores, disponibilidade, entrega e pagamento serão confirmados pela floricultura
           diretamente pelo WhatsApp.
         </p>

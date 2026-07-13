@@ -28,13 +28,13 @@ type PageMetadataContent = {
 export const dynamic = "force-dynamic";
 
 const actionLinkBaseClasses =
-  "inline-flex min-h-12 items-center justify-center rounded-md px-6 py-3 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "inline-flex min-h-12 items-center justify-center rounded-full px-7 py-3 text-base font-semibold transition duration-200 active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 const actionLinkVariantClasses: Record<ActionLinkVariant, string> = {
   primary:
-    "bg-rose-700 text-white shadow-sm shadow-rose-900/10 hover:bg-rose-800 focus-visible:outline-rose-700",
+    "bg-primary text-primary-foreground shadow-soft hover:bg-primary-hover focus-visible:outline-primary",
   outline:
-    "border border-rose-300 bg-white/85 text-rose-900 hover:border-rose-500 hover:bg-rose-50 focus-visible:outline-rose-700",
+    "border border-rose-200 bg-surface text-primary hover:border-rose-300 hover:bg-primary-soft focus-visible:outline-primary",
 };
 
 function getTrimmedValue(value: string | null | undefined): string | null {
@@ -183,15 +183,15 @@ export default async function SobrePage() {
 
   return (
     <>
-      <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8 lg:py-20">
+      <section className="container-page py-14 sm:py-16 lg:py-20">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             Sobre a floricultura
           </p>
-          <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
+          <h1 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl">
             Sobre a {businessName}
           </h1>
-          <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
+          <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">
             A {businessName} atende clientes em {cityName}
             {neighborhood ? `, especialmente na região de ${neighborhood}` : ""}, com flores,
             buquês e arranjos preparados para presentear com cuidado em momentos especiais.
@@ -213,17 +213,19 @@ export default async function SobrePage() {
         </div>
       </section>
 
-      <section className="bg-white">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 md:grid-cols-[0.9fr_1.1fr] md:items-start lg:py-16">
+      <section className="bg-surface">
+        <div className="container-page grid gap-8 py-14 md:grid-cols-[0.9fr_1.1fr] md:items-start lg:py-16">
           <div className="space-y-5">
-            <p className="text-sm font-semibold uppercase text-emerald-900">Atendimento local</p>
-            <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">
+              Atendimento local
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               {ownerName
                 ? `${ownerName} cuida dos detalhes da floricultura`
                 : "Flores e presentes com atendimento próximo"}
             </h2>
             {ownerPhotoUrl ? (
-              <div className="max-w-xs overflow-hidden rounded-lg border border-emerald-100 bg-emerald-50 shadow-sm shadow-emerald-950/5">
+              <div className="max-w-xs overflow-hidden rounded-[2rem] border border-emerald-100 bg-surface-sage shadow-soft">
                 <Image
                   alt={ownerName ? `Foto de ${ownerName}` : "Foto da proprietária"}
                   className="aspect-square h-auto w-full object-cover"
@@ -236,7 +238,7 @@ export default async function SobrePage() {
             ) : null}
           </div>
 
-          <div className="space-y-5 text-base leading-7 text-zinc-700">
+          <div className="space-y-5 text-base leading-7 text-muted">
             {ownerDescription ? (
               <p>{ownerDescription}</p>
             ) : (
@@ -259,20 +261,20 @@ export default async function SobrePage() {
         </div>
       </section>
 
-      <section className="bg-emerald-50">
-        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-8 lg:py-16">
+      <section className="bg-surface-sage">
+        <div className="container-page py-14 lg:py-16">
           <dl className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-lg border border-emerald-100 bg-white/85 p-5 shadow-sm shadow-emerald-950/5">
+            <div className="rounded-2xl border border-emerald-100 bg-surface/85 p-5 shadow-soft">
               <dt className="text-sm font-medium text-zinc-500">Região</dt>
-              <dd className="mt-1 text-lg font-semibold text-zinc-950">{cityState}</dd>
+              <dd className="mt-1 text-lg font-semibold text-foreground">{cityState}</dd>
             </div>
-            <div className="rounded-lg border border-rose-100 bg-white/85 p-5 shadow-sm shadow-rose-950/5">
+            <div className="rounded-2xl border border-rose-100 bg-surface/85 p-5 shadow-soft">
               <dt className="text-sm font-medium text-zinc-500">Atendimento</dt>
-              <dd className="mt-1 text-lg font-semibold text-zinc-950">Pelo WhatsApp</dd>
+              <dd className="mt-1 text-lg font-semibold text-foreground">Pelo WhatsApp</dd>
             </div>
-            <div className="rounded-lg border border-amber-100 bg-white/85 p-5 shadow-sm shadow-amber-950/5">
+            <div className="rounded-2xl border border-amber-100 bg-surface/85 p-5 shadow-soft">
               <dt className="text-sm font-medium text-zinc-500">Pedido</dt>
-              <dd className="mt-1 text-lg font-semibold text-zinc-950">
+              <dd className="mt-1 text-lg font-semibold text-foreground">
                 Confirmado pela loja
               </dd>
             </div>

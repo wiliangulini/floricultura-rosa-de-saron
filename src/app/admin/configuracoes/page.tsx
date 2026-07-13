@@ -30,7 +30,7 @@ export default async function AdminConfiguracoesPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-zinc-950">Configurações</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">Configurações</h1>
         <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-700">
           Edite os dados principais da floricultura. Essas informações aparecem no site, no
           WhatsApp, no Google e nos compartilhamentos.

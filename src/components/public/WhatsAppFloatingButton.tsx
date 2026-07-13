@@ -22,7 +22,7 @@ export function WhatsAppFloatingButton({ whatsappNumber }: WhatsAppFloatingButto
   return (
     <a
       aria-label="Conversar com a floricultura pelo WhatsApp"
-      className="fixed bottom-6 right-4 z-10 inline-flex size-12 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg shadow-zinc-900/20 transition hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 sm:size-14"
+      className="fixed bottom-6 right-4 z-10 inline-flex size-12 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lifted transition hover:scale-105 hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 motion-reduce:hover:scale-100 sm:size-14"
       href={whatsappUrl}
       rel="noopener noreferrer"
       target="_blank"

@@ -8,10 +8,10 @@ type CategoryFilterProps = {
 };
 
 const activeClass =
-  "inline-flex min-h-11 items-center rounded-full border border-rose-300 bg-white px-3 py-2 text-xs font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:px-4 sm:text-sm";
+  "inline-flex min-h-11 items-center rounded-full border border-rose-300 bg-primary-soft px-3.5 py-2 text-sm font-semibold text-rose-900 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-4";
 
 const inactiveClass =
-  "inline-flex min-h-11 items-center rounded-full border border-rose-100 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 transition hover:border-rose-300 hover:bg-white hover:text-rose-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:px-4 sm:text-sm";
+  "inline-flex min-h-11 items-center rounded-full border border-border bg-surface px-3.5 py-2 text-sm font-semibold text-zinc-600 transition hover:border-rose-200 hover:bg-primary-soft/60 hover:text-rose-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-4";
 
 export function CategoryFilter({ activeSlug, categories }: CategoryFilterProps) {
   if (categories.length === 0) {

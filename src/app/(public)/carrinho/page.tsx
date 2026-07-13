@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { CartView } from "@/components/public/CartView";
-import { CartProvider } from "@/context/CartContext";
 import { getSettings } from "@/server/settings";
 
 export const dynamic = "force-dynamic";
@@ -18,22 +17,22 @@ export default async function CarrinhoPage() {
   const settings = await getSettings();
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-8 sm:py-16">
+    <div className="container-page py-12 sm:py-16">
       <nav aria-label="Navegação" className="mb-8 text-sm text-zinc-500">
-        <Link className="hover:text-rose-700 hover:underline" href="/produtos">
+        <Link className="rounded-md underline-offset-4 hover:text-primary hover:underline" href="/produtos">
           Produtos
         </Link>
         <span aria-hidden="true" className="mx-2">
           /
         </span>
-        <span className="text-zinc-950">Meu pedido</span>
+        <span className="text-foreground">Meu pedido</span>
       </nav>
 
-      <h1 className="mb-8 text-3xl font-bold text-zinc-950 sm:text-4xl">Meu pedido</h1>
+      <h1 className="mb-8 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+        Meu pedido
+      </h1>
 
-      <CartProvider>
-        <CartView whatsappNumber={settings.whatsappNumber} />
-      </CartProvider>
+      <CartView whatsappNumber={settings.whatsappNumber} />
     </div>
   );
 }

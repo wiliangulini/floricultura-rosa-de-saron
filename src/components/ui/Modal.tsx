@@ -81,7 +81,7 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-zinc-950/35"
+        className="absolute inset-0 bg-overlay"
         onClick={closable ? onClose : undefined}
       />
       <div
@@ -89,7 +89,7 @@ export function Modal({
         aria-labelledby={titleId}
         aria-modal="true"
         className={cn(
-          "relative max-h-[calc(100dvh-3rem)] w-full max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg border border-rose-100 bg-white p-6 text-zinc-950 shadow-xl shadow-zinc-950/15 outline-none sm:max-w-lg",
+          "relative max-h-[calc(100dvh-3rem)] w-full max-w-[calc(100vw-2rem)] animate-fade-up overflow-y-auto rounded-2xl border border-border bg-surface p-6 text-foreground shadow-lifted outline-none sm:max-w-lg",
           className,
         )}
         ref={dialogRef}
@@ -98,11 +98,14 @@ export function Modal({
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold text-zinc-950" id={titleId}>
+            <h2
+              className="font-display text-2xl font-semibold tracking-tight text-foreground"
+              id={titleId}
+            >
               {title}
             </h2>
             {description ? (
-              <p className="mt-2 text-sm leading-6 text-zinc-600" id={descriptionId}>
+              <p className="mt-2 text-sm leading-6 text-muted" id={descriptionId}>
                 {description}
               </p>
             ) : null}

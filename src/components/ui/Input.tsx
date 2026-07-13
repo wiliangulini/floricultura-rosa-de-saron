@@ -40,8 +40,8 @@ export function Input({
         aria-describedby={describedBy}
         aria-invalid={error ? true : undefined}
         className={cn(
-          "block min-h-11 w-full rounded-md border bg-white px-3.5 py-2.5 text-base text-zinc-950 shadow-sm shadow-rose-950/5 outline-none transition placeholder:text-zinc-500 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500",
-          error ? "border-red-500 focus:border-red-500 focus:ring-red-100" : "border-rose-200",
+          "block min-h-11 w-full rounded-xl border bg-surface px-3.5 py-2.5 text-base text-foreground shadow-soft outline-none transition placeholder:text-zinc-500 focus:border-primary focus:ring-2 focus:ring-rose-200 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500",
+          error ? "border-red-500 focus:border-red-500 focus:ring-red-100" : "border-zinc-300",
           className,
         )}
         id={inputId}

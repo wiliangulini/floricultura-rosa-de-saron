@@ -14,19 +14,19 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-rose-700 text-white shadow-sm shadow-rose-900/10 hover:bg-rose-800 focus-visible:outline-rose-700",
+    "bg-primary text-primary-foreground shadow-soft hover:bg-primary-hover focus-visible:outline-primary",
   secondary:
-    "bg-emerald-100 text-emerald-950 hover:bg-emerald-200 focus-visible:outline-emerald-700",
+    "bg-secondary-soft text-emerald-950 hover:bg-emerald-100 focus-visible:outline-secondary",
   outline:
-    "border border-rose-300 bg-white/80 text-rose-900 hover:border-rose-500 hover:bg-rose-50 focus-visible:outline-rose-700",
+    "border border-rose-200 bg-surface text-primary hover:border-rose-300 hover:bg-primary-soft focus-visible:outline-primary",
   danger:
-    "bg-red-700 text-white shadow-sm shadow-red-900/10 hover:bg-red-800 focus-visible:outline-red-700",
+    "bg-destructive text-white shadow-soft hover:bg-destructive-hover focus-visible:outline-destructive",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "min-h-11 px-3.5 py-2 text-sm",
-  md: "min-h-11 px-5 py-2.5 text-base",
-  lg: "min-h-12 px-6 py-3 text-base",
+  sm: "min-h-11 px-4 py-2 text-sm",
+  md: "min-h-11 px-6 py-2.5 text-base",
+  lg: "min-h-12 px-7 py-3 text-base",
 };
 
 export function Button({
@@ -46,7 +46,7 @@ export function Button({
       {...props}
       aria-busy={isLoading || undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition duration-200 active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:translate-y-0",
         variantClasses[variant],
         sizeClasses[size],
         className,

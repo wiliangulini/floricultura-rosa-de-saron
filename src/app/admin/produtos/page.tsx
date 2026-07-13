@@ -73,7 +73,7 @@ export default async function AdminProdutosPage({ searchParams }: AdminProdutosP
     <section className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-zinc-950">Gerenciar produtos</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">Gerenciar produtos</h1>
           <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-700">
             Cadastre produtos, controle a visibilidade no catálogo e mantenha imagens provisórias
             por link de imagem.

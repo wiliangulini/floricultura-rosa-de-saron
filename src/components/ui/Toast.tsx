@@ -33,7 +33,7 @@ export function Toast({
     <div
       {...props}
       className={cn(
-        "flex w-full max-w-full items-start gap-3 rounded-lg border p-4 shadow-lg shadow-zinc-950/10 sm:max-w-sm",
+        "flex w-full max-w-full items-start gap-3 rounded-xl border p-4 shadow-lifted sm:max-w-sm",
         variantClasses[variant],
         className,
       )}

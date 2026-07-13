@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 
 import { ProductCard } from "@/components/public/ProductCard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
-import { CartProvider } from "@/context/CartContext";
 import { cn } from "@/lib/cn";
+import { formatPhoneForDisplay } from "@/lib/format-phone";
 import { createWhatsappUrl } from "@/lib/whatsapp";
 import { getActiveCategories, type PublicCategory } from "@/server/categories";
 import { getFeaturedProducts, type PublicProduct } from "@/server/products";
@@ -33,16 +33,22 @@ type HomeSectionProps = {
 export const dynamic = "force-dynamic";
 
 const actionLinkBaseClasses =
-  "inline-flex min-h-12 items-center justify-center rounded-md px-6 py-3 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "inline-flex min-h-12 items-center justify-center rounded-full px-7 py-3 text-base font-semibold transition duration-200 active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 const actionLinkVariantClasses: Record<ActionLinkVariant, string> = {
   primary:
-    "bg-rose-700 text-white shadow-sm shadow-rose-900/10 hover:bg-rose-800 focus-visible:outline-rose-700",
+    "bg-primary text-primary-foreground shadow-soft hover:bg-primary-hover focus-visible:outline-primary",
   outline:
-    "border border-rose-300 bg-white/85 text-rose-900 hover:border-rose-500 hover:bg-rose-50 focus-visible:outline-rose-700",
+    "border border-rose-200 bg-surface text-primary hover:border-rose-300 hover:bg-primary-soft focus-visible:outline-primary",
   secondary:
-    "bg-emerald-100 text-emerald-950 hover:bg-emerald-200 focus-visible:outline-emerald-700",
+    "bg-secondary-soft text-emerald-950 hover:bg-emerald-100 focus-visible:outline-secondary",
 };
+
+const sectionEyebrowClasses =
+  "text-xs font-semibold uppercase tracking-[0.2em] text-primary";
+
+const sectionTitleClasses =
+  "mt-3 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl";
 
 function getTrimmedValue(value: string | null | undefined): string | null {
   const trimmedValue = value?.trim();
@@ -285,14 +291,21 @@ function HeroSection({
   const heroImage = heroProduct?.mainImage;
 
   return (
-    <section className="bg-rose-50">
-      <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-12 sm:gap-8 sm:px-8 sm:py-16 lg:gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-20">
+    <section className="relative overflow-hidden bg-background">
+      {/* Formas orgânicas decorativas — apenas CSS, sem custo de rede */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute -right-24 -top-28 size-80 rounded-full bg-rose-100/70 blur-3xl" />
+        <div className="absolute -left-32 top-1/2 size-72 rounded-full bg-emerald-100/60 blur-3xl" />
+        <div className="absolute -bottom-20 right-1/4 size-64 rounded-full bg-amber-100/50 blur-3xl" />
+      </div>
+
+      <div className="container-page relative grid gap-10 py-12 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12 lg:py-20">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase text-rose-800">{businessName}</p>
-          <h1 className="mt-4 text-3xl font-bold leading-tight text-zinc-950 sm:text-4xl lg:text-6xl">
+          <p className={sectionEyebrowClasses}>{businessName}</p>
+          <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Floricultura em {cityName} com flores, buquês e arranjos especiais
           </h1>
-          <p className="mt-6 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
+          <p className="mt-6 max-w-xl text-base leading-7 text-muted sm:text-lg sm:leading-8">
             Presentes delicados para aniversários, agradecimentos, homenagens e gestos de carinho.
             Escolha no catálogo e finalize o atendimento diretamente pelo WhatsApp da loja.
           </p>
@@ -311,54 +324,60 @@ function HeroSection({
             </ActionLink>
           </div>
 
-          <dl className="mt-8 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-rose-100 bg-white/80 p-4">
+          <dl className="mt-10 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-rose-100 bg-surface/80 p-4">
               <dt className="text-sm font-medium text-zinc-500">Atendimento</dt>
-              <dd className="mt-1 font-semibold text-zinc-950">Pelo WhatsApp</dd>
+              <dd className="mt-1 font-semibold text-foreground">Pelo WhatsApp</dd>
             </div>
-            <div className="rounded-lg border border-emerald-100 bg-emerald-50/80 p-4">
+            <div className="rounded-2xl border border-emerald-100 bg-surface-sage/80 p-4">
               <dt className="text-sm font-medium text-zinc-500">Região</dt>
-              <dd className="mt-1 font-semibold text-zinc-950">{cityState}</dd>
+              <dd className="mt-1 font-semibold text-foreground">{cityState}</dd>
             </div>
-            <div className="rounded-lg border border-amber-100 bg-amber-50/80 p-4">
+            <div className="rounded-2xl border border-amber-100 bg-accent-soft/80 p-4">
               <dt className="text-sm font-medium text-zinc-500">Pedido</dt>
-              <dd className="mt-1 font-semibold text-zinc-950">Confirmado pela loja</dd>
+              <dd className="mt-1 font-semibold text-foreground">Confirmado pela loja</dd>
             </div>
           </dl>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-rose-100 bg-white shadow-sm shadow-rose-950/5">
-          <div className="relative aspect-[4/3] bg-rose-100">
-            {heroImage ? (
-              <Image
-                alt={heroImage.altText || heroProduct.name}
-                className="h-full w-full object-cover"
-                height={900}
-                priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
-                src={heroImage.url}
-                width={1200}
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center px-8 text-center">
-                <p className="max-w-xs text-lg font-semibold leading-8 text-rose-900">
-                  Flores frescas, buquês e arranjos preparados com cuidado para cada ocasião.
-                </p>
+        <div className="relative">
+          <div
+            aria-hidden="true"
+            className="absolute -left-5 -top-5 hidden size-24 rounded-full border border-rose-200 bg-primary-soft lg:block"
+          />
+          <div className="relative overflow-hidden rounded-[2rem] border border-border bg-surface shadow-lifted">
+            <div className="relative aspect-[4/3] bg-[radial-gradient(circle_at_30%_20%,#f8e9ee_0%,transparent_55%),radial-gradient(circle_at_75%_80%,#eff4ee_0%,transparent_55%)] bg-rose-50">
+              {heroImage ? (
+                <Image
+                  alt={heroImage.altText || heroProduct.name}
+                  className="h-full w-full object-cover"
+                  height={900}
+                  priority
+                  sizes="(min-width: 1024px) 42vw, 100vw"
+                  src={heroImage.url}
+                  width={1200}
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center px-8 text-center">
+                  <p className="max-w-xs font-display text-2xl font-medium italic leading-snug text-rose-900">
+                    Flores frescas, buquês e arranjos preparados com cuidado para cada ocasião.
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="grid gap-4 border-t border-border p-5 sm:grid-cols-3">
+              <div>
+                <p className="text-sm font-medium text-zinc-500">Flores</p>
+                <p className="mt-1 font-semibold text-foreground">Naturais e especiais</p>
               </div>
-            )}
-          </div>
-          <div className="grid gap-4 p-5 sm:grid-cols-3">
-            <div>
-              <p className="text-sm font-medium text-zinc-500">Flores</p>
-              <p className="mt-1 font-semibold text-zinc-950">Naturais e especiais</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-zinc-500">Buquês</p>
-              <p className="mt-1 font-semibold text-zinc-950">Para presentear</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-zinc-500">Arranjos</p>
-              <p className="mt-1 font-semibold text-zinc-950">Composição delicada</p>
+              <div>
+                <p className="text-sm font-medium text-zinc-500">Buquês</p>
+                <p className="mt-1 font-semibold text-foreground">Para presentear</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-zinc-500">Arranjos</p>
+                <p className="mt-1 font-semibold text-foreground">Composição delicada</p>
+              </div>
             </div>
           </div>
         </div>
@@ -371,15 +390,13 @@ function FeaturedProductsSection({ products }: { products: PublicProduct[] }) {
   const visibleProducts = products.slice(0, 3);
 
   return (
-    <section className="bg-white">
-      <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-8 lg:py-16">
+    <section className="bg-surface">
+      <div className="container-page py-14 lg:py-16">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <p className="text-sm font-semibold uppercase text-rose-800">Destaques</p>
-            <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
-              Flores e presentes escolhidos para encantar
-            </h2>
-            <p className="mt-4 text-base leading-7 text-zinc-700">
+            <p className={sectionEyebrowClasses}>Destaques</p>
+            <h2 className={sectionTitleClasses}>Flores e presentes escolhidos para encantar</h2>
+            <p className="mt-4 text-base leading-7 text-muted">
               Produtos em destaque no catálogo, com valores e disponibilidade confirmados no
               atendimento.
             </p>
@@ -390,19 +407,19 @@ function FeaturedProductsSection({ products }: { products: PublicProduct[] }) {
         </div>
 
         {visibleProducts.length > 0 ? (
-          <CartProvider>
-            <ul className="mt-8 grid list-none grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {visibleProducts.map((product) => (
-                <li className="flex w-full max-w-sm sm:max-w-none" key={product.slug}>
-                  <ProductCard product={product} />
-                </li>
-              ))}
-            </ul>
-          </CartProvider>
+          <ul className="mt-10 grid list-none grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleProducts.map((product) => (
+              <li className="flex w-full max-w-sm sm:max-w-none" key={product.slug}>
+                <ProductCard product={product} />
+              </li>
+            ))}
+          </ul>
         ) : (
-          <div className="mt-8 rounded-lg border border-rose-100 bg-rose-50 p-6">
-            <h3 className="text-xl font-bold text-zinc-950">Destaques em preparação</h3>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-700">
+          <div className="mt-10 rounded-2xl border border-rose-100 bg-surface-soft p-6 sm:p-8">
+            <h3 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+              Destaques em preparação
+            </h3>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
               A floricultura ainda está organizando os produtos em destaque. Enquanto isso, veja o
               catálogo completo ou fale pelo WhatsApp para receber sugestões.
             </p>
@@ -419,23 +436,21 @@ function CategoriesSection({ categories }: { categories: PublicCategory[] }) {
   }
 
   return (
-    <section className="bg-stone-50">
-      <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-8 lg:py-16">
+    <section className="bg-surface-sage">
+      <div className="container-page py-14 lg:py-16">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase text-rose-800">Categorias</p>
-          <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
-            Escolha pelo tipo de presente
-          </h2>
-          <p className="mt-4 text-base leading-7 text-zinc-700">
+          <p className={cn(sectionEyebrowClasses, "text-emerald-800")}>Categorias</p>
+          <h2 className={sectionTitleClasses}>Escolha pelo tipo de presente</h2>
+          <p className="mt-4 text-base leading-7 text-muted">
             Navegue por buquês, arranjos, cestas e flores naturais para encontrar a melhor opção
             para cada momento.
           </p>
         </div>
 
-        <ul className="mt-8 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-10 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <li key={category.slug}>
-              <Card className="h-full border-stone-200">
+              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-lifted motion-reduce:hover:translate-y-0">
                 <CardHeader>
                   <CardTitle>{category.name}</CardTitle>
                   <CardDescription>
@@ -444,10 +459,11 @@ function CategoriesSection({ categories }: { categories: PublicCategory[] }) {
                 </CardHeader>
                 <CardContent>
                   <Link
-                    className="inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white/85 px-5 py-2.5 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                    className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-rose-200 bg-surface px-5 py-2.5 text-base font-semibold text-primary transition hover:border-rose-300 hover:bg-primary-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     href={`/categoria/${category.slug}`}
                   >
                     Ver opções
+                    <span aria-hidden="true">→</span>
                   </Link>
                 </CardContent>
               </Card>
@@ -468,26 +484,24 @@ function HowToOrderSection() {
   ];
 
   return (
-    <section className="bg-white">
-      <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-8 lg:py-16">
+    <section className="bg-background">
+      <div className="container-page py-14 lg:py-16">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase text-rose-800">Como pedir</p>
-          <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
-            Do catálogo ao atendimento em poucos passos
-          </h2>
+          <p className={sectionEyebrowClasses}>Como pedir</p>
+          <h2 className={sectionTitleClasses}>Do catálogo ao atendimento em poucos passos</h2>
         </div>
 
-        <ol className="mt-8 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-10 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, index) => (
             <li
-              className="rounded-lg border border-rose-100 bg-rose-50 p-5 shadow-sm shadow-rose-950/5"
+              className="rounded-2xl border border-border bg-surface p-5 shadow-soft"
               key={step}
             >
-              <span className="flex size-10 items-center justify-center rounded-full bg-rose-700 text-base font-bold text-white">
+              <span className="flex size-10 items-center justify-center rounded-full bg-primary-soft font-display text-lg font-semibold text-primary">
                 {index + 1}
               </span>
-              <h3 className="mt-4 text-lg font-bold text-zinc-950">{step}</h3>
-              <p className="mt-3 text-sm leading-6 text-zinc-600">
+              <h3 className="mt-4 text-lg font-bold text-foreground">{step}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">
                 {index === 0
                   ? "Veja as opções disponíveis no catálogo."
                   : index === 1
@@ -514,17 +528,17 @@ function AboutPreviewSection({ settings }: { settings: PublicSettings }) {
   const ownerPhotoUrl = getTrimmedValue(settings.ownerPhotoUrl);
 
   return (
-    <section className="bg-emerald-50">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-14 sm:px-8 md:grid-cols-[0.9fr_1.1fr] md:items-center lg:py-16">
+    <section className="bg-surface-soft">
+      <div className="container-page grid gap-8 py-14 md:grid-cols-[0.9fr_1.1fr] md:items-center lg:py-16">
         <div className="space-y-5">
-          <p className="text-sm font-semibold uppercase text-emerald-900">Sobre a floricultura</p>
-          <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
+          <p className={sectionEyebrowClasses}>Sobre a floricultura</p>
+          <h2 className={sectionTitleClasses}>
             {ownerName
               ? `${ownerName} aproxima cada atendimento`
               : "Atendimento próximo para presentear com delicadeza"}
           </h2>
           {ownerPhotoUrl ? (
-            <div className="max-w-xs overflow-hidden rounded-lg border border-emerald-100 bg-white shadow-sm shadow-emerald-950/5">
+            <div className="max-w-xs overflow-hidden rounded-[2rem] border border-rose-100 bg-surface shadow-soft">
               <Image
                 alt={ownerName ? `Foto de ${ownerName}` : "Foto da proprietária"}
                 className="aspect-square h-auto w-full object-cover"
@@ -536,7 +550,7 @@ function AboutPreviewSection({ settings }: { settings: PublicSettings }) {
             </div>
           ) : null}
         </div>
-        <div className="space-y-5 text-base leading-7 text-zinc-700">
+        <div className="space-y-5 text-base leading-7 text-muted">
           {ownerDescription ? (
             <p>{ownerDescription}</p>
           ) : (
@@ -565,28 +579,26 @@ function LocationSection({ settings, whatsappHref }: HomeSectionProps) {
   const googleMapsUrl = getTrimmedValue(settings.googleMapsUrl);
 
   return (
-    <section className="bg-white">
-      <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-8 lg:py-16">
+    <section className="bg-surface">
+      <div className="container-page py-14 lg:py-16">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase text-rose-800">Localização e horário</p>
-          <h2 className="mt-3 text-3xl font-bold text-zinc-950 sm:text-4xl">
-            Informações para encontrar e falar com a loja
-          </h2>
+          <p className={sectionEyebrowClasses}>Localização e horário</p>
+          <h2 className={sectionTitleClasses}>Informações para encontrar e falar com a loja</h2>
         </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="border-rose-100 lg:col-span-2">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Endereço</CardTitle>
               <CardDescription>Atendimento local com confirmação pelo WhatsApp.</CardDescription>
             </CardHeader>
             <CardContent>
-              <address className="not-italic text-base leading-7 text-zinc-700">
+              <address className="not-italic text-base leading-7 text-muted">
                 {getAddressLabel(settings)}
               </address>
               {googleMapsUrl ? (
                 <a
-                  className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md border border-rose-300 bg-white/85 px-5 py-2.5 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                  className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full border border-rose-200 bg-surface px-5 py-2.5 text-base font-semibold text-primary transition hover:border-rose-300 hover:bg-primary-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   href={googleMapsUrl}
                   rel="noopener noreferrer"
                   target="_blank"
@@ -597,7 +609,7 @@ function LocationSection({ settings, whatsappHref }: HomeSectionProps) {
             </CardContent>
           </Card>
 
-          <Card className="border-emerald-100 bg-emerald-50/80">
+          <Card className="border-emerald-100 bg-surface-sage/60">
             <CardHeader>
               <CardTitle>Horário</CardTitle>
               <CardDescription>
@@ -608,10 +620,13 @@ function LocationSection({ settings, whatsappHref }: HomeSectionProps) {
               <dl className="space-y-4">
                 <div>
                   <dt className="text-sm font-medium text-zinc-500">WhatsApp</dt>
-                  <dd className="mt-1 font-semibold text-zinc-950">
+                  <dd className="mt-1 font-semibold text-foreground">
                     {whatsappNumber && whatsappHref ? (
-                      <a className="text-rose-900 hover:text-rose-700" href={whatsappHref}>
-                        {whatsappNumber}
+                      <a
+                        className="rounded-md text-rose-900 underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                        href={whatsappHref}
+                      >
+                        {formatPhoneForDisplay(whatsappNumber)}
                       </a>
                     ) : (
                       "WhatsApp em breve"
@@ -620,8 +635,8 @@ function LocationSection({ settings, whatsappHref }: HomeSectionProps) {
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-zinc-500">Telefone</dt>
-                  <dd className="mt-1 font-semibold text-zinc-950">
-                    {phone ?? "Atendimento pelo WhatsApp"}
+                  <dd className="mt-1 font-semibold text-foreground">
+                    {phone ? formatPhoneForDisplay(phone) : "Atendimento pelo WhatsApp"}
                   </dd>
                 </div>
               </dl>
@@ -635,20 +650,26 @@ function LocationSection({ settings, whatsappHref }: HomeSectionProps) {
 
 function WhatsAppCTASection({ settings, whatsappHref }: HomeSectionProps) {
   return (
-    <section className="bg-rose-900 text-white">
-      <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-12 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
+    <section className="relative overflow-hidden bg-rose-900 text-white">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-20 -top-24 size-72 rounded-full bg-rose-800/60 blur-3xl" />
+        <div className="absolute -bottom-24 -right-16 size-72 rounded-full bg-rose-950/70 blur-3xl" />
+      </div>
+      <div className="container-page relative grid gap-6 py-14 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <p className="text-sm font-semibold uppercase text-rose-100">Pedido pelo WhatsApp</p>
-          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-200">
+            Pedido pelo WhatsApp
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
             Fale com a {getBusinessName(settings)} para confirmar seu pedido
           </h2>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-rose-50">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-rose-100">
             A loja confirma valores, disponibilidade, entrega, retirada e pagamento antes de fechar
             o atendimento.
           </p>
         </div>
         <ActionLink
-          className="w-full border-white bg-white text-rose-900 hover:bg-rose-50 sm:w-auto"
+          className="w-full border-white bg-white text-rose-900 hover:border-rose-100 hover:bg-rose-50 sm:w-auto"
           external
           href={whatsappHref}
           variant="outline"

@@ -1,30 +1,176 @@
 @import "tailwindcss";
 
+/*
+ * Design system "Ateliê Botânico" — Floricultura Rosa de Saron.
+ *
+ * Duas camadas de tokens:
+ * 1. Ramps de marca (rose/emerald/amber/zinc reinterpretados em tons vinho,
+ *    verde botânico, champagne e neutros quentes) — mantêm coerentes as telas
+ *    que ainda usam classes de escala direta.
+ * 2. Tokens semânticos (background, surface, foreground, primary…) — usados
+ *    pelos componentes do design system e pelas telas redesenhadas.
+ */
+@theme {
+  /* Tipografia */
+  --font-sans:
+    var(--font-figtree), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+
+  /* Ramp vinho/rosé (substitui o rose padrão) */
+  --color-rose-50: #fbf4f5;
+  --color-rose-100: #f6e7e9;
+  --color-rose-200: #eed0d6;
+  --color-rose-300: #dfadb8;
+  --color-rose-400: #cc8195;
+  --color-rose-500: #b25a74;
+  --color-rose-600: #9c3f5c;
+  --color-rose-700: #8a2b49;
+  --color-rose-800: #74203c;
+  --color-rose-900: #5f1a32;
+  --color-rose-950: #3d0e1f;
+
+  /* Ramp verde botânico (substitui o emerald padrão) */
+  --color-emerald-50: #f2f7f2;
+  --color-emerald-100: #e3eee4;
+  --color-emerald-200: #c8dcca;
+  --color-emerald-300: #a3c2a7;
+  --color-emerald-400: #78a17e;
+  --color-emerald-500: #57855e;
+  --color-emerald-600: #426a49;
+  --color-emerald-700: #35543b;
+  --color-emerald-800: #2c4431;
+  --color-emerald-900: #253828;
+  --color-emerald-950: #121f15;
+
+  /* Ramp champagne/dourado (substitui o amber padrão) */
+  --color-amber-50: #fbf6ea;
+  --color-amber-100: #f5ead2;
+  --color-amber-200: #ead4a4;
+  --color-amber-300: #dbb972;
+  --color-amber-400: #c99d4b;
+  --color-amber-500: #b08236;
+  --color-amber-600: #93672a;
+  --color-amber-700: #755122;
+  --color-amber-800: #5f4220;
+  --color-amber-900: #50381e;
+  --color-amber-950: #2d1e0e;
+
+  /* Neutros quentes (substitui o zinc padrão) */
+  --color-zinc-50: #f9f7f5;
+  --color-zinc-100: #f1edea;
+  --color-zinc-200: #e2dcd7;
+  --color-zinc-300: #cbc2bc;
+  --color-zinc-400: #988b85;
+  --color-zinc-500: #77695f;
+  --color-zinc-600: #5d534e;
+  --color-zinc-700: #4a423e;
+  --color-zinc-800: #332d2a;
+  --color-zinc-900: #262120;
+  --color-zinc-950: #171412;
+
+  /* Tokens semânticos — superfícies e texto */
+  --color-background: #faf7f3;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f7edec;
+  --color-surface-sage: #eff4ee;
+  --color-foreground: #2f2429;
+  --color-muted: #6b5f63;
+  --color-border: #ecdfd9;
+  --color-border-strong: #a18b86;
+
+  /* Tokens semânticos — marca e feedback */
+  --color-primary: #8a2b49;
+  --color-primary-hover: #741f3b;
+  --color-primary-soft: #f8e9ee;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #42604a;
+  --color-secondary-hover: #35503d;
+  --color-secondary-soft: #e9f0e9;
+  --color-accent: #7c5c26;
+  --color-accent-soft: #f7efdf;
+  --color-destructive: #b3251e;
+  --color-destructive-hover: #96201a;
+  --color-destructive-soft: #fceceb;
+  --color-success: #2f6b4f;
+  --color-success-soft: #e8f3ec;
+  --color-warning: #8a5a19;
+  --color-warning-soft: #fdf3e0;
+  --color-overlay: rgb(47 36 41 / 0.55);
+
+  /* Elevação com tom vinho, sempre suave */
+  --shadow-soft:
+    0 1px 2px rgb(61 14 31 / 0.04), 0 4px 16px -4px rgb(61 14 31 / 0.08);
+  --shadow-lifted:
+    0 2px 4px rgb(61 14 31 / 0.05), 0 14px 32px -12px rgb(61 14 31 / 0.16);
+
+  /* Movimento */
+  --animate-fade-up: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Container padrão das páginas públicas e do admin */
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-6xl);
+  padding-inline: --spacing(5);
+
+  @variant sm {
+    padding-inline: --spacing(8);
+  }
+}
+
 :root {
   color-scheme: light;
-  background: #fff1f2;
-  color: #09090b;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
   min-height: 100vh;
   margin: 0;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button {
   font: inherit;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
