@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { CategoryFilter } from "@/components/public/CategoryFilter";
 import { ProductCard } from "@/components/public/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { CartProvider } from "@/context/CartContext";
 import { createSiteUrl } from "@/lib/site-url";
 import { getActiveCategories, getCategoryBySlug, type PublicCategory } from "@/server/categories";
 import { getProductsByCategorySlug } from "@/server/products";
@@ -133,16 +132,16 @@ export default async function CategoriaPage({ params }: Props) {
         type="application/ld+json"
       />
 
-      <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8 lg:py-20">
+      <section className="container-page py-14 sm:py-16 lg:py-20">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             Categoria
           </p>
-          <h1 className="mt-4 text-3xl font-bold sm:text-4xl">
+          <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {getCategoryTitle(category, settings)}
           </h1>
           {category.description ? (
-            <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">{category.description}</p>
+            <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">{category.description}</p>
           ) : null}
         </div>
 
@@ -151,20 +150,18 @@ export default async function CategoriaPage({ params }: Props) {
         </div>
 
         {products.length > 0 ? (
-          <CartProvider>
-            <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((product) => (
-                <li key={product.slug} className="flex">
-                  <ProductCard product={product} />
-                </li>
-              ))}
-            </ul>
-          </CartProvider>
+          <ul className="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <li key={product.slug} className="flex">
+                <ProductCard product={product} />
+              </li>
+            ))}
+          </ul>
         ) : (
           <EmptyState
             action={
               <Link
-                className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-7 py-3 text-base font-semibold text-primary-foreground shadow-soft transition hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 href="/produtos"
               >
                 Ver todos os produtos

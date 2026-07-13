@@ -30,7 +30,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   return (
     <aside
       className={[
-        "fixed inset-y-0 left-0 z-40 w-64 border-r border-zinc-200 bg-white",
+        "fixed inset-y-0 left-0 z-40 w-64 border-r border-border bg-surface",
         "transform transition-transform duration-200 ease-in-out",
         isOpen ? "translate-x-0" : "-translate-x-full",
         "md:relative md:inset-y-auto md:left-auto md:z-auto",
@@ -40,8 +40,12 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     >
       <div className="flex h-full flex-col gap-5 px-4 py-4 sm:px-6 md:py-6">
         <div>
-          <p className="text-sm font-semibold uppercase text-rose-700">Administração</p>
-          <p className="mt-1 text-lg font-bold text-zinc-950">Rosa de Saron</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            Administração
+          </p>
+          <p className="mt-1 font-display text-lg font-semibold tracking-tight text-foreground">
+            Rosa de Saron
+          </p>
         </div>
 
         <nav aria-label="Navegação administrativa" className="flex flex-col gap-1">
@@ -51,10 +55,10 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             return (
               <Link
                 aria-current={active ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center rounded-md px-3.5 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 ${
+                className={`inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                   active
-                    ? "bg-rose-100 text-rose-800"
-                    : "text-zinc-700 hover:bg-rose-50 hover:text-rose-800"
+                    ? "bg-primary-soft text-primary"
+                    : "text-zinc-700 hover:bg-primary-soft/60 hover:text-primary"
                 }`}
                 href={item.href}
                 key={item.href}
@@ -68,7 +72,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           <form action="/admin/logout" method="post">
             <button
               aria-label="Sair da conta"
-              className="inline-flex min-h-11 items-center rounded-md px-3.5 py-2 text-sm font-semibold text-rose-900 transition hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              className="inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold text-rose-900 transition hover:bg-primary-soft/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               type="submit"
             >
               Sair

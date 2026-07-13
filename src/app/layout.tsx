@@ -1,10 +1,24 @@
 import type { Metadata } from "next";
+import { Figtree, Fraunces } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { getSiteUrl } from "@/lib/site-url";
 import { getSettings, type PublicSettings } from "@/server/settings";
 
 import "./globals.css";
+
+const figtree = Figtree({
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-figtree",
+});
+
+const fraunces = Fraunces({
+  axes: ["opsz"],
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+});
 
 const fallbackBusinessName = "Floricultura";
 
@@ -72,7 +86,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html className={`${figtree.variable} ${fraunces.variable}`} lang="pt-BR">
       <body>{children}</body>
     </html>
   );

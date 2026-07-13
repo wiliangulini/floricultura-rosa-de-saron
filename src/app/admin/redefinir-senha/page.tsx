@@ -33,7 +33,7 @@ export default async function AdminResetPasswordPage({
   return (
     <section className="grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
       <div>
-        <h1 className="text-3xl font-bold">Criar nova senha</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">Criar nova senha</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700">
           Defina uma nova senha para voltar a acessar o painel administrativo.
         </p>

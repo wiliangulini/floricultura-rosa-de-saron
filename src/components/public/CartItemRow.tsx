@@ -33,7 +33,7 @@ function formatItemSubtotal(item: CartItem): string {
 export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRowProps) {
   return (
     <li className="flex flex-col gap-3 py-5 first:pt-0 last:pb-0 sm:flex-row sm:gap-4">
-      <div className="relative size-20 shrink-0 overflow-hidden rounded-md border border-rose-100 bg-rose-50">
+      <div className="relative size-20 shrink-0 overflow-hidden rounded-xl border border-border bg-surface-soft">
         {item.imageUrl ? (
           <Image
             alt={item.name}
@@ -52,7 +52,7 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
 
       <div className="min-w-0 flex-1">
         <Link
-          className="block truncate font-semibold text-zinc-950 hover:text-rose-700"
+          className="block truncate font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline"
           href={`/produto/${item.slug}`}
         >
           {item.name}
@@ -64,7 +64,7 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
           <div className="flex items-center gap-1">
             <button
               aria-label={`Diminuir quantidade de ${item.name}`}
-              className="flex size-11 items-center justify-center rounded border border-rose-200 bg-white text-zinc-800 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex size-11 items-center justify-center rounded-full border border-border bg-surface text-zinc-800 transition hover:border-rose-300 hover:bg-primary-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
               disabled={item.quantity <= 1}
               onClick={() => onQuantityChange(item.productId, item.quantity - 1)}
               type="button"
@@ -81,7 +81,7 @@ export function CartItemRow({ item, onQuantityChange, onRemoveItem }: CartItemRo
 
             <button
               aria-label={`Aumentar quantidade de ${item.name}`}
-              className="flex size-11 items-center justify-center rounded border border-rose-200 bg-white text-zinc-800 transition hover:border-rose-400 hover:bg-rose-50"
+              className="flex size-11 items-center justify-center rounded-full border border-border bg-surface text-zinc-800 transition hover:border-rose-300 hover:bg-primary-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               onClick={() => onQuantityChange(item.productId, item.quantity + 1)}
               type="button"
             >

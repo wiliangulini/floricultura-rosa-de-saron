@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/public/AddToCartButton";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { CartProvider } from "@/context/CartContext";
 import { getCartProduct } from "@/lib/cart";
 import { formatCurrencyBRL } from "@/lib/money";
 import { createWhatsappUrl } from "@/lib/whatsapp";
@@ -187,22 +186,24 @@ export default async function ProdutoPage({ params }: Props) {
         type="application/ld+json"
       />
 
-      <section className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-16 sm:px-8 sm:gap-10 lg:grid-cols-[1fr_0.9fr] lg:py-20">
+      <section className="container-page grid gap-6 py-14 sm:gap-10 sm:py-16 lg:grid-cols-[1fr_0.9fr] lg:py-20">
         <div>
-          <div className="overflow-hidden rounded-lg border border-rose-200 bg-rose-100">
+          <div className="overflow-hidden rounded-[2rem] border border-border bg-surface shadow-soft">
             {product.mainImage ? (
               <Image
                 alt={imageAlt}
                 className="aspect-[4/3] h-auto w-full object-cover"
                 height={900}
-                preload
+                priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 src={product.mainImage.url}
                 width={1200}
               />
             ) : (
-              <div className="flex aspect-[4/3] items-center justify-center px-6 text-center text-base font-semibold text-rose-900">
-                Imagem em breve
+              <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_30%_20%,#f8e9ee_0%,transparent_55%),radial-gradient(circle_at_75%_80%,#eff4ee_0%,transparent_55%)] px-6 text-center">
+                <p className="font-display text-xl font-medium italic text-rose-900">
+                  Imagem em breve
+                </p>
               </div>
             )}
           </div>
@@ -211,7 +212,7 @@ export default async function ProdutoPage({ params }: Props) {
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {galleryImages.map((image) => (
                 <div
-                  className="overflow-hidden rounded-md border border-rose-200 bg-rose-100"
+                  className="overflow-hidden rounded-xl border border-border bg-surface"
                   key={image.url}
                 >
                   <Image
@@ -236,32 +237,36 @@ export default async function ProdutoPage({ params }: Props) {
             </Badge>
           </div>
 
-          <h1 className="mt-5 text-3xl font-bold text-zinc-950 sm:text-4xl">{product.name}</h1>
+          <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            {product.name}
+          </h1>
 
           {product.shortDescription ? (
-            <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">{product.shortDescription}</p>
+            <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">{product.shortDescription}</p>
           ) : null}
 
           <p className="mt-8 text-2xl font-bold text-rose-900 sm:text-3xl">{formatProductPrice(product)}</p>
 
-          <section className="mt-10 border-t border-rose-200 pt-8">
-            <h2 className="text-2xl font-bold text-zinc-950">Detalhes</h2>
+          <section className="mt-10 border-t border-border pt-8">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+              Detalhes
+            </h2>
             <dl className="mt-5 grid gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-sm font-medium text-zinc-500">Categoria</dt>
-                <dd className="mt-1 text-base font-semibold text-zinc-950">
+                <dd className="mt-1 text-base font-semibold text-foreground">
                   {product.category.name}
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-zinc-500">Disponibilidade</dt>
-                <dd className="mt-1 text-base font-semibold text-zinc-950">
+                <dd className="mt-1 text-base font-semibold text-foreground">
                   {product.available ? "Disponível para pedido" : "Indisponível no momento"}
                 </dd>
               </div>
             </dl>
 
-            <div className="mt-6 text-base leading-7 text-zinc-700">
+            <div className="mt-6 text-base leading-7 text-muted">
               {product.description ? (
                 <p>{product.description}</p>
               ) : (
@@ -270,24 +275,24 @@ export default async function ProdutoPage({ params }: Props) {
             </div>
           </section>
 
-          <section className="mt-10 border-t border-rose-200 pt-8">
-            <h2 className="text-2xl font-bold text-zinc-950">Como pedir</h2>
-            <p className="mt-4 text-base leading-7 text-zinc-700">
+          <section className="mt-10 border-t border-border pt-8">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+              Como pedir
+            </h2>
+            <p className="mt-4 text-base leading-7 text-muted">
               Adicione o produto ao pedido ou fale com a floricultura pelo WhatsApp. Valores,
               disponibilidade, entrega e pagamento serão confirmados pela loja.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <CartProvider>
-                <AddToCartButton
-                  className="w-full sm:flex-1"
-                  product={getCartProduct(product)}
-                  size="lg"
-                  variant="primary"
-                />
-              </CartProvider>
+              <AddToCartButton
+                className="w-full sm:flex-1"
+                product={getCartProduct(product)}
+                size="lg"
+                variant="primary"
+              />
               {whatsappHref ? (
                 <a
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-md border border-rose-300 bg-white/85 px-6 py-3 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:flex-1"
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-rose-200 bg-surface px-7 py-3 text-base font-semibold text-primary transition hover:border-rose-300 hover:bg-primary-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:flex-1"
                   href={whatsappHref}
                   rel="noopener noreferrer"
                   target="_blank"

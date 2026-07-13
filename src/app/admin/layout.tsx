@@ -24,9 +24,9 @@ export default async function AdminLayout({
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-rose-50 text-zinc-950">
+      <div className="min-h-screen bg-background text-foreground">
         <a
-          className="fixed left-4 top-4 z-50 -translate-y-24 rounded-md bg-zinc-950 px-4 py-3 text-sm font-semibold text-white shadow-lg transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-rose-300"
+          className="fixed left-4 top-4 z-50 -translate-y-24 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-white shadow-lifted transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-rose-300"
           href="#conteudo-principal"
         >
           Pular para o conteúdo
@@ -43,9 +43,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-950">
+    <div className="min-h-screen bg-background text-foreground">
       <a
-        className="fixed left-4 top-4 z-50 -translate-y-24 rounded-md bg-zinc-950 px-4 py-3 text-sm font-semibold text-white shadow-lg transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-rose-300"
+        className="fixed left-4 top-4 z-50 -translate-y-24 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-white shadow-lifted transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-rose-300"
         href="#conteudo-principal"
       >
         Pular para o conteúdo

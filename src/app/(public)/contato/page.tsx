@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
+import { formatPhoneForDisplay } from "@/lib/format-phone";
 import { createWhatsappUrl } from "@/lib/whatsapp";
 import { getSettings, type PublicSettings } from "@/server/settings";
 
@@ -22,7 +23,7 @@ type PageMetadataContent = {
 export const dynamic = "force-dynamic";
 
 const actionLinkClasses =
-  "inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700";
+  "inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-7 py-3 text-base font-semibold text-primary-foreground shadow-soft transition duration-200 hover:bg-primary-hover active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 function getTrimmedValue(value: string | null | undefined): string | null {
   const trimmedValue = value?.trim();
@@ -183,15 +184,15 @@ export default async function ContatoPage() {
 
   return (
     <>
-      <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8 lg:py-20">
+      <section className="container-page py-14 sm:py-16 lg:py-20">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             Atendimento
           </p>
-          <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
+          <h1 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl">
             Contato da {businessName}
           </h1>
-          <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
+          <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">
             Fale com a floricultura para tirar dúvidas, confirmar disponibilidade e combinar
             detalhes de retirada ou entrega antes de finalizar o pedido.
           </p>
@@ -204,23 +205,25 @@ export default async function ContatoPage() {
         </div>
       </section>
 
-      <section className="bg-white">
-        <div className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-14 sm:px-8 md:grid-cols-[1fr_0.8fr] lg:py-16">
-          <div className="rounded-lg border border-rose-100 bg-white p-6 shadow-sm shadow-rose-950/5">
-            <h2 className="text-2xl font-bold text-zinc-950">Informações de contato</h2>
+      <section className="bg-surface">
+        <div className="container-page grid gap-6 py-14 md:grid-cols-[1fr_0.8fr] lg:py-16">
+          <div className="rounded-2xl border border-border bg-surface p-6 shadow-soft">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+              Informações de contato
+            </h2>
 
             <dl className="mt-6 grid gap-5 sm:grid-cols-2">
               <div>
                 <dt className="text-sm font-medium text-zinc-500">WhatsApp</dt>
-                <dd className="mt-1 font-semibold text-zinc-950">
+                <dd className="mt-1 font-semibold text-foreground">
                   {whatsappNumber && whatsappHref ? (
                     <a
-                      className="text-rose-900 hover:text-rose-700"
+                      className="text-primary underline-offset-4 hover:text-primary-hover hover:underline"
                       href={whatsappHref}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      {whatsappNumber}
+                      {formatPhoneForDisplay(whatsappNumber) ?? whatsappNumber}
                     </a>
                   ) : (
                     "WhatsApp em breve"
@@ -229,13 +232,13 @@ export default async function ContatoPage() {
               </div>
               <div>
                 <dt className="text-sm font-medium text-zinc-500">Telefone</dt>
-                <dd className="mt-1 font-semibold text-zinc-950">
+                <dd className="mt-1 font-semibold text-foreground">
                   {phone ? (
                     <a
-                      className="text-rose-900 hover:text-rose-700"
+                      className="text-primary underline-offset-4 hover:text-primary-hover hover:underline"
                       href={`tel:${phone.replace(/\D/g, "")}`}
                     >
-                      {phone}
+                      {formatPhoneForDisplay(phone) ?? phone}
                     </a>
                   ) : (
                     "Atendimento pelo WhatsApp"
@@ -244,28 +247,28 @@ export default async function ContatoPage() {
               </div>
               <div>
                 <dt className="text-sm font-medium text-zinc-500">Endereço</dt>
-                <dd className="mt-1 font-semibold text-zinc-950">
+                <dd className="mt-1 font-semibold text-foreground">
                   <address className="not-italic">{getAddressLabel(settings)}</address>
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-zinc-500">Cidade/Estado</dt>
-                <dd className="mt-1 font-semibold text-zinc-950">
+                <dd className="mt-1 font-semibold text-foreground">
                   {getCityStateLabel(settings)}
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-zinc-500">Horário</dt>
-                <dd className="mt-1 font-semibold text-zinc-950">
+                <dd className="mt-1 font-semibold text-foreground">
                   {openingHours ?? "Horário confirmado pelo WhatsApp"}
                 </dd>
               </div>
               {instagramUrl ? (
                 <div>
                   <dt className="text-sm font-medium text-zinc-500">Instagram</dt>
-                  <dd className="mt-1 font-semibold text-zinc-950">
+                  <dd className="mt-1 font-semibold text-foreground">
                     <a
-                      className="text-rose-900 hover:text-rose-700"
+                      className="text-primary underline-offset-4 hover:text-primary-hover hover:underline"
                       href={instagramUrl}
                       rel="noopener noreferrer"
                       target="_blank"
@@ -278,15 +281,17 @@ export default async function ContatoPage() {
             </dl>
           </div>
 
-          <div className="rounded-lg border border-emerald-100 bg-emerald-50/80 p-6 shadow-sm shadow-emerald-950/5">
-            <h2 className="text-2xl font-bold text-zinc-950">Localização</h2>
-            <p className="mt-4 text-base leading-7 text-zinc-700">
+          <div className="rounded-2xl border border-emerald-100 bg-surface-sage p-6 shadow-soft">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+              Localização
+            </h2>
+            <p className="mt-4 text-base leading-7 text-muted">
               Use o mapa externo para conferir a rota. Caso a localização ainda não esteja
               disponível, confirme o endereço diretamente com a loja antes de sair.
             </p>
             {googleMapsHref ? (
               <a
-                className="mt-6 inline-flex w-full min-h-11 items-center justify-center rounded-md border border-emerald-300 bg-white/85 px-5 py-2.5 text-base font-semibold text-emerald-950 transition hover:border-emerald-500 hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 sm:w-auto"
+                className="mt-6 inline-flex w-full min-h-11 items-center justify-center rounded-full border border-emerald-300 bg-surface/85 px-6 py-2.5 text-base font-semibold text-emerald-950 transition duration-200 hover:border-emerald-500 hover:bg-emerald-100 active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 sm:w-auto"
                 href={googleMapsHref}
                 rel="noopener noreferrer"
                 target="_blank"
@@ -294,7 +299,7 @@ export default async function ContatoPage() {
                 Abrir no Google Maps
               </a>
             ) : (
-              <p className="mt-6 font-semibold text-zinc-950">
+              <p className="mt-6 font-semibold text-foreground">
                 Localização confirmada pelo WhatsApp
               </p>
             )}

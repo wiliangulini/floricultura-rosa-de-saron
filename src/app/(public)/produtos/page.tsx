@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CategoryFilter } from "@/components/public/CategoryFilter";
 import { ProductCard } from "@/components/public/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { CartProvider } from "@/context/CartContext";
 import { getActiveCategories } from "@/server/categories";
 import { getActiveProducts } from "@/server/products";
 import { getSettings, type PublicSettings } from "@/server/settings";
@@ -66,13 +65,13 @@ export default async function ProdutosPage() {
   const [products, categories] = await Promise.all([getActiveProducts(), getActiveCategories()]);
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-8">
+    <section className="container-page py-14 sm:py-16">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-800">
-          Catálogo
-        </p>
-        <h1 className="mt-4 text-3xl font-bold sm:text-4xl">Produtos da floricultura</h1>
-        <p className="mt-5 text-base leading-7 text-zinc-700 sm:text-lg sm:leading-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Catálogo</p>
+        <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          Produtos da floricultura
+        </h1>
+        <p className="mt-5 text-base leading-7 text-muted sm:text-lg sm:leading-8">
           Escolha entre flores, buquês, arranjos e presentes preparados com cuidado. Valores,
           disponibilidade e entrega são confirmados pela loja antes do fechamento do pedido.
         </p>
@@ -83,20 +82,18 @@ export default async function ProdutosPage() {
       </div>
 
       {products.length > 0 ? (
-        <CartProvider>
-          <ul className="mt-10 grid list-none grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-              <li key={product.slug} className="flex w-full max-w-sm sm:max-w-none">
-                <ProductCard product={product} />
-              </li>
-            ))}
-          </ul>
-        </CartProvider>
+        <ul className="mt-10 grid list-none grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <li key={product.slug} className="flex w-full max-w-sm sm:max-w-none">
+              <ProductCard product={product} />
+            </li>
+          ))}
+        </ul>
       ) : (
         <EmptyState
           action={
             <Link
-              className="inline-flex min-h-12 items-center justify-center rounded-md bg-rose-700 px-6 py-3 text-base font-semibold text-white shadow-sm shadow-rose-900/10 transition hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-7 py-3 text-base font-semibold text-primary-foreground shadow-soft transition hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               href="/contato"
             >
               Falar com a loja

@@ -32,21 +32,23 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageAlt = product.mainImage?.altText || product.name;
 
   return (
-    <article className="flex h-full w-full flex-col">
-      <Card className="flex h-full w-full flex-col overflow-hidden">
-        <div className="relative aspect-4/3 bg-rose-100">
+    <article className="group flex h-full w-full flex-col">
+      <Card className="flex h-full w-full flex-col overflow-hidden transition duration-200 hover:-translate-y-0.5 hover:shadow-lifted motion-reduce:hover:translate-y-0">
+        <div className="relative aspect-4/3 overflow-hidden bg-rose-50">
           {product.mainImage ? (
             <Image
               alt={imageAlt}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
               height={540}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               src={product.mainImage.url}
               width={720}
             />
           ) : (
-            <div className="flex h-full items-center justify-center px-6 text-center text-sm font-semibold text-rose-900">
-              Imagem em breve
+            <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,#f8e9ee_0%,transparent_55%),radial-gradient(circle_at_75%_80%,#eff4ee_0%,transparent_55%)] px-6 text-center">
+              <p className="font-display text-lg font-medium italic text-rose-900">
+                Imagem em breve
+              </p>
             </div>
           )}
         </div>
@@ -58,7 +60,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
           <CardTitle className="line-clamp-2 pt-2">{product.name}</CardTitle>
           {product.shortDescription ? (
-            <p className="text-sm leading-6 text-zinc-600">{product.shortDescription}</p>
+            <p className="text-sm leading-6 text-muted">{product.shortDescription}</p>
           ) : null}
         </CardHeader>
 
@@ -74,7 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
           />
           <Link
             aria-label={`Ver detalhes de ${product.name}`}
-            className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-rose-300 bg-white/80 px-5 py-2.5 text-base font-semibold text-rose-900 transition hover:border-rose-500 hover:bg-rose-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 sm:flex-1"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-rose-200 bg-surface px-5 py-2.5 text-base font-semibold text-primary transition hover:border-rose-300 hover:bg-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:flex-1"
             href={`/produto/${product.slug}`}
           >
             Ver detalhes

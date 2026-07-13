@@ -28,7 +28,7 @@ export function AdminShell({ adminEmail, children }: AdminShellProps) {
       {sidebarOpen && (
         <div
           aria-hidden="true"
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
+          className="fixed inset-0 z-30 bg-overlay md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
