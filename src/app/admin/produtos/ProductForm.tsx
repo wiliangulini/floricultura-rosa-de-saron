@@ -162,7 +162,7 @@ export function ProductForm({
 
   return (
     <Card>
-      <form action={formAction} encType="multipart/form-data" noValidate>
+      <form action={formAction} noValidate>
         <CardContent className="space-y-6 pt-5">
           <div className="grid gap-5 md:grid-cols-2">
             <Input
