@@ -1,8 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 14,
   "permissions": {
-    "defaultMode": "default",
-    "disableBypassPermissionsMode": "disable",
     "allow": [
       "Bash(git status)",
       "Bash(git status *)",
@@ -21,28 +20,6 @@
       "Bash(npm run build)",
       "Bash(npm test)",
       "Bash(npm run test)"
-    ],
-    "ask": [
-      "Bash(git add *)",
-      "Bash(git commit)",
-      "Bash(git commit *)",
-      "Bash(git checkout *)",
-      "Bash(git switch *)",
-      "Bash(git merge *)",
-      "Bash(git rebase *)",
-      "Bash(npm install)",
-      "Bash(npm install *)",
-      "Bash(npm ci)",
-      "Bash(npm ci *)",
-      "Bash(npx *)",
-      "Bash(npm run test:e2e)",
-      "Bash(npm run test:e2e:ui)",
-      "Bash(npm run test:e2e:headed)",
-      "Bash(npm run db:generate)",
-      "Bash(npm run db:migrate:dev)",
-      "Bash(npm run db:migrate:deploy)",
-      "Bash(npm run db:seed)",
-      "Bash(npm run db:studio)"
     ],
     "deny": [
       "Read(./.claude/settings.local.json)",
@@ -112,9 +89,32 @@
       "Bash(git clean *)",
       "Bash(vercel*)",
       "Bash(*npm run deploy*)"
-    ]
+    ],
+    "ask": [
+      "Bash(git add *)",
+      "Bash(git commit)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(npm install)",
+      "Bash(npm install *)",
+      "Bash(npm ci)",
+      "Bash(npm ci *)",
+      "Bash(npx *)",
+      "Bash(npm run test:e2e)",
+      "Bash(npm run test:e2e:ui)",
+      "Bash(npm run test:e2e:headed)",
+      "Bash(npm run db:generate)",
+      "Bash(npm run db:migrate:dev)",
+      "Bash(npm run db:migrate:deploy)",
+      "Bash(npm run db:seed)",
+      "Bash(npm run db:studio)"
+    ],
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable"
   },
-  "cleanupPeriodDays": 14,
   "claudeMdExcludes": [
     "**/node_modules/**/CLAUDE.md",
     "**/.next/**/CLAUDE.md",
@@ -122,5 +122,8 @@
     "**/build/**/CLAUDE.md",
     "**/coverage/**/CLAUDE.md"
   ],
-  "autoCompactEnabled": true
+  "autoCompactEnabled": true,
+  "enabledPlugins": {
+    "drydocs@cardio": true
+  }
 }

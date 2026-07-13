@@ -6,18 +6,22 @@ Este manual explica como utilizar os recursos versionados em `.codex/` e
 `.claude/` neste repositório. Ele cobre:
 
 - os 5 templates de prompt do Codex;
-- os 11 comandos do Claude Code;
-- as 6 skills do Claude Code;
+- os 13 comandos do Claude Code;
+- as 7 skills do Claude Code;
+- as 7 rules de domínio compartilhadas entre os agentes;
 - as instruções e configurações operacionais das duas ferramentas;
 - a escolha do recurso adequado para cada tipo de tarefa.
 
 Os documentos raiz `PROJECT_RULES.md` e `AGENTS.md` continuam sendo as fontes
 principais das regras do projeto. Um prompt, comando ou skill organiza o
-trabalho, mas nunca amplia o escopo autorizado pelo usuário.
+trabalho, mas nunca amplia o escopo autorizado pelo usuário. Este manual é um
+guia descritivo e não cria uma fonte de regra concorrente.
 
 ## 2. Mapa integral das pastas
 
-Foram encontrados 27 arquivos: 7 em `.codex/` e 20 em `.claude/`.
+Existem 36 arquivos versionados nas pastas de agentes: 7 em `.codex/` e 29 em
+`.claude/`. Há ainda `.claude/settings.local.json`, específico desta máquina e
+ignorado pelo Git, totalizando 37 arquivos visíveis no ambiente local.
 
 ```text
 .codex/
@@ -38,21 +42,32 @@ Foram encontrados 27 arquivos: 7 em `.codex/` e 20 em `.claude/`.
 │   ├── create-code.md
 │   ├── debug-app.md
 │   ├── final-audit.md
+│   ├── implementation-plan.md
 │   ├── melhorar-ui-ux.md
 │   ├── refactor-code.md
 │   ├── review-code.md
 │   ├── revisar-performance.md
+│   ├── revisar-prisma-banco.md
 │   └── revisar-seguranca.md
 ├── instructions.md
+├── rules/
+│   ├── admin-auth.md
+│   ├── cloudinary-upload.md
+│   ├── next-app-router.md
+│   ├── prisma-database.md
+│   ├── seo-local.md
+│   ├── ui-mobile.md
+│   └── whatsapp-checkout.md
 ├── settings.json
-├── settings.local.json
+├── settings.local.json (local, ignorado e protegido contra leitura/edição)
 └── skills/
     ├── architecture-review/SKILL.md
     ├── implementation-planning/SKILL.md
     ├── legacy-code-audit/SKILL.md
     ├── safe-refactor/SKILL.md
     ├── senior-code-agent/SKILL.md
-    └── senior-code-review/SKILL.md
+    ├── senior-code-review/SKILL.md
+    └── seo-ux-review/SKILL.md
 ```
 
 ### 2.1 O que cada grupo representa
@@ -64,9 +79,10 @@ Foram encontrados 27 arquivos: 7 em `.codex/` e 20 em `.claude/`.
 | `.codex/prompts/*.md` | Templates compartilhados | Copiar, preencher e colar no Codex |
 | `.claude/instructions.md` | Procedimento operacional complementar | Lido porque `AGENTS.md` e `CLAUDE.md` exigem |
 | `.claude/settings.json` | Permissões compartilhadas do Claude Code | Carregado no projeto |
-| `.claude/settings.local.json` | Permissões específicas desta máquina | Carregado localmente e ignorado pelo Git |
-| `.claude/commands/*.md` | Comandos de workflow do Claude Code | Invocados manualmente com `/nome` |
+| `.claude/settings.local.json` | Configuração específica desta máquina | Ignorado pelo Git; deve ser preservado e não inspecionado |
+| `.claude/commands/*.md` | Entrypoints de workflow do Claude Code | Invocados com `/nome`; 12 bloqueiam invocação pelo modelo |
 | `.claude/skills/*/SKILL.md` | Workflows especializados do Claude Code | Invocados com `/nome` ou por correspondência da descrição |
+| `.claude/rules/*.md` | Invariantes por domínio derivadas de `PROJECT_RULES.md` | Lidas quando o `paths` corresponde ao arquivo afetado |
 
 ## 3. Hierarquia e precedência
 
@@ -77,16 +93,36 @@ Para qualquer tarefa neste repositório, a ordem operacional esperada é:
 1. solicitação atual do usuário;
 2. `PROJECT_RULES.md`;
 3. `AGENTS.md`;
-4. documento específico do agente (`CODEX.md` ou `CLAUDE.md`);
-5. instruções específicas da pasta do agente;
-6. prompt, comando ou skill utilizado;
-7. código, testes e documentação reais.
+4. `CLAUDE.md`, `.claude/instructions.md`, rules, commands e skills quando o
+   agente em uso for o Claude Code;
+5. `CODEX.md` e `.codex/instructions.md` quando o agente em uso for o Codex ou
+   houver continuidade entre agentes;
+6. código, testes e documentação reais;
+7. boas práticas atuais da stack e de segurança web.
 
 Em caso de conflito, um recurso auxiliar não pode contrariar uma regra de nível
 superior. O estado real do Git e dos arquivos prevalece sobre relatórios
 anteriores.
 
-### 3.2 Descoberta no Codex
+### 3.2 Responsabilidades dos documentos
+
+Cada assunto tem um responsável definido em `AGENTS.md`:
+
+| Recurso | Responsabilidade |
+| --- | --- |
+| `PROJECT_RULES.md` | Fonte de verdade técnica, de produto, segurança, SEO e validações |
+| `AGENTS.md` | Hierarquia, roteamento por domínio e continuidade entre agentes |
+| `CLAUDE.md` e `.claude/instructions.md` | Comportamento operacional do Claude Code |
+| `CODEX.md` e `.codex/instructions.md` | Comportamento operacional do Codex |
+| `.claude/commands/*` | Entrypoints de tarefa com `$ARGUMENTS` |
+| `.claude/skills/*` | Metodologias reutilizáveis, sem ampliar autorização de escrita |
+| `.claude/rules/*` | Invariantes curtas por domínio, derivadas de `PROJECT_RULES.md` |
+| `docs/ai-reports/` | Formato persistente de relatório e continuidade |
+
+Commands, skills, rules, relatórios e estes manuais devem referenciar seus
+responsáveis, não recopiar ou redefinir regras de domínio.
+
+### 3.3 Descoberta no Codex
 
 O Codex lê `AGENTS.md` automaticamente. Neste projeto, o próprio `AGENTS.md`
 manda ler `PROJECT_RULES.md`, `CODEX.md` e `.codex/instructions.md`.
@@ -107,21 +143,25 @@ orientação atual é criar skills.
 
 O Codex também não descobre as skills em `.claude/skills/`. Skills de
 repositório para Codex devem ficar em `.agents/skills/<nome>/SKILL.md`.
+Apesar disso, `CODEX.md` exige que o Codex consulte a rule aplicável em
+`.claude/rules/` antes de editar arquivos dos domínios roteados por `AGENTS.md`.
 
-### 3.3 Descoberta no Claude Code
+### 3.4 Descoberta no Claude Code
 
 Arquivos em `.claude/commands/` criam comandos de projeto com o nome do arquivo:
 `create-code.md` cria `/create-code`, por exemplo. Esse formato continua
 funcionando, embora skills sejam o formato atual mais completo.
 
-Todos os 11 comandos deste projeto possuem:
+Doze dos 13 comandos deste projeto possuem:
 
 ```yaml
 disable-model-invocation: true
 ```
 
-Isso impede o Claude de escolhê-los automaticamente. O usuário precisa
-invocá-los manualmente.
+Nesses 12 comandos, a opção impede a invocação pelo modelo e exige que o
+usuário os chame manualmente. `/implementation-plan` é a única exceção atual:
+ele não declara `disable-model-invocation`. Use a invocação explícita sempre
+que o workflow exato for importante, sem presumir seleção automática.
 
 As skills em `.claude/skills/` não possuem essa restrição. Elas podem ser:
 
@@ -131,7 +171,7 @@ As skills em `.claude/skills/` não possuem essa restrição. Elas podem ser:
 O conteúdo de uma skill é carregado somente quando ela é usada. O nome da pasta
 é o comando padrão e o frontmatter fornece nome e descrição.
 
-### 3.4 Precedência das configurações Claude
+### 3.5 Precedência das configurações Claude
 
 A precedência geral das configurações é:
 
@@ -156,13 +196,15 @@ em outro nível.
 | Investigar um bug | `debug.md` | `/debug-app` |
 | Refatorar sem mudar comportamento | `refactor-code.md` | `/refactor-code` ou `/safe-refactor` |
 | Comparar alternativas arquiteturais | `architecture-decision.md` | `/architecture-decision` ou `/architecture-review` |
-| Planejar mudança sensível/multiarquivo | Prompt comum com escopo explícito | `/implementation-planning` |
+| Planejar mudança sensível/multiarquivo | Prompt comum com escopo explícito | `/implementation-plan` ou `/implementation-planning` |
 | Auditar código antigo | Prompt comum de auditoria | `/legacy-code-audit` |
 | Continuar trabalho do Codex | Fornecer relatório e estado real | `/continue-from-codex` |
 | Auditar antes do merge | `review-code.md` adaptado | `/checklist-merge` |
 | Fazer auditoria final | Solicitação comum de auditoria | `/final-audit` |
 | Melhorar UI/UX | `create-code.md` com escopo visual | `/melhorar-ui-ux` |
+| Revisar SEO local e UX pública | Prompt de revisão com critérios claros | `/seo-ux-review` |
 | Revisar performance | Prompt de revisão com foco mensurável | `/revisar-performance` |
+| Revisar Prisma e banco sem alterar | Prompt de revisão com escopo de dados | `/revisar-prisma-banco` |
 | Revisar segurança | Prompt de revisão com foco em segurança | `/revisar-seguranca` |
 
 ### 4.2 Recurso → altera arquivos ou somente analisa
@@ -182,8 +224,10 @@ em outro nível.
 | Claude `/checklist-merge` | Somente analisa |
 | Claude `/continue-from-codex` | Pode implementar o próximo passo autorizado |
 | Claude `/final-audit` | Somente analisa; não cria melhorias |
+| Claude `/implementation-plan` | Somente planeja e entrega o plano no chat |
 | Claude `/melhorar-ui-ux` | Pode implementar a melhoria solicitada |
 | Claude `/revisar-performance` | Começa sem editar |
+| Claude `/revisar-prisma-banco` | Somente analisa; não altera código nem banco |
 | Claude `/revisar-seguranca` | Somente analisa |
 | Skill `senior-code-agent` | Implementa |
 | Skill `senior-code-review` | Somente analisa |
@@ -191,6 +235,7 @@ em outro nível.
 | Skill `legacy-code-audit` | Somente analisa |
 | Skill `architecture-review` | Somente analisa, salvo autorização explícita |
 | Skill `implementation-planning` | Somente planeja |
+| Skill `seo-ux-review` | Somente revisa SEO local e UX pública |
 
 ## 5. Templates do Codex
 
@@ -338,9 +383,10 @@ Exemplo:
 /review-code Revise o diff da paginação e valide os critérios descritos no issue.
 ```
 
-Como todos os comandos têm `disable-model-invocation: true`, pedir em linguagem
-natural algo semelhante não garante que o arquivo de comando será carregado.
-Use o nome explícito quando quiser esse workflow.
+Como 12 comandos têm `disable-model-invocation: true`, pedir em linguagem
+natural algo semelhante não carrega esses arquivos. `/implementation-plan` é
+a única exceção sem essa chave. Em todos os casos, use o nome explícito quando
+quiser garantir o workflow.
 
 ### 6.2 `/architecture-decision [decisão ou problema]`
 
@@ -450,7 +496,29 @@ dependências, regressões, comandos executados e compatibilidade entre agentes.
 
 Não implementa melhorias novas e não executa commit.
 
-### 6.8 `/melhorar-ui-ux [tela, problema e resultado esperado]`
+### 6.8 `/implementation-plan [tarefa ou funcionalidade a planejar]`
+
+**Use para:** transformar uma tarefa sensível ou multiarquivo em plano técnico
+incremental antes da implementação.
+
+**Produz:** escopo, arquivos prováveis, itens fora do escopo, rules aplicáveis,
+etapas reversíveis, critérios de aceite, validações e riscos.
+
+**Relação com a skill:** é o entrypoint com `$ARGUMENTS` que aplica a metodologia
+da skill `/implementation-planning`. Ele não substitui o Plan Mode exigido por
+`CLAUDE.md` durante uma tarefa sensível.
+
+**Exemplo:**
+
+```text
+/implementation-plan Planeje a alteração da metadata das páginas de produto sem editar arquivos.
+```
+
+O texto do comando proíbe implementação e determina que a saída fique no chat.
+Seu frontmatter declara `Read`, `Grep`, `Glob` e `Bash`; essa lista de ferramentas
+não amplia a autorização nem substitui a proibição textual de escrever arquivos.
+
+### 6.9 `/melhorar-ui-ux [tela, problema e resultado esperado]`
 
 **Use para:** melhoria visual incremental com foco mobile e acessibilidade.
 
@@ -468,7 +536,7 @@ comportamento funcional.
 Não introduz biblioteca visual, tema global, reescrita, mudança de SEO ou regra
 de negócio sem autorização.
 
-### 6.9 `/refactor-code [área e problema estrutural]`
+### 6.10 `/refactor-code [área e problema estrutural]`
 
 **Use para:** refatoração incremental com comportamento invariável.
 
@@ -486,7 +554,7 @@ devem permanecer.
 Deve parar se surgir necessidade de feature, migration, dependência ou mudança
 de contrato.
 
-### 6.10 `/review-code [escopo ou critérios de aceite]`
+### 6.11 `/review-code [escopo ou critérios de aceite]`
 
 **Use para:** revisar diff sem editar.
 
@@ -504,7 +572,7 @@ correção, seguidos de decisão objetiva.
 
 Não reprova por preferência estética.
 
-### 6.11 `/revisar-performance [página, fluxo ou diff]`
+### 6.12 `/revisar-performance [página, fluxo ou diff]`
 
 **Use para:** revisão de performance baseada em evidência e medição.
 
@@ -523,7 +591,29 @@ riscos e validações.
 Começa sem editar e não recomenda cache complexo ou troca de stack sem
 evidência.
 
-### 6.12 `/revisar-seguranca [fluxo, rota ou diff]`
+### 6.13 `/revisar-prisma-banco [escopo Prisma/banco a revisar]`
+
+**Use para:** revisar schema, migrations, seeds e consumidores do Prisma sem
+alterar a implementação ou o banco.
+
+**Avalia:** relações e políticas `onDelete`, constraints, slugs, nulabilidade,
+imutabilidade de migrations aplicadas, singleton de `Settings`, seed
+idempotente, isolamento E2E e a configuração exclusiva da URL em
+`prisma.config.ts` no Prisma 7.
+
+**Saída:** achados por severidade com arquivo/linha, risco para dados, evidência
+e correção mínima.
+
+**Exemplo:**
+
+```text
+/revisar-prisma-banco Revise a integridade das relações de Product e Category e os seeds atuais.
+```
+
+Não executa migration, seed, reset, deploy, escrita no banco ou alteração de
+código. Nunca recomenda `prisma migrate reset` como correção automática.
+
+### 6.14 `/revisar-seguranca [fluxo, rota ou diff]`
 
 **Use para:** auditoria de segurança de um fluxo real.
 
@@ -679,9 +769,52 @@ mudança destrutiva ou quebra de autenticação sem contexto.
 
 **Integração:** usa `/review-code` e `/checklist-merge` conforme a etapa.
 
-## 8. Configuração do Codex
+### 7.8 `/seo-ux-review`
 
-### 8.1 `.codex/config.toml`
+**Use para:** revisar SEO local e UX mobile de páginas públicas, metadata,
+layout, carrinho ou checkout antes de publicar ou alterar esses fluxos.
+
+**Não use para:** mudança restrita ao admin sem efeito público ou lógica de
+servidor sem impacto em interface ou metadata.
+
+**Fluxo:** separa achados de SEO e UX, verifica metadata, JSON-LD, canonical,
+sitemap, semântica, informações locais, imagens, fluxo mobile, carrinho e
+indicadores de performance.
+
+**Saída:** achados por página ou componente, severidade e correção objetiva,
+sem transformar preferência estética em bloqueador.
+
+**Integração:** consulta `PROJECT_RULES.md §4/§5/§7` e as rules `seo-local.md`
+e `ui-mobile.md`. A skill apenas revisa; não implementa correções.
+
+## 8. Rules e roteamento por domínio
+
+As rules em `.claude/rules/` são invariantes curtas com frontmatter `paths`.
+Antes de editar, o agente compara os arquivos prováveis com esses padrões e lê
+todas as rules correspondentes. Elas derivam de `PROJECT_RULES.md`, não o
+substituem e não devem duplicar o protocolo comum de trabalho.
+
+| Domínio | Seção principal | Rule |
+| --- | --- | --- |
+| App Router e Server/Client Components | §3 | `next-app-router.md` |
+| Autenticação admin, sessão e `src/proxy.ts` | §6 | `admin-auth.md` |
+| Prisma, schema, migrations e seed | §2/§3 | `prisma-database.md` |
+| SEO local, metadata, sitemap e JSON-LD | §4 | `seo-local.md` |
+| Carrinho local e checkout WhatsApp | §8 | `whatsapp-checkout.md` |
+| Upload de imagens no Cloudinary | §6 | `cloudinary-upload.md` |
+| UI, UX e performance mobile | §5/§7 | `ui-mobile.md` |
+
+Esse roteamento vale para Claude Code e Codex. O Codex não carrega as skills do
+Claude, mas `CODEX.md` determina a consulta das rules aplicáveis. Um domínio só
+deve ser tratado como impactado quando houver evidência nos arquivos reais.
+
+Em autenticação, consulte `PROJECT_RULES.md §3/§6` para as exceções públicas e
+a política vigente de `src/proxy.ts`; não reproduza a generalização da rule
+quando ela divergir da fonte principal.
+
+## 9. Configuração do Codex
+
+### 9.1 `.codex/config.toml`
 
 | Opção | Valor do projeto | Efeito |
 | --- | --- | --- |
@@ -695,7 +828,7 @@ mudança destrutiva ou quebra de autenticação sem contexto.
 
 Preferências pessoais, autenticação e credenciais não pertencem a esse arquivo.
 
-### 8.2 `.codex/instructions.md`
+### 9.2 `.codex/instructions.md`
 
 Esse documento:
 
@@ -709,9 +842,9 @@ Esse documento:
 Ele não é um prompt independente nem um comando. Deve ser tratado como
 instrução complementar obrigatória porque os documentos raiz mandam lê-lo.
 
-## 9. Configuração do Claude Code
+## 10. Configuração do Claude Code
 
-### 9.1 `.claude/instructions.md`
+### 10.1 `.claude/instructions.md`
 
 Esse documento:
 
@@ -724,13 +857,15 @@ Esse documento:
 Ele não cria um slash command. É carregado por orientação de `CLAUDE.md` e
 `AGENTS.md`.
 
-### 9.2 `.claude/settings.json`
+### 10.2 `.claude/settings.json`
 
 É a configuração compartilhada e versionada.
 
 **Permitido sem nova confirmação:**
 
-- Git de leitura: status, branch atual, diff e log;
+- Git de leitura: status, branch, diff e log;
+- exploração local com `find`, `ls` e `rg`;
+- leitura de `package.json` com o comando permitido;
 - `npm run lint`;
 - `npm run typecheck`;
 - `npm run build`;
@@ -747,64 +882,69 @@ Ele não cria um slash command. É carregado por orientação de `CLAUDE.md` e
 
 - leitura ou escrita de arquivos reais de ambiente, segredos, credenciais,
   certificados e chaves;
+- leitura ou edição de `.claude/settings.local.json`;
 - remoção recursiva, reset destrutivo e `git clean`;
 - push;
-- elevação de privilégio;
-- acesso remoto com `curl`/`wget`;
+- elevação de privilégio e acesso remoto com `ssh`, `curl` ou `wget`;
 - Docker;
-- acesso direto a bancos;
+- acesso direto a bancos e dumps com `psql`, `pg_dump`, `mysql`, `mongosh` ou
+  `redis-cli`;
 - exposição ampla do ambiente;
-- comandos destrutivos de sistema e permissões excessivas.
+- comandos destrutivos de sistema, `truncate` e permissões excessivas;
+- CLI da Vercel e scripts `npm run deploy`.
 
 `defaultMode: "default"` mantém o comportamento padrão de aprovação.
 `disableBypassPermissionsMode: "disable"` impede o uso do modo que contorna
 permissões.
 
-### 9.3 `.claude/settings.local.json`
+Outras opções operacionais compartilhadas:
 
-É uma configuração específica da máquina e está ignorada pelo Git. Ela adiciona
-um diretório pessoal de memória do Claude e permissões para workflows já
-executados localmente, incluindo:
+| Opção | Valor | Efeito |
+| --- | --- | --- |
+| `cleanupPeriodDays` | `14` | Na inicialização, remove dados de sessão/aplicação anteriores ao período configurado |
+| `claudeMdExcludes` | dependências e artefatos | Exclui `node_modules`, `.next`, `dist`, `build` e `coverage` da descoberta de `CLAUDE.md` |
+| `autoCompactEnabled` | `true` | Habilita compactação automática de contexto |
 
-- comandos amplos de `npm run`, instalação e testes;
-- TypeScript e utilitários Node;
-- comandos Prisma e Playwright;
-- staging e formas específicas de commit;
-- inspeção de serviços/pacotes;
-- consultas HTTP ao servidor local;
-- preparação do banco E2E;
-- comandos de diagnóstico pontuais.
+### 10.3 `.claude/settings.local.json`
 
-Essas permissões locais são conveniências históricas, não recomendações gerais.
-Elas devem ser revisadas antes de serem reutilizadas em outra máquina.
+Esse arquivo existe apenas nesta máquina, está ignorado pelo Git e não faz parte
+da política compartilhada. `.claude/settings.json` bloqueia explicitamente sua
+leitura e edição pelo Claude Code. Portanto:
 
-### 9.4 Alertas de segurança das permissões locais
+- preserve o arquivo;
+- não inventarie nem documente seu conteúdo como configuração do projeto;
+- não o copie para `settings.json`;
+- não dependa de uma permissão local em workflows compartilhados.
 
-1. Existem regras locais mais amplas que as regras compartilhadas. Uma entrada
-   em `allow` reduz prompts, mas não transforma o comando em seguro para qualquer
-   contexto.
-2. Há um comando Bash permitido que abre `.env` e informa somente presença e
-   comprimento de algumas variáveis. Mesmo sem imprimir valores, isso contorna a
-   intenção de não acessar arquivos reais de ambiente e não deve ser usado.
-3. Permissões para instalação, Prisma, Playwright, Git e `systemctl` podem gerar
-   efeitos colaterais. Use somente com escopo e autorização explícitos.
-4. Regras `deny` compartilhadas continuam prioritárias quando correspondem à
-   ação.
-5. Nunca copie o conteúdo local para `settings.json` sem auditoria. O arquivo
-   compartilhado deve permanecer mínimo e seguro.
+## 11. Plan Mode, workflows e continuidade
 
-## 10. Workflows recomendados
+### 11.1 Quando usar Plan Mode
 
-### 10.1 Implementação
+O Claude Code deve entrar em Plan Mode antes de editar quando a tarefa:
+
+- afetar mais de um arquivo ou módulo;
+- envolver autenticação admin, sessão, permissões ou `src/proxy.ts`;
+- envolver Prisma, migrations, seed ou schema;
+- envolver SEO local, metadata ou dados estruturados;
+- envolver carrinho, checkout ou mensagem do WhatsApp;
+- tiver escopo ambíguo ou risco de regressão.
+
+Correções triviais, localizadas e de baixo risco podem seguir diretamente após
+a leitura mínima e a confirmação do escopo. Plan Mode é um modo operacional;
+`/implementation-plan` é um command que gera um plano no chat, e
+`/implementation-planning` é a skill metodológica correspondente.
+
+### 11.2 Implementação
 
 1. Defina comportamento, escopo e critérios de aceite.
-2. Use o template Codex `create-code.md` ou `/create-code`.
+2. No Codex, use o template `create-code.md`; no Claude Code, use `/create-code`.
 3. Para tarefa Claude mais abrangente, use `/senior-code-agent`.
 4. Revise o diff.
-5. Execute validações proporcionais existentes em `package.json`.
+5. Execute as validações obrigatórias de `PROJECT_RULES.md §12`: lint,
+   typecheck, testes unitários, testes E2E e build.
 6. Use `/final-audit` antes de entregar quando a mudança for relevante.
 
-### 10.2 Diagnóstico
+### 11.3 Diagnóstico
 
 1. Forneça sintoma e reprodução.
 2. Use `debug.md` ou `/debug-app`.
@@ -812,15 +952,16 @@ Elas devem ser revisadas antes de serem reutilizadas em outra máquina.
 4. Autorize a correção explicitamente se desejar implementação.
 5. Valide a causa raiz, não apenas o desaparecimento do sintoma.
 
-### 10.3 Revisão
+### 11.4 Revisão
 
 1. Forneça objetivo e critérios de aceite.
 2. Use `review-code.md`, `/review-code` ou `/senior-code-review`.
-3. Para segurança ou performance, prefira o comando especializado.
+3. Para segurança, performance ou Prisma, prefira o command especializado; para
+   SEO local e UX pública, use `/seo-ux-review`.
 4. Antes do merge, use `/checklist-merge`.
 5. Não peça correções no mesmo passo se deseja uma revisão independente.
 
-### 10.4 Continuidade entre agentes
+### 11.5 Continuidade entre agentes
 
 1. Gere um relatório conforme `docs/ai-reports/TEMPLATE-agent-report.md` quando
    a continuidade precisar ser persistida.
@@ -829,7 +970,15 @@ Elas devem ser revisadas antes de serem reutilizadas em outra máquina.
 4. O agente seguinte deve confirmar tudo no repositório antes de continuar.
 5. Preserve as configurações específicas do outro agente.
 
-## 11. Referências oficiais
+### 11.6 Relatório persistente
+
+Use `docs/ai-reports/TEMPLATE-agent-report.md` quando a tarefa precisar de
+continuidade entre agentes ou registro persistente. O template registra objetivo,
+estado inicial e final, escopo, arquivos, decisões, fluxos críticos, comandos,
+validações, riscos e próximo passo. Ele documenta a execução, mas não substitui
+`PROJECT_RULES.md` nem cria novas regras.
+
+## 12. Referências oficiais
 
 - [Documentação do Codex](https://developers.openai.com/codex/)
 - [Skills do Codex](https://developers.openai.com/codex/skills)
