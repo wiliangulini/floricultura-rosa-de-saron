@@ -37,6 +37,9 @@ Este é um MVP real da Floricultura Rosa de Saron:
 - Não use `any` sem justificativa explícita.
 - Não leia nem exponha arquivos reais de ambiente, tokens, credenciais ou segredos.
 - Em revisão ou diagnóstico, não implemente correções salvo quando o pedido também autorizar a alteração.
+- Antes de editar por domínio (auth admin, Prisma, SEO local, carrinho/WhatsApp, upload
+  Cloudinary, UI mobile), consulte a rule equivalente em `.claude/rules/` — mesma tabela
+  de roteamento usada pelo Claude Code, documentada em `AGENTS.md`.
 
 ## Compatibilidade com Claude Code
 
