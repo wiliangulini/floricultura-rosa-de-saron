@@ -148,6 +148,13 @@ npm run db:verify:catalog
 
 ## Deploy para a VPS
 
+O script exige a variável `VPS_HOST` (destino SSH, no formato `usuario@host`) definida no
+ambiente — ele não traz um host padrão. Exporte-a antes de qualquer execução real:
+
+```bash
+export VPS_HOST="usuario@host-da-vps"
+```
+
 O deploy comum atualiza código, dependências, build e migrations sem alterar o catálogo:
 
 ```bash

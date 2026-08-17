@@ -3,13 +3,18 @@
 Revisão feita em: **2026-08-17**, sobre o repositório `floricultura-rosa-de-saron`,
 branch `main`, commit de referência `d713bfe5fc947553d5d0e63cfc2689aef0425b69`.
 
+> **Adendo de 2026-08-17:** após esta revisão, `deploy-to-vps.sh` foi corrigido para
+> exigir `VPS_HOST` por variável de ambiente (não há mais host fixo no script) e ganhou
+> um teste automatizado cobrindo essa exigência. A contagem de testes abaixo já reflete
+> essa mudança. Detalhes em `CHECKLIST-PUBLICACAO.md`, item 0.
+
 Comandos executados nesta revisão, no ambiente local:
 
 | Comando | Resultado |
 | --- | --- |
 | `npm run lint` | Passou sem erros nem avisos. |
 | `npm run typecheck` | Passou sem erros. |
-| `npm run test` | **163 testes em 18 arquivos, todos passando.** |
+| `npm run test` | **164 testes em 18 arquivos, todos passando.** |
 | `npm run test:e2e` | **Não executado.** Ambiente local tem incompatibilidade conhecida entre a versão do Node e o Playwright instalado (registrada na memória de sessão do projeto); a suíte de 54 testes existe e está versionada, mas nenhuma afirmação neste case depende de uma execução recente. |
 | `npm run build` | Não executado nesta revisão — fora do escopo desta tarefa documental. |
 
@@ -35,7 +40,7 @@ Legenda de status: **implementado e comprovado** · **parcialmente implementado*
 | Upload e gerenciamento de imagens | Validação por magic bytes, limite de 5 MB, SVG rejeitado | `src/server/images.ts` | implementado e comprovado | Sim | sem detalhar assinatura de bytes |
 | Experiência responsiva desktop/mobile | Testes de overflow, alinhamento de cards e menu por viewport | `e2e/responsive-public.spec.ts` (8 testes); `e2e/responsive-admin.spec.ts` (7 testes) | implementado e comprovado | Sim | suíte versionada; não executada nesta revisão |
 | SEO local | `generateMetadata`, Open Graph, Twitter Card, canonical, JSON-LD, sitemap, robots | `src/app/(public)/page.tsx`; `src/app/(public)/produto/[slug]/page.tsx`; `src/app/(public)/categoria/[slug]/page.tsx`; `src/app/sitemap.ts`; `src/app/robots.ts` | implementado e comprovado | Sim | — |
-| Testes unitários | Vitest, 163 testes em 18 arquivos | execução local em 2026-08-17 | implementado e comprovado | Sim | citar contagem e data, não "cobertura completa" |
+| Testes unitários | Vitest, 164 testes em 18 arquivos | execução local em 2026-08-17 | implementado e comprovado | Sim | citar contagem e data, não "cobertura completa" |
 | Testes end-to-end | Playwright, 54 testes em 7 arquivos, versionados | `e2e/*.spec.ts` | implementado e comprovado (existência); execução não verificada nesta revisão | Condicional | dizer que a suíte existe, nunca que passou "agora" |
 | Design system próprio | Tokens de marca e semânticos, componentes de UI reutilizados | `src/app/globals.css`; `src/components/ui/` | implementado e comprovado | Sim | — |
 | Confirmação em ações destrutivas | Modal `role="alertdialog"` obrigatório antes de excluir | `src/app/admin/produtos/DeleteProductButton.tsx`; `src/app/admin/categorias/DeleteCategoryButton.tsx` | implementado e comprovado | Sim | — |

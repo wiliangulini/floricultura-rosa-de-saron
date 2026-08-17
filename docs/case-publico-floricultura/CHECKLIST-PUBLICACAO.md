@@ -4,28 +4,40 @@ Este checklist cobre os passos entre "case escrito" e "case publicado", seja no
 portfólio, em PDF ou no LinkedIn. Nenhum destes passos foi executado — todos ficam para
 Wilian decidir e realizar.
 
-## 0. Item de segurança obrigatório antes de divulgar o link do repositório
+## 0. Observação de segurança sobre o histórico do repositório (não bloqueante)
 
-`deploy-to-vps.sh`, versionado neste repositório, contém o host da VPS
-(`VPS_HOST="root@..."`) com usuário `root` e o IP do servidor em texto plano. Se o
-repositório `github.com/wiliangulini/floricultura-rosa-de-saron` for público, divulgar
-o link no case, no portfólio ou no LinkedIn expõe esse dado a qualquer pessoa que abra
-o arquivo.
+O arquivo atual de `deploy-to-vps.sh`, na `main`, **não mantém mais um host fixo**: o
+destino SSH agora é exigido pela variável de ambiente `VPS_HOST`, sem valor padrão — o
+script falha imediatamente se ela não estiver definida. Isso foi corrigido no código
+(não apenas nos documentos do case) e está coberto por um teste automatizado que
+verifica a falha explícita quando `VPS_HOST` está ausente.
 
-Antes de divulgar o link do repositório:
+O uso de `root` na estrutura de deploy continua fazendo parte da configuração
+operacional vigente da VPS. Isso não é, por si só, uma credencial exposta; é uma
+oportunidade de hardening futuro (usuário de deploy com privilégios limitados,
+autenticação só por chave, `fail2ban`), não um bloqueio à publicação do case.
 
-- [ ] Decidir se o repositório continuará público ou passará a privado.
-- [ ] Se público: mover `VPS_HOST`, `DOMAIN` e demais dados de infraestrutura para
-      variáveis de ambiente carregadas fora do controle de versão, e considerar
-      reescrever o histórico do Git para remover o valor exposto nos commits antigos.
-- [ ] Se o IP ou o acesso root já estiverem expostos há tempo: considerar rotacionar as
-      credenciais/chaves de acesso à VPS, independentemente da decisão sobre o
-      repositório.
-- [ ] Só depois de resolver isso, publicar o link do repositório em qualquer material
-      público.
+O endereço que estava fixo anteriormente permanece recuperável no histórico do Git (no
+commit que introduziu o arquivo). Essa condição foi tratada como observação, não como
+bloqueio, pelos seguintes motivos: o script corrigido já reflete a prática correta; o
+domínio público da loja (`rosa-de-saron.com`) provavelmente resolve, via DNS, para o
+mesmo endereço, o que reduz o valor prático de reescrever o histórico; e uma reescrita
+de histórico (force-push, mudança de todos os hashes posteriores) tem custo e risco
+maiores do que o benefício nesse caso específico.
 
-Este passo é uma decisão e uma ação de infraestrutura — fora do escopo deste pacote de
-documentação. Ele não foi executado aqui.
+Antes de divulgar o link do repositório, ainda vale:
+
+- [ ] Confirmar que nenhum outro arquivo versionado contém credencial, token ou
+      segredo real (checagem pontual, não uma auditoria completa de infraestrutura).
+- [ ] Se desejar reduzir a exposição do endereço antigo no histórico, considerar isso
+      como melhoria independente e não urgente — não é pré-requisito para publicar
+      o case.
+- [ ] Avaliar, como hardening futuro e separado deste checklist, se a VPS usa
+      autenticação SSH só por chave, `fail2ban` e um usuário de deploy com privilégios
+      limitados em vez de `root`.
+
+Esta observação é informativa; não bloqueia nenhum dos passos seguintes deste
+checklist.
 
 ## 1. Revisão de conteúdo do case
 

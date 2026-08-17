@@ -3,7 +3,7 @@
 set -euo pipefail
 
 DOMAIN="rosa-de-saron.com"
-VPS_HOST="root@31.97.160.61"
+VPS_HOST="${VPS_HOST:-}"
 REMOTE_DIR="/var/www/html/rosa-de-saron.com"
 APP_NAME="floricultura-rosa-de-saron"
 PORT="3000"
@@ -45,6 +45,10 @@ Options:
   --seed         Run npm run db:seed explicitly after migrations.
   --sync-catalog Back up and synchronize categories, products, images and store location.
   -h, --help     Show this help.
+
+Environment:
+  VPS_HOST       Required for every option above except --help.
+                 SSH destination for the VPS, e.g. user@host.
 USAGE
 }
 
@@ -725,6 +729,10 @@ REMOTE
 }
 
 main() {
+  if [[ -z "$VPS_HOST" ]]; then
+    fail "VPS_HOST is not set. Export it before running, e.g.: VPS_HOST=user@203.0.113.10 ./deploy-to-vps.sh"
+  fi
+
   validate_local_environment
   run_local_checks
 

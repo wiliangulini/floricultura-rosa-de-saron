@@ -259,8 +259,9 @@ Princípios aplicados, sem detalhar mecanismos exploráveis:
 - Ampliar a cobertura de testes end-to-end conforme novas telas forem adicionadas.
 - Capturar e publicar screenshots reais das telas, seguindo o plano em
   [`PLANO-SCREENSHOTS.md`](./PLANO-SCREENSHOTS.md).
-- Revisar a exposição de dados de infraestrutura no histórico do repositório antes de
-  divulgar o link publicamente — ver [`CHECKLIST-PUBLICACAO.md`](./CHECKLIST-PUBLICACAO.md).
+- Avaliar, como melhoria não urgente, reduzir a exposição do endereço antigo da VPS
+  ainda recuperável no histórico do repositório — ver
+  [`CHECKLIST-PUBLICACAO.md`](./CHECKLIST-PUBLICACAO.md), item 0.
 
 ## Como este projeto foi construído
 
@@ -274,9 +275,10 @@ por validações automatizadas (lint, checagem de tipos e testes) antes de ser a
 - Repositório: `github.com/wiliangulini/floricultura-rosa-de-saron`
 - Site: `rosa-de-saron.com`
 
-> Antes de publicar este case com esses links ativos, revise
-> [`CHECKLIST-PUBLICACAO.md`](./CHECKLIST-PUBLICACAO.md) — há um item de segurança
-> pendente sobre dados de infraestrutura versionados no repositório.
+> O script de deploy versionado no repositório exige a variável `VPS_HOST` em vez de um
+> host fixo. O endereço usado anteriormente ainda é recuperável no histórico do Git —
+> ver [`CHECKLIST-PUBLICACAO.md`](./CHECKLIST-PUBLICACAO.md), item 0, para o
+> detalhamento, sem que isso bloqueie a publicação deste link.
 
 ## Fale comigo
 
