@@ -1,70 +1,54 @@
 # Instruções operacionais do Claude Code
 
-## Fontes de verdade
-
-Leia, nesta ordem:
-
-1. solicitação atual do usuário;
-2. `PROJECT_RULES.md`;
-3. `AGENTS.md`;
-4. `CLAUDE.md`;
-5. este arquivo;
-6. comando ou skill invocado;
-7. código, testes e documentação relacionados.
-
-Leia `CODEX.md` e relatórios anteriores quando houver continuidade com Codex.
+A hierarquia de instruções, o padrão de trabalho e o protocolo de entrega vivem em
+`AGENTS.md` (importado junto com este arquivo). Aqui ficam apenas os pontos que **não**
+estão lá nem em `CLAUDE.md`.
 
 ## Contexto fixo
 
-O projeto é uma vitrine digital da Floricultura Rosa de Saron com Next.js App Router, React, TypeScript estrito, Tailwind CSS, Prisma/PostgreSQL, Vitest e Playwright.
+O projeto é uma vitrine digital da Floricultura Rosa de Saron com Next.js App Router,
+React, TypeScript estrito, Tailwind CSS, Prisma/PostgreSQL, Vitest e Playwright.
 
-Fluxos críticos:
+Fluxos críticos e onde vivem:
 
-- carrinho em `localStorage`;
-- mensagem e redirecionamento para WhatsApp;
-- SEO local e páginas públicas;
-- painel e autenticação administrativa customizada;
-- proteção em `src/proxy.ts`;
-- upload validado para Cloudinary;
+- carrinho em `localStorage` — `src/lib/cart.ts`, `src/context/CartContext.tsx`;
+- mensagem e redirecionamento para WhatsApp — `src/lib/whatsapp.ts`;
+- SEO local e páginas públicas — `src/app/(public)/**`, `sitemap.ts`, `robots.ts`;
+- painel e autenticação administrativa customizada — `src/lib/auth.ts`, `src/app/admin/**`;
+- proteção de rotas em `src/proxy.ts`;
+- upload validado para Cloudinary — `src/server/images.ts`;
 - performance e usabilidade mobile.
 
-## Antes de editar
+## Proibições específicas do Claude Code
 
-1. Confirme objetivo, escopo permitido e fora de escopo.
-2. Verifique branch, `git status` e alterações preexistentes.
-3. Leia os arquivos que pretende alterar e seus consumidores.
-4. Identifique contratos, validações e testes que precisam ser preservados.
-5. Liste estratégia, arquivos prováveis e riscos antes de mudanças multiarquivo ou sensíveis.
-
-Não implemente com base apenas em nomes de arquivos, memória ou suposições.
-
-## Implementação
-
-- Faça a menor alteração suficiente.
-- Preserve App Router, Server/Client Components e padrões existentes.
-- Não crie abstração, estado global ou dependência sem necessidade comprovada.
-- Não misture feature, correção e refatoração sem justificativa.
-- Não altere `src/proxy.ts`, autenticação, Prisma, APIs, SEO, carrinho ou WhatsApp sem autorização explícita.
-- Não remova validações, testes ou proteções para fazer uma validação passar.
+- Não altere `src/proxy.ts`, autenticação, Prisma, APIs, SEO, carrinho ou WhatsApp sem
+  autorização explícita na tarefa.
 - Não altere `.codex/` ou `CODEX.md` salvo quando isso fizer parte do escopo.
 - Não exponha dados sensíveis em respostas, comandos, logs ou relatórios.
+- Não implemente com base apenas em nomes de arquivos, memória ou suposições.
 
 ## Permissões compartilhadas
 
-`.claude/settings.json`:
+`.claude/settings.json` (escopo do projeto):
 
-- libera apenas Git de leitura e os scripts seguros de lint, typecheck, build e teste unitário;
-- exige confirmação para commit, troca de branch, instalação, `npx`, E2E e comandos Prisma;
-- bloqueia arquivos reais de ambiente, credenciais, comandos destrutivos, push, acesso direto a banco e ferramentas remotas;
-- preserva a leitura de `.env.example`, que contém somente documentação das variáveis esperadas.
+- **libera** Git de leitura e os scripts de `lint`, `typecheck`, `build` e teste unitário;
+- **exige confirmação** para Git mutável, instalação, `npx`, E2E e todos os scripts `db:*`,
+  incluindo os `:apply`, que gravam no banco;
+- **bloqueia** arquivos reais de ambiente e credenciais, remoção de arquivos, push, acesso
+  remoto (`ssh`/`scp`/`rsync`/`curl`/`wget`), acesso direto a banco, `deploy-to-vps.sh`,
+  Vercel, `prisma migrate reset`/`db push` e execução inline via `node -e`/`python -c`;
+- **preserva** a leitura de `.env.example`, que só documenta os nomes das variáveis.
 
-As permissões reduzem risco, mas não substituem revisão humana, sandbox, hooks ou as regras deste repositório.
+Regras `deny` vencem `ask`, que vence `allow` — `deny` não admite exceção por allowlist.
+Os caminhos usam o prefixo `/`, que ancora na **raiz do projeto**: as proteções valem
+mesmo em sessões iniciadas em subpasta ou worktree.
 
-## Revisão final
+Duas ressalvas importantes:
 
-1. Revise o diff completo.
-2. Confirme que nenhum arquivo fora do escopo mudou.
-3. Execute somente validações existentes, seguras e proporcionais à tarefa.
-4. Não declare como executado o que não foi executado.
-5. Informe arquivos criados/alterados, comandos, resultados, riscos e validações manuais.
-6. Use `docs/ai-reports/TEMPLATE-agent-report.md` quando for necessário registrar continuidade.
+- regras `Read`/`Edit` **não** alcançam subprocessos arbitrários (um script Node ou Python
+  que abre arquivos por conta própria). Só o sandbox do sistema operacional faria isso;
+- `allowed-tools` em um command ou skill **concede** permissão durante o turno — não
+  restringe. Trate qualquer `allowed-tools` como ampliação de privilégio.
+
+As permissões reduzem risco, mas não substituem revisão humana nem as regras deste
+repositório.

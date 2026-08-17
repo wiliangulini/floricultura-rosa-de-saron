@@ -5,10 +5,11 @@ import { describe, expect, it } from "vitest";
 
 const deployScript = path.resolve("deploy-to-vps.sh");
 
-function runDeployScript(args: string[]) {
+function runDeployScript(args: string[], env: NodeJS.ProcessEnv = process.env) {
   return spawnSync("bash", [deployScript, ...args], {
     cwd: process.cwd(),
     encoding: "utf8",
+    env,
   });
 }
 
@@ -39,5 +40,13 @@ describe("deploy-to-vps.sh options", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Unknown option");
+  });
+
+  it("exige VPS_HOST definido antes de validar o ambiente local ou tocar na VPS", () => {
+    const { VPS_HOST: _vpsHost, ...envWithoutVpsHost } = process.env;
+    const result = runDeployScript(["--dry-run"], envWithoutVpsHost);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("VPS_HOST is not set");
   });
 });
