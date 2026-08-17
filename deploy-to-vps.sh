@@ -3,7 +3,7 @@
 set -euo pipefail
 
 DOMAIN="rosa-de-saron.com"
-VPS_HOST="root@31.97.160.61"
+VPS_HOST="${VPS_HOST:?Defina a variável de ambiente VPS_HOST (ex.: root@SEU_IP) antes de rodar este script}"
 REMOTE_DIR="/var/www/html/rosa-de-saron.com"
 APP_NAME="floricultura-rosa-de-saron"
 PORT="3000"
