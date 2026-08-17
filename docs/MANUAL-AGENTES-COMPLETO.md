@@ -864,38 +864,62 @@ Ele não cria um slash command. É carregado por orientação de `CLAUDE.md` e
 **Permitido sem nova confirmação:**
 
 - Git de leitura: status, branch, diff e log;
-- exploração local com `find`, `ls` e `rg`;
-- leitura de `package.json` com o comando permitido;
 - `npm run lint`;
 - `npm run typecheck`;
 - `npm run build`;
 - testes unitários por `npm test` e `npm run test`.
+
+`ls`, `cat`, `find`, `grep`, `head`, `tail`, `wc` e as formas de leitura do Git já
+são reconhecidos como somente leitura pelo Claude Code e rodam sem regra própria —
+por isso não aparecem na lista `allow`. Para buscar em arquivos, prefira as
+ferramentas `Read`/`Grep`/`Glob`: elas respeitam as regras `deny`, enquanto um
+binário externo como `rg` não necessariamente respeita.
 
 **Exige confirmação:**
 
 - staging, commit, checkout, switch, merge e rebase;
 - instalação com npm e uso de `npx`;
 - Playwright E2E;
-- geração, migration, seed e Studio do Prisma.
+- geração, migration, seed e Studio do Prisma;
+- todos os scripts `db:*`, incluindo os `:apply`, que gravam no banco, e os de
+  preparação do banco E2E.
 
 **Bloqueado:**
 
 - leitura ou escrita de arquivos reais de ambiente, segredos, credenciais,
   certificados e chaves;
 - leitura ou edição de `.claude/settings.local.json`;
-- remoção recursiva, reset destrutivo e `git clean`;
+- remoção de arquivos (`rm`, `rmdir`), reset destrutivo e `git clean`;
 - push;
-- elevação de privilégio e acesso remoto com `ssh`, `curl` ou `wget`;
+- elevação de privilégio e acesso remoto com `ssh`, `scp`, `sftp`, `rsync`,
+  `curl` ou `wget`;
 - Docker;
 - acesso direto a bancos e dumps com `psql`, `pg_dump`, `mysql`, `mongosh` ou
-  `redis-cli`;
-- exposição ampla do ambiente;
+  `redis-cli`, além de `prisma migrate reset` e `prisma db push`;
+- exposição ampla do ambiente (`printenv`, `env`);
+- execução inline de código por `node -e`, `node --eval`, `python -c` e
+  `python3 -c`, que contornaria as regras de arquivo por subprocesso;
 - comandos destrutivos de sistema, `truncate` e permissões excessivas;
-- CLI da Vercel e scripts `npm run deploy`.
+- `deploy-to-vps.sh`, CLI da Vercel e scripts `npm run deploy`.
 
 `defaultMode: "default"` mantém o comportamento padrão de aprovação.
-`disableBypassPermissionsMode: "disable"` impede o uso do modo que contorna
-permissões.
+`disableBypassPermissionsMode: "disable"` e `disableAutoMode: "disable"` impedem
+os modos que contornam ou automatizam a aprovação.
+
+**Ancoragem de caminhos.** As regras `Read`/`Edit` usam o prefixo `/`, que ancora
+na raiz do projeto (a origem do arquivo de settings), e não `./`, que ancoraria no
+diretório onde a sessão foi iniciada. Assim as proteções de segredo continuam
+valendo em sessões abertas dentro de uma subpasta ou de um worktree.
+
+**Dois limites a ter em mente:**
+
+- regras `Read`/`Edit` alcançam as ferramentas internas e os comandos de arquivo
+  que o Claude Code reconhece no Bash, mas **não** subprocessos arbitrários — um
+  script que abre arquivos por conta própria escapa. Só o sandbox do sistema
+  operacional cobriria esse caso;
+- `allowed-tools` em um command ou skill **concede** permissão durante o turno da
+  invocação; não restringe nada. Trate qualquer `allowed-tools` como ampliação de
+  privilégio e mantenha a lista mínima.
 
 Outras opções operacionais compartilhadas:
 

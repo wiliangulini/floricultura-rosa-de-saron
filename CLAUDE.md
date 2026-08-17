@@ -1,10 +1,14 @@
+@AGENTS.md
+@.claude/instructions.md
+
 # CLAUDE.md
 
-Leia e siga obrigatoriamente:
+`AGENTS.md` e `.claude/instructions.md` são importados acima e carregam automaticamente em
+toda sessão — não é preciso abri-los manualmente.
 
-- `PROJECT_RULES.md`
-- `AGENTS.md`
-- `.claude/instructions.md`
+Leia `PROJECT_RULES.md` sob demanda: é a fonte de verdade técnica e de produto, grande
+demais para ficar sempre em contexto. As invariantes por domínio já estão extraídas em
+`.claude/rules/`, acionadas por `paths`.
 
 Leia `CODEX.md` quando a tarefa envolver continuidade, revisão ou compatibilidade com Codex.
 

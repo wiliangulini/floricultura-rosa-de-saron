@@ -5,7 +5,9 @@ allowed-tools:
   - Read
   - Grep
   - Glob
-  - Bash
+  - Bash(git status)
+  - Bash(git diff *)
+  - Bash(git log *)
 ---
 
 # Comando: implementation-plan
@@ -22,8 +24,8 @@ reversíveis, critérios de aceite, validações e riscos.
 
 Siga `AGENTS.md` (prioridade das instruções, roteamento por domínio) e `PROJECT_RULES.md`.
 Leia a rule em `.claude/rules/` cujo `paths` casa com os arquivos prováveis da tarefa antes
-de propor o plano. Respeite as proibições de `PROJECT_RULES.md §10` e `AGENTS.md §Segurança
-operacional`; não recopie o protocolo aqui.
+de propor o plano. Respeite as proibições de `PROJECT_RULES.md §10` e `AGENTS.md §Regras
+principais`; não recopie o protocolo aqui.
 
 ## Saída
 
@@ -34,6 +36,8 @@ operacional`; não recopie o protocolo aqui.
   alteração implícita — qualquer impacto nesses fluxos deve ser explícito no plano.
 - Sugira as validações de `PROJECT_RULES.md §12` sem executá-las.
 
-Este comando restringe `allowed-tools` a `Read`/`Grep`/`Glob`/`Bash`: a saída é sempre no
-chat, sem gravar arquivo. Se o usuário pedir o plano como artefato em arquivo, isso exige
-uma tarefa separada fora deste comando.
+Este comando pré-aprova apenas leitura e Git de leitura. `allowed-tools` **concede**
+permissão durante o turno da invocação — não restringe ferramentas —, por isso a lista é
+mínima: qualquer outro comando Bash continua passando pelo fluxo normal de permissão. A
+saída é sempre no chat, sem gravar arquivo. Se o usuário pedir o plano como artefato em
+arquivo, isso exige uma tarefa separada fora deste comando.

@@ -155,15 +155,26 @@ instruções. Só é aplicado em repositório confiável.
 
 `.claude/settings.json`:
 
-- permite Git de leitura, `find`, `ls`, `rg`, leitura de `package.json`, lint,
-  typecheck, build e testes unitários;
-- pede confirmação para Git mutável, instalações, `npx`, E2E e Prisma;
-- bloqueia segredos e arquivos de ambiente, `settings.local.json`, comandos
-  destrutivos, push, SSH/HTTP remoto, acesso direto a banco, Vercel e deploy;
+- permite Git de leitura, lint, typecheck, build e testes unitários. `ls`, `cat`,
+  `find` e `grep` não precisam de regra: já são read-only embutidos;
+- pede confirmação para Git mutável, instalações, `npx`, E2E e todos os scripts
+  `db:*`, incluindo os `:apply`, que gravam no banco;
+- bloqueia segredos e arquivos de ambiente, `settings.local.json`, remoção de
+  arquivos, push, acesso remoto (SSH/SCP/rsync/curl/wget), acesso direto a banco,
+  `deploy-to-vps.sh`, Vercel, `prisma migrate reset`/`db push` e execução inline
+  via `node -e`/`python -c`;
 - define `cleanupPeriodDays: 14`, exclui dependências/artefatos via
-  `claudeMdExcludes` e habilita `autoCompactEnabled`.
+  `claudeMdExcludes`, habilita `autoCompactEnabled` e desliga os modos
+  `bypassPermissions` e `auto`.
 
-Regras `deny` têm prioridade sobre `ask`, e `ask` sobre `allow`.
+Regras `deny` têm prioridade sobre `ask`, e `ask` sobre `allow`; `deny` não admite
+exceção por allowlist. Os caminhos usam o prefixo `/`, que ancora na raiz do
+projeto — as proteções valem também em subpasta e worktree.
+
+Duas ressalvas: regras `Read`/`Edit` não alcançam subprocessos arbitrários (só o
+sandbox do SO faria isso), e `allowed-tools` em command/skill **concede**
+permissão no turno, não restringe.
+
 `.claude/settings.local.json` é ignorado pelo Git e bloqueado para leitura e
 edição pela política compartilhada. Preserve-o sem documentar seu conteúdo.
 
